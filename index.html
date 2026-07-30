@@ -6,7 +6,7 @@
     <title>한국어 공간 | Coreano Aesthetic</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Supabase JS Client v2 (Versión estable) -->
+    <!-- Supabase JS Client v2 -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -46,24 +46,24 @@
         <!-- Pantalla Principal de Contenido (Oculta hasta iniciar sesión) -->
         <div id="app-section" class="hidden flex flex-col gap-6">
             
-       <!-- Tarjeta de Práctica y Audio -->
-<div class="bg-white p-6 rounded-3xl shadow-sm border border-stone-100 text-center">
-    <span class="text-[10px] uppercase tracking-widest text-rose-500 font-semibold bg-rose-50 px-2.5 py-1 rounded-full">Vocabulario del Día</span>
-    <p id="palabra-coreano" class="text-4xl font-light text-stone-900 mt-6 mb-2 tracking-wide">안녕하세요</p>
-    <p id="palabra-espanol" class="text-xs text-stone-400 mb-6">Hola / Buenos días</p>
-    
-    <!-- Reproductor de Audio HTML5 -->
-    <audio id="audio-real" preload="auto"></audio>
+            <!-- Tarjeta de Práctica y Audio -->
+            <div class="bg-white p-6 rounded-3xl shadow-sm border border-stone-100 text-center">
+                <span class="text-[10px] uppercase tracking-widest text-rose-500 font-semibold bg-rose-50 px-2.5 py-1 rounded-full">Vocabulario del Día</span>
+                <p id="palabra-coreano" class="text-4xl font-light text-stone-900 mt-6 mb-2 tracking-wide">안녕하세요</p>
+                <p id="palabra-espanol" class="text-xs text-stone-400 mb-6">Hola / Buenos días</p>
+                
+                <!-- Reproductor de Audio HTML5 Oculto -->
+                <audio id="audio-real" preload="auto"></audio>
 
-    <div class="flex gap-2">
-        <button id="btn-audio" class="flex-1 bg-rose-500 hover:bg-rose-600 text-white py-3 rounded-2xl text-xs font-medium transition shadow-sm flex items-center justify-center gap-2">
-            🔊 Escuchar pronunciación
-        </button>
-        <button id="btn-siguiente" class="bg-stone-100 hover:bg-stone-200 text-stone-700 px-4 py-3 rounded-2xl text-xs font-medium transition">
-            Siguiente ➔
-        </button>
-    </div>
-</div>
+                <div class="flex gap-2">
+                    <button id="btn-audio" class="flex-1 bg-rose-500 hover:bg-rose-600 text-white py-3 rounded-2xl text-xs font-medium transition shadow-sm flex items-center justify-center gap-2">
+                        🔊 Escuchar pronunciación
+                    </button>
+                    <button id="btn-siguiente" class="bg-stone-100 hover:bg-stone-200 text-stone-700 px-4 py-3 rounded-2xl text-xs font-medium transition">
+                        Siguiente ➔
+                    </button>
+                </div>
+            </div>
 
             <!-- Panel de Control / Sesión -->
             <div class="bg-white p-5 rounded-3xl shadow-sm border border-stone-100 flex justify-between items-center px-6">
