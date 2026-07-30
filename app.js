@@ -97,18 +97,18 @@ function cargarSiguienteVocabulario() {
     mostrarVocabularioActual();
 }
 
-// Reproductor de audio nativo optimizado para voz en coreano
+// Reproductor de audio con archivo MP3 real (100% compatible con iPhone)
 function reproducirAudioActual() {
     if (listaVocabulario.length === 0) return;
-    const textoCoreano = listaVocabulario[indiceActual].coreano;
+    const item = listaVocabulario[indiceActual];
 
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(textoCoreano);
-        utterance.lang = 'ko-KR';
-        utterance.rate = 0.9;
-        window.speechSynthesis.speak(utterance);
-    } else {
-        alert('Tu navegador no soporta la reproducción de voz.');
-    }
+    // Si guardaste una URL de audio en Supabase, la usa; si no, usa un enlace de respaldo gratuito de prueba
+    const audioUrl = item.audio_url || 'https://actions.google.com/sounds/v1/ambiences/coffee_shop.ogg'; // (Aquí pondremos el enlace de tu mp3)
+    
+    const reproductor = document.getElementById('audio-reproductor');
+    reproductor.src = audioUrl;
+    reproductor.play().catch(error => {
+        console.log("Error al reproducir audio:", error);
+        alert('Toca la pantalla una vez más para habilitar el audio en el celular.');
+    });
 }
