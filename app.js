@@ -97,18 +97,25 @@ function cargarSiguienteVocabulario() {
     mostrarVocabularioActual();
 }
 
-// Reproductor de audio con archivo MP3 real (100% compatible con iPhone)
+// Reproductor de audio optimizado para respuesta inmediata en cada clic
 function reproducirAudioActual() {
     if (listaVocabulario.length === 0) return;
     const item = listaVocabulario[indiceActual];
+    const textoCoreano = item.coreano;
 
-    // Si guardaste una URL de audio en Supabase, la usa; si no, usa un enlace de respaldo gratuito de prueba
-    const audioUrl = item.audio_url || 'https://actions.google.com/sounds/v1/ambiences/coffee_shop.ogg'; // (Aquí pondremos el enlace de tu mp3)
-    
-    const reproductor = document.getElementById('audio-reproductor');
-    reproductor.src = audioUrl;
-    reproductor.play().catch(error => {
-        console.log("Error al reproducir audio:", error);
-        alert('Toca la pantalla una vez más para habilitar el audio en el celular.');
-    });
+    if ('speechSynthesis' in window) {
+        // Cancela cualquier audio anterior para liberar el canal de inmediato
+        window.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(textoCoreano);
+        utterance.lang = 'ko-KR';
+        utterance.rate = 0.85; // Un poco más pausado para que se entienda perfecto
+        
+        // Forzar la ejecución inmediata en dispositivos móviles
+        setTimeout(() => {
+            window.speechSynthesis.speak(utterance);
+        }, 50);
+    } else {
+        alert('Tu navegador no soporta la reproducción de voz.');
+    }
 }
