@@ -1,4 +1,4 @@
-// Configuración de Supabase
+// Configuración de Supabase (Tus credenciales se mantienen igual)
 const SUPABASE_URL = 'https://gkunigyqgetqvjsovzjy.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdrdW5pZ3lxZ2V0cXZqc292emp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUzNjc1MzEsImV4cCI6MjEwMDk0MzUzMX0.Co8JkEWVJGlexJGG5WJbnLPb63pYvdX-y5HfYTd6fsg';
 
@@ -7,7 +7,21 @@ const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 let listaVocabulario = [];
 let indiceActual = 0;
 
-// Esperar a que cargue la página para asignar los eventos a los botones
+// Paquete de inicio (Se usará si tu base de datos de Supabase está vacía)
+const vocabularioPorDefecto = [
+    { coreano: "안녕하세요", espanol: "Hola / Buenos días" },
+    { coreano: "감사합니다", espanol: "Gracias (formal)" },
+    { coreano: "사랑해", espanol: "Te amo" },
+    { coreano: "물", espanol: "Agua" },
+    { coreano: "친구", espanol: "Amigo/a" },
+    { coreano: "학교", espanol: "Escuela" },
+    { coreano: "네", espanol: "Sí" },
+    { coreano: "아니요", espanol: "No" },
+    { coreano: "맛있어요", espanol: "¡Está delicioso!" },
+    { coreano: "고양이", espanol: "Gato" }
+];
+
+// Esperar a que cargue la página
 document.addEventListener('DOMContentLoaded', () => {
     verificarSesion();
 
@@ -18,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-logout').addEventListener('click', cerrarSesion);
 });
 
-// Registro de usuarios
+// Registro e Inicio de sesión (Sin cambios, funcionaba bien)
 async function handleSignup() {
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
@@ -36,7 +50,6 @@ async function handleSignup() {
     }
 }
 
-// Iniciar sesión
 async function handleLogin() {
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
@@ -54,62 +67,79 @@ async function handleLogin() {
     }
 }
 
-// Verificar estado de la sesión
 async function verificarSesion() {
     const { data: { session } } = await _supabase.auth.getSession();
     if (session) {
         document.getElementById('auth-section').classList.add('hidden');
         document.getElementById('app-section').classList.remove('hidden');
-        document.getElementById('user-info').innerText = session.user.email;
+        
+        // Extraemos solo el nombre de usuario antes del @ para que se vea más estético
+        const nombreUsuario = session.user.email.split('@')[0];
+        document.getElementById('user-info').innerText = `Hola, ${nombreUsuario} ✨`;
+        
         cargarVocabularioDesdeBaseDeDatos();
     }
 }
 
-// Cerrar sesión
 async function cerrarSesion() {
     await _supabase.auth.signOut();
     location.reload();
 }
 
-// Cargar datos de la tabla creada en Supabase
+// Cargar datos (Con sistema de respaldo para nunca quedarnos sin palabras)
 async function cargarVocabularioDesdeBaseDeDatos() {
     const { data, error } = await _supabase.from('vocabulario').select('*');
-    if (error) {
-        console.error('Error cargando vocabulario:', error);
-    } else if (data && data.length > 0) {
+    
+    if (error || !data || data.length === 0) {
+        console.log('Usando vocabulario por defecto. Si quieres usar la base de datos, asegúrate de tener datos en la tabla "vocabulario".');
+        listaVocabulario = vocabularioPorDefecto;
+    } else {
         listaVocabulario = data;
-        mostrarVocabularioActual();
     }
+    
+    mostrarVocabularioActual();
 }
 
-// Mostrar tarjeta actual en pantalla
 function mostrarVocabularioActual() {
     if (listaVocabulario.length === 0) return;
     const item = listaVocabulario[indiceActual];
-    document.getElementById('palabra-coreano').innerText = item.coreano;
-    document.getElementById('palabra-espanol').innerText = item.espanol;
+    
+    // Agregamos una pequeña animación al texto cuando cambia
+    const textoCoreano = document.getElementById('palabra-coreano');
+    textoCoreano.style.opacity = 0;
+    
+    setTimeout(() => {
+        textoCoreano.innerText = item.coreano;
+        document.getElementById('palabra-espanol').innerText = item.espanol;
+        textoCoreano.style.opacity = 1;
+        textoCoreano.style.transition = "opacity 0.3s ease-in-out";
+    }, 150);
 }
 
-// Rotar a la siguiente palabra
 function cargarSiguienteVocabulario() {
     if (listaVocabulario.length === 0) return;
     indiceActual = (indiceActual + 1) % listaVocabulario.length;
     mostrarVocabularioActual();
 }
 
-// Reproductor con archivo de audio real
+// NUEVO: Reproductor de audio usando la voz del sistema operativo (Gratis y sin archivos)
 function reproducirAudioActual() {
     if (listaVocabulario.length === 0) return;
+    
     const item = listaVocabulario[indiceActual];
     
-    // Usa el enlace de audio de la base de datos o uno por defecto de respaldo
-    const urlAudio = item.audio_url || 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
-    
-    const reproductor = document.getElementById('audio-real');
-    reproductor.src = urlAudio;
-    reproductor.load();
-    reproductor.play().catch(error => {
-        console.log("Error al reproducir:", error);
-        alert('Toca de nuevo para permitir la reproducción en el celular.');
-    });
+    // Verificamos si el navegador soporta esta tecnología
+    if ('speechSynthesis' in window) {
+        // Cancelamos cualquier audio anterior que esté sonando
+        window.speechSynthesis.cancel();
+
+        const pronunciacion = new SpeechSynthesisUtterance();
+        pronunciacion.text = item.coreano;
+        pronunciacion.lang = 'ko-KR'; // Código oficial para idioma Coreano de Corea del Sur
+        pronunciacion.rate = 0.85; // Velocidad ligeramente reducida para estudiantes (1 es normal)
+        
+        window.speechSynthesis.speak(pronunciacion);
+    } else {
+        alert("Lo siento, tu navegador actual no soporta la reproducción de voz. Intenta usar Chrome o Safari.");
+    }
 }
