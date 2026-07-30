@@ -240,8 +240,7 @@
             
         </div>
     </nav>
-
-    <!-- ========================================== -->
+ <!-- ========================================== -->
     <!-- LOGICA DE LA APLICACIÓN (JAVASCRIPT)       -->
     <!-- ========================================== -->
     <script>
@@ -250,103 +249,19 @@
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdrdW5pZ3lxZ2V0cXZqc292emp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUzNjc1MzEsImV4cCI6MjEwMDk0MzUzMX0.Co8JkEWVJGlexJGG5WJbnLPb63pYvdX-y5HfYTd6fsg';
         const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // --- 2. CONTENIDOS CREADOS POR EL EXPERTO (NIVELES) ---
-        // Basado en el libro Sogang Korean 1A y 1B
-        const contenidoApp = {
-            1: { // NIVEL 1: BÁSICO (Saludos e Introducción)
-                vocabulario: [
-                    { coreano: "안녕하세요", espanol: "Hola / Buenos días" },
-                    { coreano: "이름", espanol: "Nombre" },
-                    { coreano: "사람", espanol: "Persona" },
-                    { coreano: "어느", espanol: "Cuál (Which)" },
-                    { coreano: "나라", espanol: "País" },
-                    { coreano: "직업", espanol: "Profesión" },
-                    { coreano: "학생", espanol: "Estudiante" },
-                    { coreano: "선생님", espanol: "Profesor/a" }
-                ],
-                lecturas: [
-                    { coreano: "안녕하세요. 제 이름은 마리아입니다.", espanol: "Hola. Mi nombre es María." },
-                    { coreano: "저는 멕시코 사람입니다. 학생입니다. 만나서 반갑습니다.", espanol: "Soy de México. Soy estudiante. Encantada de conocerte." }
-                ],
-                dictados: ["안녕하세요", "이름", "학생", "사람"],
-                oraciones: [
-                    { espanol: "Yo soy María.", palabras: ["저는", "마리아", "입니다."] },
-                    { espanol: "¿De qué país eres?", palabras: ["어느", "나라", "사람", "입니까?"] }
-                ]
-            },
-            2: { // NIVEL 2: LUGARES Y DIRECCIONES
-                vocabulario: [
-                    { coreano: "어디", espanol: "Dónde" },
-                    { coreano: "가다", espanol: "Ir" },
-                    { coreano: "학교", espanol: "Escuela" },
-                    { coreano: "식당", espanol: "Restaurante" },
-                    { coreano: "병원", espanol: "Hospital" },
-                    { coreano: "은행", espanol: "Banco" },
-                    { coreano: "오늘", espanol: "Hoy" },
-                    { coreano: "내일", espanol: "Mañana" }
-                ],
-                lecturas: [
-                    { coreano: "오늘 어디에 갑니까? 학교에 갑니다.", espanol: "¿A dónde vas hoy? Voy a la escuela." },
-                    { coreano: "내일은 병원에 갑니다. 그리고 식당에 갑니다.", espanol: "Mañana voy al hospital. Y voy al restaurante." }
-                ],
-                dictados: ["학교", "식당", "병원", "오늘"],
-                oraciones: [
-                    { espanol: "¿A dónde vas hoy?", palabras: ["오늘", "어디에", "갑니까?"] },
-                    { espanol: "Voy a la escuela.", palabras: ["저는", "학교에", "갑니다."] }
-                ]
-            },
-            3: { // NIVEL 3: RUTINAS Y VERBOS (Uso de partícula 을/를)
-                vocabulario: [
-                    { coreano: "무엇", espanol: "Qué" },
-                    { coreano: "하다", espanol: "Hacer" },
-                    { coreano: "먹다", espanol: "Comer" },
-                    { coreano: "마시다", espanol: "Beber" },
-                    { coreano: "읽다", espanol: "Leer" },
-                    { coreano: "자다", espanol: "Dormir" },
-                    { coreano: "밥", espanol: "Arroz / Comida" },
-                    { coreano: "책", espanol: "Libro" }
-                ],
-                lecturas: [
-                    { coreano: "오늘 무엇을 합니까? 친구를 만납니다.", espanol: "¿Qué haces hoy? Me encuentro con un amigo." },
-                    { coreano: "식당에서 밥을 먹습니다. 그리고 차를 마십니다.", espanol: "Como en el restaurante. Y bebo té." }
-                ],
-                dictados: ["먹다", "마시다", "읽다", "무엇"],
-                oraciones: [
-                    { espanol: "¿Qué haces?", palabras: ["무엇을", "합니까?"] },
-                    { espanol: "Leo un libro.", palabras: ["책을", "읽습니다."] }
-                ]
-            },
-            4: { // NIVEL 4: COMPRAS Y NÚMEROS (Sogang 1B)
-                vocabulario: [
-                    { coreano: "얼마", espanol: "Cuánto" },
-                    { coreano: "주다", espanol: "Dar" },
-                    { coreano: "사과", espanol: "Manzana" },
-                    { coreano: "우유", espanol: "Leche" },
-                    { coreano: "개", espanol: "Unidad (Contador)" },
-                    { coreano: "원", espanol: "Won (Moneda coreana)" },
-                    { coreano: "비싸다", espanol: "Caro" },
-                    { coreano: "맛있다", espanol: "Delicioso" }
-                ],
-                lecturas: [
-                    { coreano: "사과가 얼마입니까? 천 원입니다.", espanol: "¿Cuánto cuesta la manzana? Son mil wones." },
-                    { coreano: "사과 세 개 주세요. 네, 여기 있습니다.", espanol: "Deme tres manzanas. Sí, aquí tiene." }
-                ],
-                dictados: ["사과", "우유", "얼마", "비싸다"],
-                oraciones: [
-                    { espanol: "Deme tres manzanas.", palabras: ["사과", "세", "개", "주세요."] },
-                    { espanol: "¿Cuánto es esto?", palabras: ["이것은", "얼마", "입니까?"] }
-                ]
-            }
-        };
-
-        // --- 3. ESTADO DE LA APP ---
+        // --- 2. ESTADO DE LA APP Y DATOS DINÁMICOS ---
         let nivelActual = 1;
         let indiceVocab = 0;
         let indiceLectura = 0;
         let indiceOracion = 0;
         let palabraDictadoActual = "";
+        
+        // Aquí se guardará lo que descarguemos de Supabase
+        let contenidoNivelActual = {
+            vocabulario: [], lecturas: [], dictados: [], oraciones: []
+        };
 
-        // --- 4. INICIALIZACIÓN ---
+        // --- 3. INICIALIZACIÓN ---
         document.addEventListener('DOMContentLoaded', () => {
             verificarSesion();
             
@@ -355,14 +270,14 @@
             document.getElementById('btn-login').addEventListener('click', handleLogin);
             document.getElementById('btn-logout').addEventListener('click', cerrarSesion);
             
-            // Evento cambio de nivel
+            // Evento cambio de nivel (Ahora descarga de Supabase)
             document.getElementById('level-selector').addEventListener('change', (e) => {
                 nivelActual = parseInt(e.target.value);
-                reiniciarContenidos();
+                cargarDatosDelNivelDesdeSupabase(nivelActual);
             });
         });
 
-        // --- 5. LÓGICA DE AUTENTICACIÓN (SUPABASE) ---
+        // --- 4. LÓGICA DE AUTENTICACIÓN ---
         async function handleSignup() {
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
@@ -401,11 +316,11 @@
                 document.getElementById('level-selector').classList.remove('hidden');
                 document.getElementById('app-section').classList.add('flex');
                 
-                // Nombre de usuario bonito
                 const nombreUsuario = session.user.email.split('@')[0];
                 document.getElementById('user-info').innerText = `¡Hola, ${nombreUsuario}! ✨`;
                 
-                reiniciarContenidos(); // Carga el nivel actual
+                // Cargar datos de la base de datos al entrar
+                cargarDatosDelNivelDesdeSupabase(nivelActual);
             }
         }
 
@@ -414,29 +329,57 @@
             location.reload();
         }
 
+        // --- 5. CARGAR DATOS DESDE SUPABASE ---
+        async function cargarDatosDelNivelDesdeSupabase(nivel) {
+            // Mostrar estado de carga en la UI (Opcional, pero UX friendly)
+            document.getElementById('palabra-coreano').innerText = "Cargando...";
+            document.getElementById('palabra-espanol').innerText = "Conectando con Supabase...";
+            
+            try {
+                // Descargar todo al mismo tiempo para que sea rápido
+                const [resVocab, resLecturas, resDictados, resOraciones] = await Promise.all([
+                    _supabase.from('app_vocabulario').select('*').eq('nivel', nivel),
+                    _supabase.from('app_lecturas').select('*').eq('nivel', nivel),
+                    _supabase.from('app_dictados').select('*').eq('nivel', nivel),
+                    _supabase.from('app_oraciones').select('*').eq('nivel', nivel)
+                ]);
+
+                // Guardar en la memoria de la app
+                contenidoNivelActual.vocabulario = resVocab.data || [];
+                contenidoNivelActual.lecturas = resLecturas.data || [];
+                // Para dictados y oraciones, adaptamos el formato para que el código viejo lo entienda
+                contenidoNivelActual.dictados = (resDictados.data || []).map(d => d.palabra);
+                contenidoNivelActual.oraciones = (resOraciones.data || []).map(o => ({
+                    espanol: o.espanol, 
+                    palabras: o.palabras // Supabase ya lo entrega como arreglo gracias a JSONB
+                }));
+
+                reiniciarContenidos();
+            } catch (error) {
+                console.error("Error cargando nivel:", error);
+                alert("Hubo un error cargando el nivel desde Supabase.");
+            }
+        }
+
         // --- 6. NAVEGACIÓN Y SISTEMA DE NIVELES ---
         function cambiarVista(vistaId) {
-            // Ocultar todas las vistas
             document.querySelectorAll('.app-view').forEach(el => el.classList.add('hidden', 'flex'));
             document.querySelectorAll('.app-view').forEach(el => el.classList.remove('flex'));
             
-            // Mostrar la seleccionada
             document.getElementById(`view-${vistaId}`).classList.remove('hidden');
             document.getElementById(`view-${vistaId}`).classList.add('flex');
             
-            // Actualizar diseño de botones de navegación (poner gris los inactivos, rosa el activo)
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 if(btn.dataset.target === `view-${vistaId}`) {
                     btn.classList.remove('text-stone-400');
                     btn.classList.add('text-rose-500');
-                    btn.querySelector('i').classList.replace('ph', 'ph-fill'); // Icono relleno
+                    btn.querySelector('i').classList.replace('ph', 'ph-fill');
                 } else {
                     btn.classList.remove('text-rose-500');
                     btn.classList.add('text-stone-400');
                 }
             });
 
-            // Acciones específicas al entrar a una vista
             if(vistaId === 'memo') iniciarMemorama();
             if(vistaId === 'dictado') resetDictadoUI();
             if(vistaId === 'armar') resetArmarUI();
@@ -446,16 +389,18 @@
             indiceVocab = 0;
             indiceLectura = 0;
             indiceOracion = 0;
-            cargarVocabularioUI();
-            cargarLecturaUI();
-            resetDictadoUI();
-            iniciarMemorama();
-            resetArmarUI();
+            
+            if(contenidoNivelActual.vocabulario.length > 0) cargarVocabularioUI();
+            if(contenidoNivelActual.lecturas.length > 0) cargarLecturaUI();
+            if(contenidoNivelActual.dictados.length > 0) resetDictadoUI();
+            if(contenidoNivelActual.vocabulario.length > 0) iniciarMemorama();
+            if(contenidoNivelActual.oraciones.length > 0) resetArmarUI();
         }
 
-        // --- 7. MÓDULO: VOCABULARIO (Tarjetas) ---
+        // --- 7. MÓDULO: VOCABULARIO ---
         function cargarVocabularioUI() {
-            const lista = contenidoApp[nivelActual].vocabulario;
+            const lista = contenidoNivelActual.vocabulario;
+            if(lista.length === 0) return;
             const item = lista[indiceVocab];
             
             const textoCoreano = document.getElementById('palabra-coreano');
@@ -468,38 +413,36 @@
         }
 
         function siguienteVocabulario() {
-            const lista = contenidoApp[nivelActual].vocabulario;
+            const lista = contenidoNivelActual.vocabulario;
             indiceVocab = (indiceVocab + 1) % lista.length;
             cargarVocabularioUI();
         }
 
-        // --- 8. MÓDULO: MEMORAMA (Gamificación) ---
+        // --- 8. MÓDULO: MEMORAMA ---
         let cartasVolteadas = [];
         let bloqueado = false;
         let paresEncontrados = 0;
 
         function iniciarMemorama() {
             const grid = document.getElementById('memo-grid');
-            grid.innerHTML = ''; // Limpiar mesa
+            grid.innerHTML = '';
             cartasVolteadas = [];
             bloqueado = false;
             paresEncontrados = 0;
 
-            // Tomar 6 palabras al azar del nivel actual
-            let palabras = [...contenidoApp[nivelActual].vocabulario].sort(() => 0.5 - Math.random()).slice(0, 6);
-            
-            // Crear el mazo (12 cartas: 6 en coreano, 6 en español)
+            const lista = contenidoNivelActual.vocabulario;
+            if(lista.length === 0) return;
+
+            let palabras = [...lista].sort(() => 0.5 - Math.random()).slice(0, 6);
             let mazo = [];
             palabras.forEach(p => {
                 mazo.push({ texto: p.coreano, tipo: 'kr', id: p.coreano });
                 mazo.push({ texto: p.espanol, tipo: 'es', id: p.coreano });
             });
 
-            // Revolver mazo
             mazo.sort(() => 0.5 - Math.random());
 
-            // Renderizar cartas
-            mazo.forEach((carta, index) => {
+            mazo.forEach((carta) => {
                 const cardEl = document.createElement('div');
                 cardEl.className = 'card perspective h-24 w-full cursor-pointer rounded-2xl';
                 cardEl.dataset.id = carta.id;
@@ -507,11 +450,9 @@
                 
                 cardEl.innerHTML = `
                     <div class="card-inner w-full h-full relative transform-style-3d">
-                        <!-- Frente (Dorso de la carta) -->
                         <div class="backface-hidden absolute w-full h-full bg-rose-100 rounded-2xl border-2 border-rose-200 flex items-center justify-center text-rose-300 text-2xl shadow-sm">
                             <i class="ph-fill ph-flower-lotus"></i>
                         </div>
-                        <!-- Reverso (Contenido) -->
                         <div class="backface-hidden rotate-y-180 absolute w-full h-full bg-white rounded-2xl border-2 border-stone-100 flex items-center justify-center p-2 text-center shadow-sm">
                             <span class="font-bold ${carta.tipo === 'kr' ? 'text-lg text-stone-900' : 'text-xs text-stone-500'}">${carta.texto}</span>
                         </div>
@@ -525,10 +466,8 @@
 
         function voltearCarta(carta) {
             if (bloqueado || carta.classList.contains('flipped') || carta.classList.contains('matched')) return;
-
             carta.classList.add('flipped');
             if(carta.dataset.tipo === 'kr') reproducirVoz(carta.querySelector('span').innerText);
-
             cartasVolteadas.push(carta);
 
             if (cartasVolteadas.length === 2) {
@@ -539,9 +478,7 @@
 
         function verificarPar() {
             const [c1, c2] = cartasVolteadas;
-            const hacenMatch = c1.dataset.id === c2.dataset.id;
-
-            if (hacenMatch) {
+            if (c1.dataset.id === c2.dataset.id) {
                 c1.classList.add('matched');
                 c2.classList.add('matched');
                 paresEncontrados++;
@@ -556,22 +493,21 @@
             }
         }
 
-        function resetearTurno() {
-            cartasVolteadas = [];
-            bloqueado = false;
-        }
+        function resetearTurno() { cartasVolteadas = []; bloqueado = false; }
 
         // --- 9. MÓDULO: LECTURA ---
         function cargarLecturaUI() {
-            const lista = contenidoApp[nivelActual].lecturas;
+            const lista = contenidoNivelActual.lecturas;
+            if(lista.length === 0) return;
             const item = lista[indiceLectura];
             document.getElementById('lectura-coreano').innerText = item.coreano;
             document.getElementById('lectura-traduccion').innerText = item.espanol;
-            document.getElementById('lectura-traduccion').classList.add('hidden'); // Ocultar por defecto
+            document.getElementById('lectura-traduccion').classList.add('hidden');
         }
 
         function siguienteLectura() {
-            const lista = contenidoApp[nivelActual].lecturas;
+            const lista = contenidoNivelActual.lecturas;
+            if(lista.length === 0) return;
             indiceLectura = (indiceLectura + 1) % lista.length;
             cargarLecturaUI();
         }
@@ -582,37 +518,35 @@
 
         // --- 10. MÓDULO: DICTADO ---
         function resetDictadoUI() {
-            const lista = contenidoApp[nivelActual].dictados;
-            // Seleccionar una palabra al azar del nivel
+            const lista = contenidoNivelActual.dictados;
+            if(lista.length === 0) return;
             palabraDictadoActual = lista[Math.floor(Math.random() * lista.length)];
-            
             document.getElementById('dictado-input').value = '';
             document.getElementById('dictado-feedback').style.opacity = 0;
         }
 
         function reproducirDictado() {
-            reproducirVoz(palabraDictadoActual, 0.75); // Lento para que entiendan
+            reproducirVoz(palabraDictadoActual, 0.75);
         }
 
         function verificarDictado() {
             const input = document.getElementById('dictado-input').value.trim();
             const feedback = document.getElementById('dictado-feedback');
-            
             if(!input) return;
 
             feedback.style.opacity = 1;
             if(input === palabraDictadoActual) {
                 feedback.innerText = "¡Perfecto! ✨";
                 feedback.className = "h-6 text-sm font-bold mb-4 transition-opacity text-emerald-500";
-                reproducirVoz("딩동댕"); // Sonido de correcto en corea (Ding dong dang)
-                setTimeout(resetDictadoUI, 1500); // Siguiente palabra auto
+                reproducirVoz("딩동댕");
+                setTimeout(resetDictadoUI, 1500);
             } else {
                 feedback.innerText = `Casi... Era: ${palabraDictadoActual}`;
                 feedback.className = "h-6 text-sm font-bold mb-4 transition-opacity text-rose-500";
             }
         }
 
-        // --- 11. MOTOR DE AUDIO (Web Speech API) ---
+        // --- 11. MOTOR DE AUDIO ---
         function reproducirVoz(texto, velocidad = 0.85) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
@@ -626,13 +560,13 @@
             }
         }
 
-        // --- 12. MÓDULO: CONSTRUCTOR DE ORACIONES (NUEVO SOGANG) ---
+        // --- 12. MÓDULO: CONSTRUCTOR DE ORACIONES ---
         let oracionActual = null;
         let palabrasSeleccionadas = [];
 
         function resetArmarUI() {
-            const lista = contenidoApp[nivelActual].oraciones;
-            if(!lista || lista.length === 0) return;
+            const lista = contenidoNivelActual.oraciones;
+            if(lista.length === 0) return;
             oracionActual = lista[indiceOracion];
             palabrasSeleccionadas = [];
             
@@ -641,10 +575,8 @@
             
             const source = document.getElementById('armar-source');
             const target = document.getElementById('armar-target');
-            source.innerHTML = '';
-            target.innerHTML = '';
+            source.innerHTML = ''; target.innerHTML = '';
             
-            // Barajar palabras de la oración para hacer el reto
             const desordenadas = [...oracionActual.palabras].sort(() => 0.5 - Math.random());
             
             desordenadas.forEach((palabra) => {
@@ -657,7 +589,7 @@
         }
 
         function seleccionarPalabraArmar(btn, palabra) {
-            btn.classList.add('hidden'); // Ocultar el botón original
+            btn.classList.add('hidden');
             palabrasSeleccionadas.push(palabra);
             
             const target = document.getElementById('armar-target');
@@ -666,18 +598,14 @@
             badge.innerText = palabra;
             target.appendChild(badge);
             
-            // Quitar signos de puntuación solo para la pronunciación limpia
             reproducirVoz(palabra.replace(/[^a-zA-Z가-힣]/g, '')); 
             
-            // Si ya seleccionó todas las palabras, verificar si está bien
             if (palabrasSeleccionadas.length === oracionActual.palabras.length) {
                 verificarOracionArmada();
             }
         }
 
-        function limpiarOracion() {
-            resetArmarUI();
-        }
+        function limpiarOracion() { resetArmarUI(); }
 
         function verificarOracionArmada() {
             const armada = palabrasSeleccionadas.join(" ");
@@ -689,7 +617,7 @@
                 feedback.innerText = "¡Excelente estructura! ✨";
                 feedback.className = "text-center text-sm font-bold h-5 transition-opacity text-emerald-500";
                 reproducirVoz(correcta, 0.8);
-                setTimeout(siguienteOracion, 2500); // Avanzar automático después del éxito
+                setTimeout(siguienteOracion, 2500);
             } else {
                 feedback.innerText = "Revisa el orden, vuelve a intentarlo.";
                 feedback.className = "text-center text-sm font-bold h-5 transition-opacity text-rose-500";
@@ -697,7 +625,7 @@
         }
 
         function siguienteOracion() {
-            const lista = contenidoApp[nivelActual].oraciones;
+            const lista = contenidoNivelActual.oraciones;
             indiceOracion = (indiceOracion + 1) % lista.length;
             resetArmarUI();
         }
