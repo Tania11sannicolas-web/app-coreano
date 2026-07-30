@@ -102,13 +102,14 @@ function reproducirAudioActual() {
     if (listaVocabulario.length === 0) return;
     const item = listaVocabulario[indiceActual];
     
-    // Usa el enlace de audio de la base de datos o uno por defecto
+    // Usa el enlace de audio de la base de datos o uno por defecto de respaldo
     const urlAudio = item.audio_url || 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
     
     const reproductor = document.getElementById('audio-real');
     reproductor.src = urlAudio;
+    reproductor.load();
     reproductor.play().catch(error => {
         console.log("Error al reproducir:", error);
-        alert('Toca de nuevo para permitir la reproducción.');
+        alert('Toca de nuevo para permitir la reproducción en el celular.');
     });
 }
