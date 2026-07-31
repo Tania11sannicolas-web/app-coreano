@@ -32,6 +32,12 @@
             transform: rotateY(180deg);
         }
         
+        /* ESTILO PARA CARTAS ACERTADAS */
+        .card.matched .rotate-y-180 { 
+            border-color: #34d399 !important; 
+            background-color: #ecfdf5 !important; 
+        }
+        
         /* Ocultar scrollbar pero permitir scroll */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -135,13 +141,23 @@
                             ...
                         </p>
                         
+                        <!-- Mini Quiz de Comprensión -->
+                        <div id="lectura-quiz" class="mb-6 bg-rose-50/50 p-4 rounded-2xl border border-rose-100 hidden">
+                            <p class="text-[10px] font-bold text-rose-500 uppercase tracking-wider mb-2">Completar la lectura:</p>
+                            <div class="flex gap-2">
+                                <input type="text" id="lectura-input" placeholder="Escribe la palabra faltante..." class="flex-1 px-4 py-3 rounded-xl bg-white border border-stone-200 text-sm focus:outline-none focus:border-rose-300 transition-colors" autocomplete="off">
+                                <button onclick="verificarLectura()" class="bg-rose-500 text-white px-4 py-3 rounded-xl text-sm font-semibold active:scale-95 transition-all shadow-sm"><i class="ph-bold ph-check"></i></button>
+                            </div>
+                            <div id="lectura-feedback" class="h-4 text-xs font-bold mt-2 opacity-0 transition-opacity"></div>
+                        </div>
+
                         <div id="lectura-traduccion" class="hidden text-sm text-stone-500 text-center mb-6 p-4 bg-stone-50 rounded-2xl font-medium">
                             ...
                         </div>
 
                         <div class="grid grid-cols-2 gap-3">
-                            <button onclick="reproducirVoz(document.getElementById('lectura-coreano').innerText, 0.7)" class="bg-stone-900 text-white py-3 rounded-2xl text-sm font-semibold active:scale-95 transition-all flex flex-col items-center justify-center gap-1">
-                                <i class="ph-fill ph-play-circle text-xl"></i> Leer Lento
+                            <button onclick="reproducirVoz(document.getElementById('lectura-coreano').dataset.textoCompleto || document.getElementById('lectura-coreano').innerText, 0.7)" class="bg-stone-900 text-white py-3 rounded-2xl text-sm font-semibold active:scale-95 transition-all flex flex-col items-center justify-center gap-1">
+                                <i class="ph-fill ph-play-circle text-xl"></i> Escuchar
                             </button>
                             <button onclick="toggleTraduccion()" class="bg-stone-100 text-stone-700 py-3 rounded-2xl text-sm font-semibold active:scale-95 transition-all flex flex-col items-center justify-center gap-1">
                                 <i class="ph-bold ph-translate text-xl"></i> Traducir
@@ -200,6 +216,43 @@
                     </div>
                 </div>
 
+                <!-- 6. SECCIÓN ESCRITURA (NUEVA) -->
+                <div id="view-escritura" class="app-view hidden flex-col gap-6 w-full animate-fade-in">
+                    <div class="text-center px-4">
+                        <h2 class="text-xl font-bold text-stone-900 mb-1">Práctica Escrita</h2>
+                        <p class="text-xs text-stone-500">¿Cómo se dice esto en coreano?</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-[32px] shadow-sm border border-stone-100 text-center flex flex-col min-h-[300px] justify-center">
+                        <span class="text-[10px] uppercase tracking-widest text-emerald-500 font-bold bg-emerald-50 px-3 py-1.5 rounded-full inline-block mb-6 mx-auto">Traduce</span>
+                        
+                        <p id="escritura-espanol" class="text-2xl font-medium text-stone-800 mb-8">...</p>
+                        
+                        <div class="w-full relative">
+                            <input type="text" id="escritura-input" placeholder="Escribe en coreano..." class="w-full text-center px-5 py-4 rounded-2xl bg-stone-50 border-2 border-stone-100 text-lg font-medium focus:outline-none focus:border-emerald-300 transition-colors mb-2" autocomplete="off" autocorrect="off" spellcheck="false">
+                            <div id="escritura-feedback" class="h-6 text-sm font-bold mb-4 opacity-0 transition-opacity"></div>
+                        </div>
+
+                        <button onclick="verificarEscritura()" class="w-full bg-emerald-500 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">
+                            Comprobar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Modal Ganador Memorama -->
+                <div id="modal-ganador" class="hidden absolute top-0 left-0 w-full h-full bg-stone-900/40 backdrop-blur-sm z-50 flex-col items-center justify-center p-6 animate-fade-in rounded-[32px]">
+                    <div class="bg-white w-full max-w-sm p-8 rounded-[32px] shadow-xl text-center transform scale-100 transition-transform">
+                        <div class="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-500 text-4xl shadow-inner border border-emerald-100">
+                            <i class="ph-fill ph-confetti"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-stone-900 mb-2">¡Lo lograste!</h3>
+                        <p class="text-sm text-stone-500 mb-8">Tienes una memoria excelente. ✨</p>
+                        <button onclick="cerrarModalYReiniciar()" class="w-full bg-stone-900 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">
+                            Jugar de nuevo
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Botón de logout (al final de todas las vistas) -->
                 <div class="text-center mt-4">
                     <button id="btn-logout" class="text-xs font-bold text-stone-400 hover:text-rose-500 transition-colors">Cerrar Sesión</button>
@@ -211,7 +264,7 @@
 
     <!-- Bottom Navigation Bar (Fija abajo) -->
     <nav id="bottom-nav" class="hidden bg-white border-t border-stone-200/60 pb-safe shrink-0 z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.03)] rounded-t-[32px]">
-        <div class="max-w-md mx-auto w-full px-6 py-4 flex justify-between items-center">
+        <div class="max-w-md mx-auto w-full px-4 py-4 flex justify-between items-center">
             
             <button onclick="cambiarVista('vocab')" class="nav-btn flex flex-col items-center gap-1 active:scale-90 transition-all text-rose-500" data-target="view-vocab">
                 <i class="ph-fill ph-cards text-2xl"></i>
@@ -229,8 +282,13 @@
             </button>
             
             <button onclick="cambiarVista('dictado')" class="nav-btn flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-dictado">
-                <i class="ph-fill ph-pencil-simple text-2xl"></i>
+                <i class="ph-fill ph-headphones text-2xl"></i>
                 <span class="text-[9px] font-bold tracking-wide">Dictado</span>
+            </button>
+            
+            <button onclick="cambiarVista('escritura')" class="nav-btn flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-escritura">
+                <i class="ph-fill ph-keyboard text-2xl"></i>
+                <span class="text-[9px] font-bold tracking-wide">Escribir</span>
             </button>
             
             <button onclick="cambiarVista('armar')" class="nav-btn flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-armar">
@@ -240,7 +298,8 @@
             
         </div>
     </nav>
- <!-- ========================================== -->
+
+    <!-- ========================================== -->
     <!-- LOGICA DE LA APLICACIÓN (JAVASCRIPT)       -->
     <!-- ========================================== -->
     <script>
@@ -254,9 +313,10 @@
         let indiceVocab = 0;
         let indiceLectura = 0;
         let indiceOracion = 0;
+        let indiceEscritura = 0;
         let palabraDictadoActual = "";
+        let colaDictado = []; // Para repetir palabras que se fallen
         
-        // Aquí se guardará lo que descarguemos de Supabase
         let contenidoNivelActual = {
             vocabulario: [], lecturas: [], dictados: [], oraciones: []
         };
@@ -264,13 +324,10 @@
         // --- 3. INICIALIZACIÓN ---
         document.addEventListener('DOMContentLoaded', () => {
             verificarSesion();
-            
-            // Asignar eventos Auth
             document.getElementById('btn-signup').addEventListener('click', handleSignup);
             document.getElementById('btn-login').addEventListener('click', handleLogin);
             document.getElementById('btn-logout').addEventListener('click', cerrarSesion);
             
-            // Evento cambio de nivel (Ahora descarga de Supabase)
             document.getElementById('level-selector').addEventListener('change', (e) => {
                 nivelActual = parseInt(e.target.value);
                 cargarDatosDelNivelDesdeSupabase(nivelActual);
@@ -309,7 +366,6 @@
         async function verificarSesion() {
             const { data: { session } } = await _supabase.auth.getSession();
             if (session) {
-                // UI: Ocultar login, mostrar app
                 document.getElementById('auth-section').classList.add('hidden');
                 document.getElementById('app-section').classList.remove('hidden');
                 document.getElementById('bottom-nav').classList.remove('hidden');
@@ -319,7 +375,6 @@
                 const nombreUsuario = session.user.email.split('@')[0];
                 document.getElementById('user-info').innerText = `¡Hola, ${nombreUsuario}! ✨`;
                 
-                // Cargar datos de la base de datos al entrar
                 cargarDatosDelNivelDesdeSupabase(nivelActual);
             }
         }
@@ -331,12 +386,10 @@
 
         // --- 5. CARGAR DATOS DESDE SUPABASE ---
         async function cargarDatosDelNivelDesdeSupabase(nivel) {
-            // Mostrar estado de carga en la UI (Opcional, pero UX friendly)
             document.getElementById('palabra-coreano').innerText = "Cargando...";
             document.getElementById('palabra-espanol').innerText = "Conectando con Supabase...";
             
             try {
-                // Descargar todo al mismo tiempo para que sea rápido
                 const [resVocab, resLecturas, resDictados, resOraciones] = await Promise.all([
                     _supabase.from('app_vocabulario').select('*').eq('nivel', nivel),
                     _supabase.from('app_lecturas').select('*').eq('nivel', nivel),
@@ -344,14 +397,12 @@
                     _supabase.from('app_oraciones').select('*').eq('nivel', nivel)
                 ]);
 
-                // Guardar en la memoria de la app
                 contenidoNivelActual.vocabulario = resVocab.data || [];
                 contenidoNivelActual.lecturas = resLecturas.data || [];
-                // Para dictados y oraciones, adaptamos el formato para que el código viejo lo entienda
                 contenidoNivelActual.dictados = (resDictados.data || []).map(d => d.palabra);
                 contenidoNivelActual.oraciones = (resOraciones.data || []).map(o => ({
                     espanol: o.espanol, 
-                    palabras: o.palabras // Supabase ya lo entrega como arreglo gracias a JSONB
+                    palabras: o.palabras
                 }));
 
                 reiniciarContenidos();
@@ -377,23 +428,30 @@
                 } else {
                     btn.classList.remove('text-rose-500');
                     btn.classList.add('text-stone-400');
+                    btn.querySelector('i').classList.replace('ph-fill', 'ph');
                 }
             });
 
             if(vistaId === 'memo') iniciarMemorama();
-            if(vistaId === 'dictado') resetDictadoUI();
+            if(vistaId === 'dictado') resetDictadoUI(true); 
             if(vistaId === 'armar') resetArmarUI();
+            if(vistaId === 'escritura') resetEscrituraUI();
         }
 
         function reiniciarContenidos() {
             indiceVocab = 0;
             indiceLectura = 0;
             indiceOracion = 0;
+            indiceEscritura = 0;
+            colaDictado = [];
             
-            if(contenidoNivelActual.vocabulario.length > 0) cargarVocabularioUI();
+            if(contenidoNivelActual.vocabulario.length > 0) {
+                cargarVocabularioUI();
+                iniciarMemorama();
+                resetEscrituraUI();
+            }
             if(contenidoNivelActual.lecturas.length > 0) cargarLecturaUI();
-            if(contenidoNivelActual.dictados.length > 0) resetDictadoUI();
-            if(contenidoNivelActual.vocabulario.length > 0) iniciarMemorama();
+            if(contenidoNivelActual.dictados.length > 0) resetDictadoUI(true);
             if(contenidoNivelActual.oraciones.length > 0) resetArmarUI();
         }
 
@@ -453,7 +511,7 @@
                         <div class="backface-hidden absolute w-full h-full bg-rose-100 rounded-2xl border-2 border-rose-200 flex items-center justify-center text-rose-300 text-2xl shadow-sm">
                             <i class="ph-fill ph-flower-lotus"></i>
                         </div>
-                        <div class="backface-hidden rotate-y-180 absolute w-full h-full bg-white rounded-2xl border-2 border-stone-100 flex items-center justify-center p-2 text-center shadow-sm">
+                        <div class="backface-hidden rotate-y-180 absolute w-full h-full bg-white rounded-2xl border-2 border-stone-100 flex items-center justify-center p-2 text-center shadow-sm transition-colors">
                             <span class="font-bold ${carta.tipo === 'kr' ? 'text-lg text-stone-900' : 'text-xs text-stone-500'}">${carta.texto}</span>
                         </div>
                     </div>
@@ -479,10 +537,17 @@
         function verificarPar() {
             const [c1, c2] = cartasVolteadas;
             if (c1.dataset.id === c2.dataset.id) {
-                c1.classList.add('matched');
+                c1.classList.add('matched'); // El CSS ahora aplicará colores a estas!
                 c2.classList.add('matched');
                 paresEncontrados++;
-                if(paresEncontrados === 6) setTimeout(() => alert("¡Ganaste! ✨ Qué buena memoria."), 500);
+                
+                if(paresEncontrados === 6) {
+                    setTimeout(() => {
+                        document.getElementById('modal-ganador').classList.remove('hidden');
+                        document.getElementById('modal-ganador').classList.add('flex');
+                        reproducirVoz("축하합니다"); // ¡Felicidades!
+                    }, 600);
+                }
                 resetearTurno();
             } else {
                 setTimeout(() => {
@@ -495,14 +560,64 @@
 
         function resetearTurno() { cartasVolteadas = []; bloqueado = false; }
 
-        // --- 9. MÓDULO: LECTURA ---
+        function cerrarModalYReiniciar() {
+            document.getElementById('modal-ganador').classList.add('hidden');
+            document.getElementById('modal-ganador').classList.remove('flex');
+            iniciarMemorama();
+        }
+
+        // --- 9. MÓDULO: LECTURA CON COMPRENSIÓN (QUIZ) ---
+        let palabraFaltanteLectura = "";
+        let textoCoreanoCompleto = "";
+
         function cargarLecturaUI() {
             const lista = contenidoNivelActual.lecturas;
             if(lista.length === 0) return;
             const item = lista[indiceLectura];
-            document.getElementById('lectura-coreano').innerText = item.coreano;
+            
+            textoCoreanoCompleto = item.coreano;
+            document.getElementById('lectura-coreano').dataset.textoCompleto = textoCoreanoCompleto;
+            
+            // Lógica inteligente para ocultar una palabra (Fill in the blank)
+            const palabras = textoCoreanoCompleto.split(" ");
+            let palabrasValidas = palabras.filter(p => p.replace(/[^\w가-힣]/g, '').length >= 1);
+            
+            if (palabrasValidas.length > 0) {
+                let palabraAleatoria = palabrasValidas[Math.floor(Math.random() * palabrasValidas.length)];
+                palabraFaltanteLectura = palabraAleatoria.replace(/[^\w가-힣]/g, '');
+                
+                let textoConHueco = textoCoreanoCompleto.replace(palabraAleatoria, `<span class="text-rose-400 font-bold border-b-2 border-rose-400 px-2 inline-block min-w-[3rem] text-center">?</span>`);
+                document.getElementById('lectura-coreano').innerHTML = textoConHueco;
+                
+                document.getElementById('lectura-quiz').classList.remove('hidden');
+                document.getElementById('lectura-input').value = "";
+                document.getElementById('lectura-feedback').style.opacity = 0;
+            } else {
+                document.getElementById('lectura-coreano').innerText = textoCoreanoCompleto;
+                document.getElementById('lectura-quiz').classList.add('hidden');
+            }
+
             document.getElementById('lectura-traduccion').innerText = item.espanol;
             document.getElementById('lectura-traduccion').classList.add('hidden');
+        }
+
+        function verificarLectura() {
+            const input = document.getElementById('lectura-input').value.trim();
+            const feedback = document.getElementById('lectura-feedback');
+            if(!input) return;
+
+            feedback.style.opacity = 1;
+            if(input === palabraFaltanteLectura) {
+                feedback.innerText = "¡Excelente comprensión! ✨";
+                feedback.className = "h-4 text-xs font-bold mt-2 transition-opacity text-emerald-500";
+                
+                // Mostrar palabra en el texto original y leerlo todo
+                document.getElementById('lectura-coreano').innerText = textoCoreanoCompleto;
+                reproducirVoz(textoCoreanoCompleto, 0.8);
+            } else {
+                feedback.innerText = "Revisa bien el contexto e intenta de nuevo.";
+                feedback.className = "h-4 text-xs font-bold mt-2 transition-opacity text-rose-500";
+            }
         }
 
         function siguienteLectura() {
@@ -516,11 +631,17 @@
             document.getElementById('lectura-traduccion').classList.toggle('hidden');
         }
 
-        // --- 10. MÓDULO: DICTADO ---
-        function resetDictadoUI() {
+        // --- 10. MÓDULO: DICTADO (CON REPETICIÓN ESPACIADA) ---
+        function resetDictadoUI(forzarReinicio = false) {
             const lista = contenidoNivelActual.dictados;
             if(lista.length === 0) return;
-            palabraDictadoActual = lista[Math.floor(Math.random() * lista.length)];
+            
+            // Si obligamos a reiniciar o si ya vaciamos la cola
+            if (forzarReinicio || colaDictado.length === 0) {
+                colaDictado = [...lista].sort(() => 0.5 - Math.random());
+            }
+            
+            palabraDictadoActual = colaDictado[0];
             document.getElementById('dictado-input').value = '';
             document.getElementById('dictado-feedback').style.opacity = 0;
         }
@@ -539,10 +660,25 @@
                 feedback.innerText = "¡Perfecto! ✨";
                 feedback.className = "h-6 text-sm font-bold mb-4 transition-opacity text-emerald-500";
                 reproducirVoz("딩동댕");
-                setTimeout(resetDictadoUI, 1500);
+                
+                // Quitamos la palabra que acertó de la lista
+                colaDictado.shift(); 
+                
+                if(colaDictado.length === 0) {
+                    setTimeout(() => alert("¡Terminaste todas las palabras de este dictado!"), 1000);
+                    setTimeout(() => resetDictadoUI(true), 1500); // Volver a empezar
+                } else {
+                    setTimeout(() => resetDictadoUI(false), 1500); // Siguiente palabra
+                }
             } else {
-                feedback.innerText = `Casi... Era: ${palabraDictadoActual}`;
+                feedback.innerText = "¡Ups! Pasando al final de la fila...";
                 feedback.className = "h-6 text-sm font-bold mb-4 transition-opacity text-rose-500";
+                
+                // Mueve la palabra actual al final de la lista para volver a intentarla
+                const palabraFallada = colaDictado.shift();
+                colaDictado.push(palabraFallada); 
+                
+                setTimeout(() => resetDictadoUI(false), 1500);
             }
         }
 
@@ -594,8 +730,18 @@
             
             const target = document.getElementById('armar-target');
             const badge = document.createElement('div');
-            badge.className = 'bg-rose-500 text-white px-4 py-2 rounded-xl font-medium shadow-sm flex items-center animate-fade-in';
+            badge.className = 'bg-rose-500 text-white px-4 py-2 rounded-xl font-medium shadow-sm flex items-center animate-fade-in cursor-pointer hover:bg-rose-600 transition-colors';
             badge.innerText = palabra;
+            
+            // CAMBIO: Al tocar en la palabra armada, se regresa al banco de opciones
+            badge.onclick = () => {
+                badge.remove();
+                btn.classList.remove('hidden');
+                const idx = palabrasSeleccionadas.lastIndexOf(palabra);
+                if(idx > -1) palabrasSeleccionadas.splice(idx, 1);
+                document.getElementById('armar-feedback').style.opacity = 0;
+            };
+            
             target.appendChild(badge);
             
             reproducirVoz(palabra.replace(/[^a-zA-Z가-힣]/g, '')); 
@@ -628,6 +774,43 @@
             const lista = contenidoNivelActual.oraciones;
             indiceOracion = (indiceOracion + 1) % lista.length;
             resetArmarUI();
+        }
+
+        // --- 13. MÓDULO NUEVO: PRÁCTICA DE ESCRITURA ---
+        function resetEscrituraUI() {
+            const lista = contenidoNivelActual.vocabulario;
+            if(lista.length === 0) return;
+            
+            const item = lista[indiceEscritura];
+            document.getElementById('escritura-espanol').innerText = item.espanol;
+            document.getElementById('escritura-input').value = '';
+            document.getElementById('escritura-feedback').style.opacity = 0;
+        }
+
+        function verificarEscritura() {
+            const lista = contenidoNivelActual.vocabulario;
+            if(lista.length === 0) return;
+            
+            const item = lista[indiceEscritura];
+            const input = document.getElementById('escritura-input').value.trim();
+            const feedback = document.getElementById('escritura-feedback');
+            
+            if(!input) return;
+
+            feedback.style.opacity = 1;
+            if(input === item.coreano) {
+                feedback.innerText = "¡Excelente! ✨";
+                feedback.className = "h-6 text-sm font-bold mb-4 transition-opacity text-emerald-500";
+                reproducirVoz(item.coreano);
+                
+                setTimeout(() => {
+                    indiceEscritura = (indiceEscritura + 1) % lista.length;
+                    resetEscrituraUI();
+                }, 1500);
+            } else {
+                feedback.innerText = `Incorrecto. Pista: empieza con la sílaba "${item.coreano.charAt(0)}"`;
+                feedback.className = "h-6 text-sm font-bold mb-4 transition-opacity text-rose-500";
+            }
         }
     </script>
 </body>
