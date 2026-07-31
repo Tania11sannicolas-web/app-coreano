@@ -106,7 +106,7 @@
                     </div>
                     <div class="bg-white p-8 rounded-[32px] shadow-sm border border-stone-100 text-center relative overflow-hidden flex-1 flex flex-col justify-center min-h-[400px]">
                         <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-amber-200 to-amber-400"></div>
-                        <span class="text-[10px] uppercase tracking-widest text-amber-600 font-bold bg-amber-50 px-3 py-1.5 rounded-full inline-block mb-6 mx-auto" id="flashcard-counter">1 / 20</span>
+                        <span class="text-[10px] uppercase tracking-widest text-amber-600 font-bold bg-amber-50 px-3 py-1.5 rounded-full inline-block mb-6 mx-auto" id="vocab-counter">0 / 20</span>
                         
                         <p id="palabra-coreano" class="text-5xl font-medium text-stone-900 mt-4 mb-4 tracking-wide transition-opacity duration-300">...</p>
                         <p id="palabra-espanol" class="text-base text-stone-500 mb-10 font-medium">...</p>
@@ -129,12 +129,14 @@
 
                 <!-- 2. MEMORAMA (Color ROSA) -->
                 <div id="view-memo" class="app-view hidden flex-col gap-4 w-full animate-fade-in">
-                    <div class="flex justify-between items-end px-2 mb-2">
+                    <div class="flex justify-between items-center px-2 mb-2">
                         <div>
                             <h2 class="text-xl font-bold text-stone-900">Memorama</h2>
-                            <p class="text-xs text-stone-500">Encuentra los pares mágicos.</p>
                         </div>
-                        <button onclick="reiniciarJuegoActivo()" class="text-rose-500 bg-rose-50 p-2 rounded-xl active:scale-95 transition-all"><i class="ph-bold ph-arrows-clockwise text-lg"></i></button>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] uppercase tracking-widest text-rose-500 font-bold bg-rose-50 px-3 py-1.5 rounded-full inline-block" id="memo-counter">0 / 20</span>
+                            <button onclick="reiniciarJuegoActivo()" class="text-rose-500 bg-rose-50 p-2 rounded-xl active:scale-95 transition-all"><i class="ph-bold ph-arrows-clockwise text-lg"></i></button>
+                        </div>
                     </div>
                     <div id="memo-grid" class="grid grid-cols-3 gap-3 w-full"></div>
                 </div>
@@ -145,11 +147,13 @@
                         <h2 class="text-xl font-bold text-stone-900">Lectura Guiada</h2>
                         <button onclick="reiniciarJuegoActivo()" class="text-sky-500 bg-sky-50 p-2 rounded-xl active:scale-95 transition-all"><i class="ph-bold ph-arrows-clockwise text-lg"></i></button>
                     </div>
-                    <div class="bg-white p-6 rounded-[32px] shadow-sm border border-stone-100 relative">
-                        <div class="text-3xl text-sky-200 absolute top-4 left-4"><i class="ph-fill ph-quotes"></i></div>
-                        <p id="lectura-coreano" class="text-2xl font-medium text-stone-800 leading-relaxed mt-6 mb-6 text-center px-4">...</p>
+                    <div class="bg-white p-6 rounded-[32px] shadow-sm border border-stone-100 relative text-center">
+                        <span class="text-[10px] uppercase tracking-widest text-sky-600 font-bold bg-sky-50 px-3 py-1.5 rounded-full inline-block mb-2 mx-auto" id="lectura-counter">0 / 20</span>
                         
-                        <div id="lectura-quiz" class="mb-6 bg-sky-50/60 p-4 rounded-2xl border border-sky-100 hidden">
+                        <div class="text-3xl text-sky-200 absolute top-4 left-4"><i class="ph-fill ph-quotes"></i></div>
+                        <p id="lectura-coreano" class="text-2xl font-medium text-stone-800 leading-relaxed mt-4 mb-6 text-center px-4">...</p>
+                        
+                        <div id="lectura-quiz" class="mb-6 bg-sky-50/60 p-4 rounded-2xl border border-sky-100 hidden text-left">
                             <p class="text-[10px] font-bold text-sky-600 uppercase tracking-wider mb-2">Completar la lectura:</p>
                             <div class="flex gap-2">
                                 <input type="text" id="lectura-input" placeholder="Escribe aquí..." class="flex-1 px-4 py-3 rounded-xl bg-white border border-stone-200 text-sm focus:outline-none focus:border-sky-300 transition-colors text-sky-700 font-medium" autocomplete="off">
@@ -169,20 +173,17 @@
                             </button>
                         </div>
                     </div>
-                    <button onclick="siguienteLectura()" class="mx-auto text-sm font-semibold text-sky-500 active:scale-95 transition-all">Siguiente texto ➔</button>
                 </div>
 
                 <!-- 4. DICTADO (Color ESMERALDA/EMERALD) -->
                 <div id="view-dictado" class="app-view hidden flex-col gap-6 w-full animate-fade-in">
                     <div class="flex justify-between items-center px-2 mb-2">
-                        <div>
-                            <h2 class="text-xl font-bold text-stone-900">Dictado al oído</h2>
-                            <p class="text-xs text-stone-500" id="dictado-counter">1 / 20</p>
-                        </div>
+                        <h2 class="text-xl font-bold text-stone-900">Dictado al oído</h2>
                         <button onclick="reiniciarJuegoActivo()" class="text-emerald-500 bg-emerald-50 p-2 rounded-xl active:scale-95 transition-all"><i class="ph-bold ph-arrows-clockwise text-lg"></i></button>
                     </div>
 
                     <div class="bg-white p-6 rounded-[32px] shadow-sm border border-stone-100 text-center">
+                        <span class="text-[10px] uppercase tracking-widest text-emerald-600 font-bold bg-emerald-50 px-3 py-1.5 rounded-full inline-block mb-6 mx-auto" id="dictado-counter">0 / 20</span>
                         <button onclick="reproducirDictado()" class="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6 text-emerald-500 hover:bg-emerald-100 active:scale-90 transition-all shadow-inner border border-emerald-100">
                             <i class="ph-fill ph-headphones text-4xl"></i>
                         </button>
@@ -195,14 +196,12 @@
                 <!-- 5. ARMAR ORACIONES (Color FUCSIA/FUCHSIA) -->
                 <div id="view-armar" class="app-view hidden flex-col gap-6 w-full animate-fade-in">
                     <div class="flex justify-between items-center px-2 mb-2">
-                        <div>
-                            <h2 class="text-xl font-bold text-stone-900">Estructura</h2>
-                            <p class="text-xs text-stone-500">Ordena las palabras.</p>
-                        </div>
+                        <h2 class="text-xl font-bold text-stone-900">Estructura</h2>
                         <button onclick="reiniciarJuegoActivo()" class="text-fuchsia-500 bg-fuchsia-50 p-2 rounded-xl active:scale-95 transition-all"><i class="ph-bold ph-arrows-clockwise text-lg"></i></button>
                     </div>
 
-                    <div class="bg-white p-6 rounded-[32px] shadow-sm border border-stone-100 flex flex-col items-center">
+                    <div class="bg-white p-6 rounded-[32px] shadow-sm border border-stone-100 flex flex-col items-center text-center">
+                        <span class="text-[10px] uppercase tracking-widest text-fuchsia-600 font-bold bg-fuchsia-50 px-3 py-1.5 rounded-full inline-block mb-6 mx-auto" id="armar-counter">0 / 20</span>
                         <p id="armar-espanol" class="text-base text-stone-700 font-medium mb-6 text-center">...</p>
                         <div id="armar-target" class="w-full min-h-[60px] bg-fuchsia-50/50 rounded-2xl border-2 border-dashed border-fuchsia-200 mb-2 p-2 flex flex-wrap gap-2 items-center justify-center"></div>
                         <div id="armar-feedback" class="h-10 text-sm mb-4 opacity-0 transition-opacity flex items-center text-center justify-center"></div>
@@ -215,15 +214,12 @@
                 <!-- 6. ESCRITURA (Color NARANJA/ORANGE) -->
                 <div id="view-escritura" class="app-view hidden flex-col gap-6 w-full animate-fade-in">
                     <div class="flex justify-between items-center px-2 mb-2">
-                        <div>
-                            <h2 class="text-xl font-bold text-stone-900">Práctica Escrita</h2>
-                            <p class="text-xs text-stone-500" id="escritura-counter">1 / 20</p>
-                        </div>
+                        <h2 class="text-xl font-bold text-stone-900">Práctica Escrita</h2>
                         <button onclick="reiniciarJuegoActivo()" class="text-orange-500 bg-orange-50 p-2 rounded-xl active:scale-95 transition-all"><i class="ph-bold ph-arrows-clockwise text-lg"></i></button>
                     </div>
 
                     <div class="bg-white p-6 rounded-[32px] shadow-sm border border-stone-100 text-center flex flex-col min-h-[300px] justify-center">
-                        <span class="text-[10px] uppercase tracking-widest text-orange-500 font-bold bg-orange-50 px-3 py-1.5 rounded-full inline-block mb-6 mx-auto">Traduce</span>
+                        <span class="text-[10px] uppercase tracking-widest text-orange-600 font-bold bg-orange-50 px-3 py-1.5 rounded-full inline-block mb-6 mx-auto" id="escritura-counter">0 / 20</span>
                         <p id="escritura-espanol" class="text-2xl font-medium text-stone-800 mb-8">...</p>
                         <div class="w-full relative">
                             <input type="text" id="escritura-input" placeholder="Escribe en coreano..." class="w-full text-center px-5 py-4 rounded-2xl bg-stone-50 border-2 border-stone-100 text-lg font-medium text-orange-700 focus:outline-none focus:border-orange-400 transition-colors mb-2" autocomplete="off" spellcheck="false">
@@ -246,7 +242,7 @@
                     <!-- Examen Activo -->
                     <div id="examen-activo" class="hidden flex-col gap-4 w-full">
                         <div class="flex justify-between items-center mt-2 px-2">
-                            <div class="text-xs text-stone-400 font-bold tracking-widest uppercase" id="examen-contador">1 / 20</div>
+                            <div class="text-xs text-stone-400 font-bold tracking-widest uppercase" id="examen-contador-top">TEST</div>
                             <button onclick="terminarExamenTemprano()" class="text-indigo-500 bg-indigo-50 p-2 rounded-xl active:scale-95 transition-all"><i class="ph-bold ph-arrows-clockwise text-lg"></i></button>
                         </div>
                         <div class="w-full bg-indigo-50 h-2 rounded-full overflow-hidden mb-2">
@@ -254,7 +250,10 @@
                         </div>
 
                         <div class="bg-white p-6 rounded-[32px] shadow-sm border border-stone-100 flex flex-col items-center text-center">
-                            <span id="examen-tipo-badge" class="text-[10px] uppercase tracking-widest text-indigo-600 font-bold bg-indigo-50 px-3 py-1.5 rounded-full inline-block mb-6 mx-auto">Tipo</span>
+                            <div class="flex gap-2 justify-center mb-6">
+                                <span id="examen-tipo-badge" class="text-[10px] uppercase tracking-widest text-indigo-600 font-bold bg-indigo-50 px-3 py-1.5 rounded-full inline-block">Tipo</span>
+                                <span class="text-[10px] uppercase tracking-widest text-indigo-600 font-bold bg-indigo-50 px-3 py-1.5 rounded-full inline-block" id="examen-contador">0 / 20</span>
+                            </div>
 
                             <!-- UI Dinámicas -->
                             <div id="examen-escritura-ui" class="w-full hidden flex-col">
@@ -290,10 +289,14 @@
                 </div>
 
                 <div id="modal-filtro" class="hidden absolute top-0 left-0 w-full h-full bg-stone-900/50 backdrop-blur-sm z-50 flex-col items-center justify-center p-6 animate-fade-in rounded-[32px]">
-                    <div class="bg-white w-full max-w-sm p-8 rounded-[32px] shadow-xl">
+                    <div class="bg-white w-full max-w-sm p-8 rounded-[32px] shadow-xl text-center">
                         <h3 class="text-xl font-bold text-stone-900 mb-1" id="filtro-title">Opciones</h3>
-                        <p class="text-xs text-stone-500 mb-6">Selecciona los temas a estudiar.</p>
-                        <div class="space-y-3 mb-8 max-h-[50vh] overflow-y-auto no-scrollbar" id="filtro-niveles-container">
+                        <p class="text-xs text-stone-500 mb-3">Selecciona los temas a estudiar.</p>
+                        
+                        <!-- CONTADOR DE TEMAS SELECCIONADOS -->
+                        <div id="filtro-contador-texto" class="text-xs font-bold text-rose-500 mb-6 bg-rose-50 inline-block px-3 py-1.5 rounded-full transition-colors">0 temas seleccionados</div>
+                        
+                        <div class="space-y-3 mb-8 max-h-[50vh] overflow-y-auto no-scrollbar text-left" id="filtro-niveles-container">
                             <!-- Se llena por JS dependiendo del modo -->
                         </div>
                         <button onclick="aplicarFiltroYRecargar()" class="w-full bg-stone-900 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">Guardar y Aplicar</button>
@@ -304,7 +307,7 @@
                     <div class="bg-white w-full max-w-sm p-8 rounded-[32px] shadow-xl text-center">
                         <div class="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-500 text-4xl shadow-inner border border-emerald-100"><i class="ph-fill ph-check-circle"></i></div>
                         <h3 class="text-2xl font-bold text-stone-900 mb-2">¡Ronda completada! ✨</h3>
-                        <p class="text-sm text-stone-500 mb-8">Has terminado la sesión de práctica.</p>
+                        <p class="text-sm text-stone-500 mb-8">Has terminado los 20 ejercicios de esta sección.</p>
                         <div class="space-y-3">
                             <button onclick="cerrarModalRondaYReiniciar()" class="w-full bg-emerald-500 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">Siguiente Ronda</button>
                             <button onclick="document.getElementById('modal-ronda').classList.add('hidden'); abrirFiltro();" class="w-full bg-stone-100 text-stone-700 py-4 rounded-2xl text-sm font-semibold border-2 border-stone-100 active:scale-95 transition-all">Cambiar Temas</button>
@@ -319,23 +322,18 @@
     <nav id="bottom-nav" class="hidden bg-white border-t border-stone-200/60 pb-safe shrink-0 z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.03)] rounded-t-[32px]">
         <div class="max-w-md mx-auto w-full px-6 py-4 flex gap-6 overflow-x-auto no-scrollbar items-center justify-center">
             
-            <!-- Items de Vocabulario -->
             <button id="nav-vocab" onclick="cambiarVista('vocab')" class="nav-btn shrink-0 flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400" data-target="view-vocab">
                 <i class="ph-fill ph-cards text-2xl"></i><span class="text-[9px] font-bold tracking-wide">Tarjetas</span>
             </button>
             <button id="nav-memo" onclick="cambiarVista('memo')" class="nav-btn shrink-0 flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-memo">
                 <i class="ph-fill ph-puzzle-piece text-2xl"></i><span class="text-[9px] font-bold tracking-wide">Juego</span>
             </button>
-
-            <!-- Items de Gramática -->
             <button id="nav-armar" onclick="cambiarVista('armar')" class="nav-btn shrink-0 flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-armar">
                 <i class="ph-fill ph-magic-wand text-2xl"></i><span class="text-[9px] font-bold tracking-wide">Armar</span>
             </button>
             <button id="nav-lectura" onclick="cambiarVista('lectura')" class="nav-btn shrink-0 flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-lectura">
                 <i class="ph-fill ph-book-open-text text-2xl"></i><span class="text-[9px] font-bold tracking-wide">Lectura</span>
             </button>
-            
-            <!-- Items Compartidos -->
             <button id="nav-dictado" onclick="cambiarVista('dictado')" class="nav-btn shrink-0 flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-dictado">
                 <i class="ph-fill ph-headphones text-2xl"></i><span class="text-[9px] font-bold tracking-wide">Dictado</span>
             </button>
@@ -359,32 +357,22 @@
         let contenidoNivelActual = { vocabulario: [], lecturas: [], dictados: [], oraciones: [] };
         
         let currentMode = ''; 
-        let queueVocab = [], queueDictado = [], queueEscritura = [], queueArmar = [];
-        let indiceVocab = 0, indiceLectura = 0;
+        
+        // Colas y Contadores Unificados (Siempre máx 20 por ronda)
         const MAX_RONDA = 20;
+        let queueVocab = [], queueMemo = [], queueLectura = [], queueDictado = [], queueEscritura = [], queueArmar = [];
+        let progreso = { vocab: 0, memo: 0, lectura: 0, dictado: 0, armar: 0, escritura: 0, examen: 0 };
+        let totales = { vocab: 0, memo: 0, lectura: 0, dictado: 0, armar: 0, escritura: 0, examen: 0 };
 
-        // Mapa de colores para cada vista en el menú inferior
-        const navColors = {
-            vocab: 'text-amber-500',
-            memo: 'text-rose-500',
-            lectura: 'text-sky-500',
-            dictado: 'text-emerald-500',
-            armar: 'text-fuchsia-500',
-            escritura: 'text-orange-500',
-            examen: 'text-indigo-500'
-        };
+        const navColors = { vocab: 'text-amber-500', memo: 'text-rose-500', lectura: 'text-sky-500', dictado: 'text-emerald-500', armar: 'text-fuchsia-500', escritura: 'text-orange-500', examen: 'text-indigo-500' };
 
-        // UI Helpers
         function showToast(msg, icon = '✨') {
             const toast = document.getElementById('toast');
             document.getElementById('toast-msg').innerText = msg;
             document.getElementById('toast-icon').innerText = icon;
             toast.classList.remove('-translate-y-24', 'opacity-0');
             toast.classList.add('translate-y-0', 'opacity-100');
-            setTimeout(() => {
-                toast.classList.remove('translate-y-0', 'opacity-100');
-                toast.classList.add('-translate-y-24', 'opacity-0');
-            }, 3000);
+            setTimeout(() => { toast.classList.remove('translate-y-0', 'opacity-100'); toast.classList.add('-translate-y-24', 'opacity-0'); }, 3000);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -395,24 +383,18 @@
         });
 
         async function handleSignup() {
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value.trim();
+            const email = document.getElementById('email').value.trim(); const password = document.getElementById('password').value.trim();
             if(!email || !password) return showToast('Ingresa correo y contraseña.', '⚠️');
-            const btn = document.getElementById('btn-signup');
-            btn.innerText = "Cargando...";
-            const { error } = await _supabase.auth.signUp({ email, password });
-            btn.innerText = "Crear cuenta nueva";
+            const btn = document.getElementById('btn-signup'); btn.innerText = "Cargando...";
+            const { error } = await _supabase.auth.signUp({ email, password }); btn.innerText = "Crear cuenta nueva";
             if (error) showToast(error.message, '❌'); else showToast('¡Registro exitoso!', '🎉');
         }
 
         async function handleLogin() {
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value.trim();
+            const email = document.getElementById('email').value.trim(); const password = document.getElementById('password').value.trim();
             if(!email || !password) return showToast('Ingresa correo y contraseña.', '⚠️');
-            const btn = document.getElementById('btn-login');
-            btn.innerText = "Cargando...";
-            const { error } = await _supabase.auth.signInWithPassword({ email, password });
-            btn.innerText = "Iniciar Sesión";
+            const btn = document.getElementById('btn-login'); btn.innerText = "Cargando...";
+            const { error } = await _supabase.auth.signInWithPassword({ email, password }); btn.innerText = "Iniciar Sesión";
             if (error) showToast('Verifica tus datos.', '❌'); else verificarSesion();
         }
 
@@ -431,129 +413,93 @@
         async function cargarTodaLaBaseDeDatos() {
             try {
                 const [resVocab, resLecturas, resDictados, resOraciones] = await Promise.all([
-                    _supabase.from('app_vocabulario').select('*'),
-                    _supabase.from('app_lecturas').select('*'),
-                    _supabase.from('app_dictados').select('*'),
-                    _supabase.from('app_oraciones').select('*')
+                    _supabase.from('app_vocabulario').select('*'), _supabase.from('app_lecturas').select('*'),
+                    _supabase.from('app_dictados').select('*'), _supabase.from('app_oraciones').select('*')
                 ]);
-                dbCache.vocabulario = resVocab.data || [];
-                dbCache.lecturas = resLecturas.data || [];
-                dbCache.dictados = resDictados.data || [];
-                dbCache.oraciones = resOraciones.data || [];
-            } catch (error) {
-                console.error("Error cargando DB:", error);
-            }
+                dbCache.vocabulario = resVocab.data || []; dbCache.lecturas = resLecturas.data || [];
+                dbCache.dictados = resDictados.data || []; dbCache.oraciones = resOraciones.data || [];
+            } catch (error) { console.error("Error cargando DB:", error); }
         }
 
         function volverAlMenuPrincipal() {
-            document.getElementById('app-section').classList.add('hidden');
-            document.getElementById('app-section').classList.remove('flex');
-            document.getElementById('bottom-nav').classList.add('hidden');
-            document.getElementById('btn-opciones').classList.add('hidden');
-            
-            document.getElementById('mode-selection').classList.remove('hidden');
-            document.getElementById('mode-selection').classList.add('flex');
-            document.getElementById('header-badge').innerText = "Inicio";
-            document.getElementById('header-badge').className = "text-[9px] text-rose-500 font-bold px-2 py-0.5 bg-rose-50 rounded-full uppercase tracking-wider";
+            document.getElementById('app-section').classList.add('hidden'); document.getElementById('app-section').classList.remove('flex');
+            document.getElementById('bottom-nav').classList.add('hidden'); document.getElementById('btn-opciones').classList.add('hidden');
+            document.getElementById('mode-selection').classList.remove('hidden'); document.getElementById('mode-selection').classList.add('flex');
+            document.getElementById('header-badge').innerText = "Inicio"; document.getElementById('header-badge').className = "text-[9px] text-rose-500 font-bold px-2 py-0.5 bg-rose-50 rounded-full uppercase tracking-wider";
         }
 
         function iniciarModo(modo) {
             currentMode = modo;
-            document.getElementById('mode-selection').classList.add('hidden');
-            document.getElementById('mode-selection').classList.remove('flex');
-            
-            document.getElementById('app-section').classList.remove('hidden');
-            document.getElementById('app-section').classList.add('flex');
-            document.getElementById('bottom-nav').classList.remove('hidden');
-            document.getElementById('btn-opciones').classList.remove('hidden');
+            document.getElementById('mode-selection').classList.add('hidden'); document.getElementById('mode-selection').classList.remove('flex');
+            document.getElementById('app-section').classList.remove('hidden'); document.getElementById('app-section').classList.add('flex');
+            document.getElementById('bottom-nav').classList.remove('hidden'); document.getElementById('btn-opciones').classList.remove('hidden');
             
             if (modo === 'vocab') {
-                document.getElementById('header-badge').innerText = "Vocabulario";
-                document.getElementById('header-badge').className = "text-[9px] text-amber-500 font-bold px-2 py-0.5 bg-amber-50 rounded-full uppercase tracking-wider";
-                document.getElementById('nav-armar').classList.add('hidden');
-                document.getElementById('nav-lectura').classList.add('hidden');
-                document.getElementById('nav-vocab').classList.remove('hidden');
-                document.getElementById('nav-memo').classList.remove('hidden');
+                document.getElementById('header-badge').innerText = "Vocabulario"; document.getElementById('header-badge').className = "text-[9px] text-amber-500 font-bold px-2 py-0.5 bg-amber-50 rounded-full uppercase tracking-wider";
+                document.getElementById('nav-armar').classList.add('hidden'); document.getElementById('nav-lectura').classList.add('hidden');
+                document.getElementById('nav-vocab').classList.remove('hidden'); document.getElementById('nav-memo').classList.remove('hidden');
                 nivelesActivos = [1]; 
             } else {
-                document.getElementById('header-badge').innerText = "Gramática";
-                document.getElementById('header-badge').className = "text-[9px] text-fuchsia-500 font-bold px-2 py-0.5 bg-fuchsia-50 rounded-full uppercase tracking-wider";
-                document.getElementById('nav-armar').classList.remove('hidden');
-                document.getElementById('nav-lectura').classList.remove('hidden');
-                document.getElementById('nav-vocab').classList.add('hidden');
-                document.getElementById('nav-memo').classList.add('hidden');
+                document.getElementById('header-badge').innerText = "Gramática"; document.getElementById('header-badge').className = "text-[9px] text-fuchsia-500 font-bold px-2 py-0.5 bg-fuchsia-50 rounded-full uppercase tracking-wider";
+                document.getElementById('nav-armar').classList.remove('hidden'); document.getElementById('nav-lectura').classList.remove('hidden');
+                document.getElementById('nav-vocab').classList.add('hidden'); document.getElementById('nav-memo').classList.add('hidden');
                 nivelesActivos = [201];
             }
-            
-            construirModalFiltro();
-            abrirFiltro();
+            construirModalFiltro(); abrirFiltro();
         }
 
         function construirModalFiltro() {
-            const container = document.getElementById('filtro-niveles-container');
-            container.innerHTML = '';
-            
+            const container = document.getElementById('filtro-niveles-container'); container.innerHTML = '';
             let opciones = [];
             if (currentMode === 'vocab') {
                 document.getElementById('filtro-title').innerText = "Listas de Vocabulario";
                 opciones = [
-                    {val: 1, label: "Nivel 1: 반갑습니다"}, {val: 2, label: "Nivel 2: 이게 뭐예요?"},
-                    {val: 3, label: "Nivel 3: 커피 주세요"}, {val: 4, label: "Nivel 4: 서울역이 어디에 있어요?"},
-                    {val: 5, label: "Nivel 5: 전화번호가 몇 번이에요?"}, {val: 6, label: "Nivel 6: 어디에 가요?"},
-                    {val: 7, label: "Nivel 7: 극장에서 영화를 봐요"}, {val: 8, label: "Nivel 8: 어제 학교에 안 갔어요"},
-                    {val: 9, label: "Nivel 9: 은행이 어디에 있어요?"}, {val: 10, label: "Nivel 10: 어떻게 가요?"},
-                    {val: 100, label: "🌎 Países del Mundo"}, {val: 101, label: "🍔 Comida y Bebida"},
+                    {val: 1, label: "Nivel 1: 반갑습니다"}, {val: 2, label: "Nivel 2: 이게 뭐예요?"}, {val: 3, label: "Nivel 3: 커피 주세요"},
+                    {val: 4, label: "Nivel 4: 서울역이 어디에 있어요?"}, {val: 5, label: "Nivel 5: 전화번호가 몇 번이에요?"}, {val: 6, label: "Nivel 6: 어디에 가요?"},
+                    {val: 7, label: "Nivel 7: 극장에서 영화를 봐요"}, {val: 8, label: "Nivel 8: 어제 학교에 안 갔어요"}, {val: 9, label: "Nivel 9: 은행이 어디에 있어요?"},
+                    {val: 10, label: "Nivel 10: 어떻게 가요?"}, {val: 100, label: "🌎 Países del Mundo"}, {val: 101, label: "🍔 Comida y Bebida"},
                     {val: 106, label: "🔢 Números (Coreanos/Contadores)"}, {val: 107, label: "🔢 Números (Sino/Dinero)"}
                 ];
             } else {
                 document.getElementById('filtro-title').innerText = "Apuntes de Gramática";
                 opciones = [
-                    {val: 201, label: "✨ Ser, Estar y Posesión"},
-                    {val: 202, label: "🧩 Estructura S-T-L-O-V y Partículas"},
-                    {val: 203, label: "⏳ Tiempos, Negación y Verbos"},
-                    {val: 204, label: "📍 Direcciones y Obligaciones"}
+                    {val: 201, label: "✨ Ser, Estar y Posesión"}, {val: 202, label: "🧩 Estructura S-T-L-O-V y Partículas"},
+                    {val: 203, label: "⏳ Tiempos, Negación y Verbos"}, {val: 204, label: "📍 Direcciones y Obligaciones"}
                 ];
             }
-
             opciones.forEach(opc => {
                 const checked = nivelesActivos.includes(opc.val) ? "checked" : "";
                 const color = currentMode === 'vocab' ? 'amber' : 'fuchsia';
                 container.innerHTML += `
                     <label class="flex items-center gap-3 p-4 rounded-2xl border-2 border-stone-100 hover:border-${color}-200 cursor-pointer transition-all focus-within:border-${color}-400 bg-stone-50">
-                        <input type="checkbox" value="${opc.val}" class="filtro-cb w-5 h-5 accent-${color}-500" ${checked}>
+                        <input type="checkbox" value="${opc.val}" class="filtro-cb w-5 h-5 accent-${color}-500" ${checked} onchange="actualizarContadorFiltro()">
                         <span class="text-sm font-bold text-stone-700">${opc.label}</span>
-                    </label>
-                `;
+                    </label>`;
             });
+            actualizarContadorFiltro();
         }
 
-        function abrirFiltro() {
-            document.getElementById('modal-filtro').classList.remove('hidden');
-            document.getElementById('modal-filtro').classList.add('flex');
+        function actualizarContadorFiltro() {
+            const seleccionados = document.querySelectorAll('.filtro-cb:checked').length;
+            const color = currentMode === 'vocab' ? 'amber' : 'fuchsia';
+            const txt = document.getElementById('filtro-contador-texto');
+            txt.innerText = `${seleccionados} tema${seleccionados !== 1 ? 's' : ''} seleccionado${seleccionados !== 1 ? 's' : ''}`;
+            txt.className = `text-xs font-bold text-${color}-600 mb-6 bg-${color}-50 inline-block px-3 py-1.5 rounded-full transition-colors`;
         }
+
+        function abrirFiltro() { document.getElementById('modal-filtro').classList.remove('hidden'); document.getElementById('modal-filtro').classList.add('flex'); }
 
         function aplicarFiltroYRecargar() {
             const checkboxes = document.querySelectorAll('.filtro-cb');
             nivelesActivos = Array.from(checkboxes).filter(cb => cb.checked).map(cb => parseInt(cb.value));
-
-            if(nivelesActivos.length === 0) {
-                showToast("Debes seleccionar al menos un tema.", '⚠️');
-                checkboxes[0].checked = true;
-                nivelesActivos = [parseInt(checkboxes[0].value)];
-            }
-
-            document.getElementById('modal-filtro').classList.add('hidden');
-            document.getElementById('modal-filtro').classList.remove('flex');
+            if(nivelesActivos.length === 0) { showToast("Debes seleccionar al menos un tema.", '⚠️'); checkboxes[0].checked = true; nivelesActivos = [parseInt(checkboxes[0].value)]; }
+            document.getElementById('modal-filtro').classList.add('hidden'); document.getElementById('modal-filtro').classList.remove('flex');
             
             aplicarFiltroLocal();
-            if(currentMode === 'vocab') cambiarVista('vocab');
-            else cambiarVista('armar');
+            if(currentMode === 'vocab') cambiarVista('vocab'); else cambiarVista('armar');
         }
 
-        function mezclarYCortar(array, max) {
-            if(!array || array.length === 0) return [];
-            return [...array].sort(() => 0.5 - Math.random()).slice(0, max);
-        }
+        function mezclarYCortar(array, max) { if(!array || array.length === 0) return []; return [...array].sort(() => 0.5 - Math.random()).slice(0, max); }
 
         function aplicarFiltroLocal() {
             contenidoNivelActual.vocabulario = dbCache.vocabulario.filter(x => nivelesActivos.includes(x.nivel));
@@ -565,283 +511,212 @@
 
         function reiniciarContenidos() {
             if (currentMode === 'vocab') {
-                queueVocab = mezclarYCortar(contenidoNivelActual.vocabulario, 50);
+                queueVocab = mezclarYCortar(contenidoNivelActual.vocabulario, MAX_RONDA);
+                queueMemo = mezclarYCortar(contenidoNivelActual.vocabulario, MAX_RONDA);
                 queueDictado = mezclarYCortar(contenidoNivelActual.dictados, MAX_RONDA);
                 queueEscritura = mezclarYCortar(contenidoNivelActual.vocabulario, MAX_RONDA);
-                queueArmar = [];
+                queueArmar = []; queueLectura = [];
             } else {
                 let frasesList = contenidoNivelActual.oraciones.map(o => ({ espanol: o.espanol, coreano: o.palabras.join(" ") }));
-                queueVocab = [];
+                queueVocab = []; queueMemo = [];
+                queueLectura = mezclarYCortar(contenidoNivelActual.lecturas, MAX_RONDA);
                 queueDictado = mezclarYCortar(frasesList.map(o => o.coreano), MAX_RONDA);
                 queueEscritura = mezclarYCortar(frasesList, MAX_RONDA);
                 queueArmar = mezclarYCortar(contenidoNivelActual.oraciones, MAX_RONDA);
             }
             
-            indiceVocab = 0;
-            indiceLectura = 0;
+            totales = { vocab: queueVocab.length, memo: queueMemo.length, lectura: queueLectura.length, dictado: queueDictado.length, armar: queueArmar.length, escritura: queueEscritura.length, examen: 20 };
+            progreso = { vocab: 0, memo: 0, lectura: 0, dictado: 0, armar: 0, escritura: 0, examen: 0 };
             
             if(currentMode === 'vocab') { cargarVocabularioUI(); iniciarMemorama(); }
-            if(currentMode === 'grammar' && contenidoNivelActual.lecturas.length > 0) cargarLecturaUI();
+            if(currentMode === 'grammar' && queueLectura.length > 0) cargarLecturaUI();
             
-            resetDictadoUI(true);
-            resetEscrituraUI(true);
-            resetArmarUI(true);
+            resetDictadoUI(); resetEscrituraUI(); resetArmarUI();
         }
 
         function cambiarVista(vistaId) {
-            document.querySelectorAll('.app-view').forEach(el => el.classList.add('hidden', 'flex'));
-            document.querySelectorAll('.app-view').forEach(el => el.classList.remove('flex'));
-            document.getElementById(`view-${vistaId}`).classList.remove('hidden');
-            document.getElementById(`view-${vistaId}`).classList.add('flex');
+            document.querySelectorAll('.app-view').forEach(el => el.classList.add('hidden', 'flex')); document.querySelectorAll('.app-view').forEach(el => el.classList.remove('flex'));
+            document.getElementById(`view-${vistaId}`).classList.remove('hidden'); document.getElementById(`view-${vistaId}`).classList.add('flex');
             
             const activeColorClass = navColors[vistaId] || 'text-stone-900';
-
             document.querySelectorAll('.nav-btn').forEach(btn => {
-                // Reset all colors
-                Object.values(navColors).forEach(c => btn.classList.remove(c));
-                btn.classList.add('text-stone-400');
+                Object.values(navColors).forEach(c => btn.classList.remove(c)); btn.classList.add('text-stone-400');
                 btn.querySelector('i').classList.replace('ph-fill', 'ph');
-                
-                if(btn.dataset.target === `view-${vistaId}`) {
-                    btn.classList.remove('text-stone-400');
-                    btn.classList.add(activeColorClass);
-                    btn.querySelector('i').classList.replace('ph', 'ph-fill');
-                }
+                if(btn.dataset.target === `view-${vistaId}`) { btn.classList.remove('text-stone-400'); btn.classList.add(activeColorClass); btn.querySelector('i').classList.replace('ph', 'ph-fill'); }
             });
         }
 
-        function reiniciarJuegoActivo() {
-            reiniciarContenidos();
-            showToast("Ejercicios barajeados y reiniciados.", "✨");
-        }
+        function reiniciarJuegoActivo() { reiniciarContenidos(); showToast("Ejercicios barajeados y reiniciados a 0/20.", "✨"); }
 
         function cargarVocabularioUI() {
             if(queueVocab.length === 0) return;
-            const item = queueVocab[indiceVocab];
-            document.getElementById('flashcard-counter').innerText = `${indiceVocab + 1} / ${queueVocab.length}`;
-            const textoCoreano = document.getElementById('palabra-coreano');
-            textoCoreano.style.opacity = 0;
+            document.getElementById('vocab-counter').innerText = `${progreso.vocab} / ${totales.vocab}`;
+            const item = queueVocab[progreso.vocab];
+            const textoCoreano = document.getElementById('palabra-coreano'); textoCoreano.style.opacity = 0;
             setTimeout(() => {
-                textoCoreano.innerText = item.coreano;
-                document.getElementById('palabra-espanol').innerText = item.espanol;
-                textoCoreano.style.opacity = 1;
+                textoCoreano.innerText = item.coreano; document.getElementById('palabra-espanol').innerText = item.espanol; textoCoreano.style.opacity = 1;
             }, 150);
         }
         function siguienteVocabulario() {
             if(queueVocab.length === 0) return;
-            indiceVocab = (indiceVocab + 1) % queueVocab.length;
-            cargarVocabularioUI();
+            progreso.vocab++;
+            if (progreso.vocab >= totales.vocab) { 
+                document.getElementById('modal-ronda').classList.remove('hidden'); document.getElementById('modal-ronda').classList.add('flex');
+                progreso.vocab = 0; // Por si lo cierra
+            } else { cargarVocabularioUI(); }
         }
         function anteriorVocabulario() {
             if(queueVocab.length === 0) return;
-            indiceVocab = (indiceVocab - 1 + queueVocab.length) % queueVocab.length;
+            if(progreso.vocab > 0) progreso.vocab--;
             cargarVocabularioUI();
         }
 
-        let cartasVolteadas = [], bloqueado = false, paresEncontrados = 0;
-        function iniciarMemorama() {
-            const grid = document.getElementById('memo-grid');
-            grid.innerHTML = ''; cartasVolteadas = []; bloqueado = false; paresEncontrados = 0;
-            if(queueVocab.length === 0) return;
-            let palabras = [...queueVocab].sort(() => 0.5 - Math.random()).slice(0, 6);
+        let memoTableroActual = [], cartasVolteadas = [], bloqueado = false, paresEncontrados = 0;
+        function iniciarMemorama() { progreso.memo = 0; renderizarTableroMemo(); }
+        function renderizarTableroMemo() {
+            const grid = document.getElementById('memo-grid'); grid.innerHTML = ''; cartasVolteadas = []; bloqueado = false; paresEncontrados = 0;
+            document.getElementById('memo-counter').innerText = `${progreso.memo} / ${totales.memo}`;
+            memoTableroActual = queueMemo.slice(progreso.memo, progreso.memo + 6);
+            if(memoTableroActual.length === 0) return;
+            
             let mazo = [];
-            palabras.forEach(p => {
-                mazo.push({ texto: p.coreano, tipo: 'kr', id: p.coreano });
-                mazo.push({ texto: p.espanol, tipo: 'es', id: p.coreano });
-            });
+            memoTableroActual.forEach(p => { mazo.push({ texto: p.coreano, tipo: 'kr', id: p.coreano }); mazo.push({ texto: p.espanol, tipo: 'es', id: p.coreano }); });
             mazo.sort(() => 0.5 - Math.random());
             mazo.forEach((carta) => {
-                const cardEl = document.createElement('div');
-                cardEl.className = 'card perspective h-24 w-full cursor-pointer rounded-2xl';
-                cardEl.dataset.id = carta.id; cardEl.dataset.tipo = carta.tipo;
+                const cardEl = document.createElement('div'); cardEl.className = 'card perspective h-24 w-full cursor-pointer rounded-2xl'; cardEl.dataset.id = carta.id; cardEl.dataset.tipo = carta.tipo;
                 cardEl.innerHTML = `<div class="card-inner w-full h-full relative transform-style-3d"><div class="backface-hidden absolute w-full h-full bg-rose-100 rounded-2xl border-2 border-rose-200 flex items-center justify-center text-rose-400 text-2xl"><i class="ph-fill ph-flower-lotus"></i></div><div class="backface-hidden rotate-y-180 absolute w-full h-full bg-white rounded-2xl border-2 border-stone-100 flex items-center justify-center p-2 text-center transition-colors"><span class="font-bold ${carta.tipo === 'kr' ? 'text-lg text-stone-900' : 'text-xs text-stone-500'}">${carta.texto}</span></div></div>`;
-                cardEl.addEventListener('click', () => voltearCarta(cardEl));
-                grid.appendChild(cardEl);
+                cardEl.addEventListener('click', () => voltearCarta(cardEl)); grid.appendChild(cardEl);
             });
         }
         function voltearCarta(carta) {
             if (bloqueado || carta.classList.contains('flipped') || carta.classList.contains('matched')) return;
-            carta.classList.add('flipped');
-            if(carta.dataset.tipo === 'kr') reproducirVoz(carta.querySelector('span').innerText);
-            cartasVolteadas.push(carta);
-            if (cartasVolteadas.length === 2) { bloqueado = true; verificarPar(); }
+            carta.classList.add('flipped'); if(carta.dataset.tipo === 'kr') reproducirVoz(carta.querySelector('span').innerText);
+            cartasVolteadas.push(carta); if (cartasVolteadas.length === 2) { bloqueado = true; verificarPar(); }
         }
         function verificarPar() {
             const [c1, c2] = cartasVolteadas;
             if (c1.dataset.id === c2.dataset.id) {
-                c1.classList.add('matched'); c2.classList.add('matched'); paresEncontrados++;
-                if(paresEncontrados === 6) setTimeout(() => {
-                    document.getElementById('modal-ronda').classList.remove('hidden');
-                    document.getElementById('modal-ronda').classList.add('flex');
-                    reproducirVoz("딩동댕");
+                c1.classList.add('matched'); c2.classList.add('matched'); paresEncontrados++; progreso.memo++;
+                document.getElementById('memo-counter').innerText = `${progreso.memo} / ${totales.memo}`;
+                if(paresEncontrados === memoTableroActual.length) setTimeout(() => {
+                    if (progreso.memo >= totales.memo) { document.getElementById('modal-ronda').classList.remove('hidden'); document.getElementById('modal-ronda').classList.add('flex'); reproducirVoz("딩동댕"); }
+                    else { renderizarTableroMemo(); }
                 }, 600);
                 cartasVolteadas = []; bloqueado = false;
-            } else {
-                setTimeout(() => { c1.classList.remove('flipped'); c2.classList.remove('flipped'); cartasVolteadas = []; bloqueado = false; }, 1000);
-            }
+            } else { setTimeout(() => { c1.classList.remove('flipped'); c2.classList.remove('flipped'); cartasVolteadas = []; bloqueado = false; }, 1000); }
         }
 
         let palabraFaltanteLectura = "", textoCoreanoCompleto = "";
         function cargarLecturaUI() {
-            const lista = contenidoNivelActual.lecturas;
-            if(lista.length === 0) return;
-            const item = lista[indiceLectura];
-            textoCoreanoCompleto = item.coreano;
+            if(queueLectura.length === 0) return;
+            document.getElementById('lectura-counter').innerText = `${progreso.lectura} / ${totales.lectura}`;
+            const item = queueLectura[0]; textoCoreanoCompleto = item.coreano;
             document.getElementById('lectura-coreano').dataset.textoCompleto = textoCoreanoCompleto;
-            const palabras = textoCoreanoCompleto.split(" ");
-            let palabrasValidas = palabras.filter(p => p.replace(/[^\w가-힣]/g, '').length >= 1);
+            const palabras = textoCoreanoCompleto.split(" "); let palabrasValidas = palabras.filter(p => p.replace(/[^\w가-힣]/g, '').length >= 1);
             if (palabrasValidas.length > 0) {
                 let palabraAleatoria = palabrasValidas[Math.floor(Math.random() * palabrasValidas.length)];
                 palabraFaltanteLectura = palabraAleatoria.replace(/[^\w가-힣]/g, '');
                 document.getElementById('lectura-coreano').innerHTML = textoCoreanoCompleto.replace(palabraAleatoria, `<span class="text-sky-500 font-bold border-b-2 border-sky-500 px-2 inline-block min-w-[3rem] text-center">?</span>`);
-                document.getElementById('lectura-quiz').classList.remove('hidden');
-                document.getElementById('lectura-input').value = "";
-                document.getElementById('lectura-feedback').style.opacity = 0;
+                document.getElementById('lectura-quiz').classList.remove('hidden'); document.getElementById('lectura-input').value = ""; document.getElementById('lectura-feedback').style.opacity = 0;
             }
-            document.getElementById('lectura-traduccion').innerText = item.espanol;
-            document.getElementById('lectura-traduccion').classList.add('hidden');
+            document.getElementById('lectura-traduccion').innerText = item.espanol; document.getElementById('lectura-traduccion').classList.add('hidden');
         }
         function verificarLectura() {
-            const input = document.getElementById('lectura-input').value.trim();
-            const feedback = document.getElementById('lectura-feedback');
+            const input = document.getElementById('lectura-input').value.trim(); const feedback = document.getElementById('lectura-feedback');
             if(!input) return;
             feedback.style.opacity = 1;
             if(input === palabraFaltanteLectura) {
-                feedback.innerText = "¡Excelente comprensión! ✨";
-                feedback.className = "h-4 text-xs font-bold mt-2 transition-opacity text-emerald-500";
-                document.getElementById('lectura-coreano').innerText = textoCoreanoCompleto;
-                reproducirVoz(textoCoreanoCompleto, 0.8);
+                progreso.lectura++; feedback.innerText = "¡Excelente! ✨"; feedback.className = "h-4 text-xs font-bold mt-2 transition-opacity text-emerald-500";
+                document.getElementById('lectura-coreano').innerText = textoCoreanoCompleto; reproducirVoz(textoCoreanoCompleto, 0.8);
+                queueLectura.shift();
+                if(queueLectura.length === 0) setTimeout(() => { document.getElementById('modal-ronda').classList.remove('hidden'); document.getElementById('modal-ronda').classList.add('flex'); }, 2000);
+                else setTimeout(() => cargarLecturaUI(), 2000);
             } else {
-                feedback.innerText = `Incorrecto. Era: ${palabraFaltanteLectura}`;
-                feedback.className = "h-4 text-xs font-bold mt-2 transition-opacity text-rose-500";
-                setTimeout(() => { document.getElementById('lectura-input').value = ""; feedback.style.opacity = 0; }, 2000); 
+                feedback.innerText = `Incorrecto. Era: ${palabraFaltanteLectura}`; feedback.className = "h-4 text-xs font-bold mt-2 transition-opacity text-rose-500";
+                const fallada = queueLectura.shift(); queueLectura.push(fallada);
+                setTimeout(() => cargarLecturaUI(), 2500); 
             }
-        }
-        function siguienteLectura() {
-            const lista = contenidoNivelActual.lecturas;
-            if(lista.length === 0) return;
-            indiceLectura = (indiceLectura + 1) % lista.length;
-            cargarLecturaUI();
         }
         function toggleTraduccion() { document.getElementById('lectura-traduccion').classList.toggle('hidden'); }
 
-        function resetDictadoUI(forceNewQueue = false) {
-            if(forceNewQueue) queueDictado = (currentMode==='vocab') ? mezclarYCortar(contenidoNivelActual.dictados, MAX_RONDA) : mezclarYCortar(contenidoNivelActual.oraciones.map(o=>o.palabras.join(" ")), MAX_RONDA);
+        function resetDictadoUI() {
             if(queueDictado.length === 0) return;
-            document.getElementById('dictado-counter').innerText = `${MAX_RONDA - queueDictado.length + 1} / ${MAX_RONDA}`;
-            document.getElementById('dictado-input').value = '';
-            document.getElementById('dictado-feedback').style.opacity = 0;
+            document.getElementById('dictado-counter').innerText = `${progreso.dictado} / ${totales.dictado}`;
+            document.getElementById('dictado-input').value = ''; document.getElementById('dictado-feedback').style.opacity = 0;
         }
         function reproducirDictado() { if(queueDictado.length > 0) reproducirVoz(queueDictado[0], 0.75); }
         function verificarDictado() {
             if(queueDictado.length === 0) return;
-            const input = document.getElementById('dictado-input').value.trim();
-            const correcta = queueDictado[0];
-            const feedback = document.getElementById('dictado-feedback');
+            const input = document.getElementById('dictado-input').value.trim(); const correcta = queueDictado[0]; const feedback = document.getElementById('dictado-feedback');
             if(!input) return;
-
             feedback.style.opacity = 1;
             if(input === correcta) {
-                feedback.innerText = "¡Perfecto! ✨";
-                feedback.className = "h-auto min-h-[1.5rem] text-sm font-bold mb-4 transition-opacity text-emerald-500";
-                reproducirVoz("딩동댕");
+                progreso.dictado++; feedback.innerText = "¡Perfecto! ✨"; feedback.className = "h-auto min-h-[1.5rem] text-sm font-bold mb-4 transition-opacity text-emerald-500"; reproducirVoz("딩동댕");
                 queueDictado.shift();
-                if(queueDictado.length === 0) setTimeout(() => document.getElementById('modal-ronda').classList.remove('hidden'), 1000);
-                else setTimeout(() => resetDictadoUI(), 1000);
+                if(queueDictado.length === 0) setTimeout(() => { document.getElementById('modal-ronda').classList.remove('hidden'); document.getElementById('modal-ronda').classList.add('flex'); }, 1500);
+                else setTimeout(() => resetDictadoUI(), 1500);
             } else {
-                feedback.innerText = `❌ Incorrecto.\nLa respuesta correcta es:\n${correcta}`;
-                feedback.className = "h-auto min-h-[1.5rem] text-sm font-bold mb-4 transition-opacity text-rose-500";
+                feedback.innerText = `❌ Incorrecto.\nLa respuesta correcta es:\n${correcta}`; feedback.className = "h-auto min-h-[1.5rem] text-sm font-bold mb-4 transition-opacity text-rose-500";
                 const fallada = queueDictado.shift(); queueDictado.push(fallada);
                 setTimeout(() => resetDictadoUI(), 3000); 
             }
         }
 
         let oracionActual = null, palabrasSeleccionadas = [];
-        function resetArmarUI(forceNewQueue = false) {
-            if(forceNewQueue) queueArmar = mezclarYCortar(contenidoNivelActual.oraciones, MAX_RONDA);
+        function resetArmarUI() {
             if(queueArmar.length === 0) return;
-            oracionActual = queueArmar[0];
-            palabrasSeleccionadas = [];
-            document.getElementById('armar-espanol').innerText = oracionActual.espanol;
-            document.getElementById('armar-feedback').style.opacity = 0;
-            const source = document.getElementById('armar-source');
-            const target = document.getElementById('armar-target');
+            document.getElementById('armar-counter').innerText = `${progreso.armar} / ${totales.armar}`;
+            oracionActual = queueArmar[0]; palabrasSeleccionadas = [];
+            document.getElementById('armar-espanol').innerText = oracionActual.espanol; document.getElementById('armar-feedback').style.opacity = 0;
+            const source = document.getElementById('armar-source'); const target = document.getElementById('armar-target');
             source.innerHTML = ''; target.innerHTML = '';
             
             [...oracionActual.palabras].sort(() => 0.5 - Math.random()).forEach((palabra) => {
-                const btn = document.createElement('button');
-                btn.className = 'bg-white border-2 border-stone-200 px-4 py-2 rounded-xl text-stone-800 font-medium active:scale-90 transition-all shadow-sm';
-                btn.innerText = palabra;
-                btn.onclick = () => seleccionarPalabraArmar(btn, palabra);
-                source.appendChild(btn);
+                const btn = document.createElement('button'); btn.className = 'bg-white border-2 border-stone-200 px-4 py-2 rounded-xl text-stone-800 font-medium active:scale-90 transition-all shadow-sm';
+                btn.innerText = palabra; btn.onclick = () => seleccionarPalabraArmar(btn, palabra); source.appendChild(btn);
             });
         }
         function seleccionarPalabraArmar(btn, palabra) {
-            btn.classList.add('hidden');
-            palabrasSeleccionadas.push(palabra);
-            const target = document.getElementById('armar-target');
-            const badge = document.createElement('div');
-            badge.className = 'bg-fuchsia-500 hover:bg-fuchsia-600 text-white px-4 py-2 rounded-xl font-medium shadow-sm flex items-center animate-fade-in cursor-pointer transition-colors';
-            badge.innerText = palabra;
-            badge.onclick = () => {
-                badge.remove(); btn.classList.remove('hidden');
-                const idx = palabrasSeleccionadas.lastIndexOf(palabra);
-                if(idx > -1) palabrasSeleccionadas.splice(idx, 1);
-                document.getElementById('armar-feedback').style.opacity = 0;
-            };
-            target.appendChild(badge);
-            reproducirVoz(palabra.replace(/[^a-zA-Z가-힣]/g, '')); 
+            btn.classList.add('hidden'); palabrasSeleccionadas.push(palabra);
+            const target = document.getElementById('armar-target'); const badge = document.createElement('div');
+            badge.className = 'bg-fuchsia-500 hover:bg-fuchsia-600 text-white px-4 py-2 rounded-xl font-medium shadow-sm flex items-center animate-fade-in cursor-pointer transition-colors'; badge.innerText = palabra;
+            badge.onclick = () => { badge.remove(); btn.classList.remove('hidden'); const idx = palabrasSeleccionadas.lastIndexOf(palabra); if(idx > -1) palabrasSeleccionadas.splice(idx, 1); document.getElementById('armar-feedback').style.opacity = 0; };
+            target.appendChild(badge); reproducirVoz(palabra.replace(/[^a-zA-Z가-힣]/g, '')); 
             if (palabrasSeleccionadas.length === oracionActual.palabras.length) verificarOracionArmada();
         }
         function limpiarOracion() { resetArmarUI(); }
         function verificarOracionArmada() {
-            const armada = palabrasSeleccionadas.join(" ");
-            const correcta = oracionActual.palabras.join(" ");
-            const feedback = document.getElementById('armar-feedback');
+            const armada = palabrasSeleccionadas.join(" "); const correcta = oracionActual.palabras.join(" "); const feedback = document.getElementById('armar-feedback');
             feedback.style.opacity = 1;
             if (armada === correcta) {
-                feedback.innerText = "¡Excelente estructura! ✨";
-                feedback.className = "h-10 text-sm mb-4 transition-opacity flex items-center text-center justify-center font-bold text-emerald-500";
-                reproducirVoz(correcta, 0.8);
+                progreso.armar++; feedback.innerText = "¡Excelente estructura! ✨"; feedback.className = "h-10 text-sm mb-4 transition-opacity flex items-center text-center justify-center font-bold text-emerald-500"; reproducirVoz(correcta, 0.8);
                 queueArmar.shift();
-                if(queueArmar.length === 0) setTimeout(() => document.getElementById('modal-ronda').classList.remove('hidden'), 2000);
+                if(queueArmar.length === 0) setTimeout(() => { document.getElementById('modal-ronda').classList.remove('hidden'); document.getElementById('modal-ronda').classList.add('flex'); }, 2000);
                 else setTimeout(() => resetArmarUI(), 2000);
             } else {
-                feedback.innerText = "❌ Revisa el orden, vuelve a intentarlo.";
-                feedback.className = "h-10 text-sm mb-4 transition-opacity flex items-center text-center justify-center font-bold text-rose-500";
+                feedback.innerText = "❌ Revisa el orden, vuelve a intentarlo."; feedback.className = "h-10 text-sm mb-4 transition-opacity flex items-center text-center justify-center font-bold text-rose-500";
                 setTimeout(() => { limpiarOracion(); }, 1500); 
             }
         }
 
-        function resetEscrituraUI(forceNewQueue = false) {
-            if(forceNewQueue) {
-                if(currentMode === 'vocab') queueEscritura = mezclarYCortar(contenidoNivelActual.vocabulario, MAX_RONDA);
-                else queueEscritura = mezclarYCortar(contenidoNivelActual.oraciones.map(o => ({ espanol: o.espanol, coreano: o.palabras.join(" ") })), MAX_RONDA);
-            }
+        function resetEscrituraUI() {
             if(queueEscritura.length === 0) return;
-            document.getElementById('escritura-counter').innerText = `${MAX_RONDA - queueEscritura.length + 1} / ${MAX_RONDA}`;
+            document.getElementById('escritura-counter').innerText = `${progreso.escritura} / ${totales.escritura}`;
             document.getElementById('escritura-espanol').innerText = queueEscritura[0].espanol;
-            document.getElementById('escritura-input').value = '';
-            document.getElementById('escritura-feedback').style.opacity = 0;
+            document.getElementById('escritura-input').value = ''; document.getElementById('escritura-feedback').style.opacity = 0;
         }
         function verificarEscritura() {
             if(queueEscritura.length === 0) return;
-            const item = queueEscritura[0];
-            const input = document.getElementById('escritura-input').value.trim();
-            const feedback = document.getElementById('escritura-feedback');
+            const item = queueEscritura[0]; const input = document.getElementById('escritura-input').value.trim(); const feedback = document.getElementById('escritura-feedback');
             if(!input) return;
-
             feedback.style.opacity = 1;
             if(input === item.coreano) {
-                feedback.innerText = "¡Excelente! ✨";
-                feedback.className = "h-auto min-h-[1.5rem] text-sm font-bold mb-4 transition-opacity text-emerald-500";
-                reproducirVoz(item.coreano);
+                progreso.escritura++; feedback.innerText = "¡Excelente! ✨"; feedback.className = "h-auto min-h-[1.5rem] text-sm font-bold mb-4 transition-opacity text-emerald-500"; reproducirVoz(item.coreano);
                 queueEscritura.shift();
-                if(queueEscritura.length === 0) setTimeout(() => document.getElementById('modal-ronda').classList.remove('hidden'), 1000);
-                else setTimeout(() => resetEscrituraUI(), 1000);
+                if(queueEscritura.length === 0) setTimeout(() => { document.getElementById('modal-ronda').classList.remove('hidden'); document.getElementById('modal-ronda').classList.add('flex'); }, 1500);
+                else setTimeout(() => resetEscrituraUI(), 1500);
             } else {
-                feedback.innerText = `❌ Incorrecto.\nLa respuesta correcta es:\n${item.coreano}`;
-                feedback.className = "h-auto min-h-[1.5rem] text-sm font-bold mb-4 transition-opacity text-rose-500";
+                feedback.innerText = `❌ Incorrecto.\nLa respuesta correcta es:\n${item.coreano}`; feedback.className = "h-auto min-h-[1.5rem] text-sm font-bold mb-4 transition-opacity text-rose-500";
                 const fallada = queueEscritura.shift(); queueEscritura.push(fallada);
                 setTimeout(() => resetEscrituraUI(), 3000);
             }
@@ -860,61 +735,44 @@
                 contenidoNivelActual.oraciones.forEach(o => p.push({tipo: 'armar', data: o}));
             }
             p.sort(() => 0.5 - Math.random());
-            testPreguntas = p.slice(0, 20);
-            testIndice = 0; testPuntos = 0;
+            testPreguntas = p.slice(0, MAX_RONDA);
+            testIndice = 0; testPuntos = 0; totales.examen = testPreguntas.length;
             if(testPreguntas.length === 0) return showToast("Selecciona temas primero.", "⚠️");
 
-            document.getElementById('examen-inicio').classList.add('hidden');
-            document.getElementById('examen-resultado').classList.add('hidden');
-            document.getElementById('examen-activo').classList.remove('hidden');
-            document.getElementById('examen-activo').classList.add('flex');
+            document.getElementById('examen-inicio').classList.add('hidden'); document.getElementById('examen-resultado').classList.add('hidden');
+            document.getElementById('examen-activo').classList.remove('hidden'); document.getElementById('examen-activo').classList.add('flex');
             cargarPreguntaExamen();
         }
-        function terminarExamenTemprano() {
-            // El usuario pidió explícitamente reiniciar, así que reiniciamos directo.
-            showToast("Test reiniciado.", "🔄");
-            iniciarExamen();
-        }
+        function terminarExamenTemprano() { showToast("Test reiniciado.", "🔄"); iniciarExamen(); }
         function cargarPreguntaExamen() {
             if(testIndice >= testPreguntas.length) return finalizarExamen();
             testPreguntaActual = testPreguntas[testIndice];
             document.getElementById('examen-progreso').style.width = `${(testIndice / testPreguntas.length) * 100}%`;
-            document.getElementById('examen-contador').innerText = `${testIndice + 1} / ${testPreguntas.length}`;
+            document.getElementById('examen-contador').innerText = `${testIndice} / ${testPreguntas.length}`;
             document.getElementById('examen-feedback').style.opacity = 0;
-            const btnComprobar = document.getElementById('btn-examen-comprobar');
-            btnComprobar.innerText = "Comprobar";
-            btnComprobar.onclick = comprobarPreguntaExamen;
+            const btnComprobar = document.getElementById('btn-examen-comprobar'); btnComprobar.innerText = "Comprobar"; btnComprobar.onclick = comprobarPreguntaExamen;
 
-            ['escritura', 'dictado', 'armar'].forEach(t => {
-                document.getElementById(`examen-${t}-ui`).classList.add('hidden');
-                document.getElementById(`examen-${t}-ui`).classList.remove('flex');
-            });
+            ['escritura', 'dictado', 'armar'].forEach(t => { document.getElementById(`examen-${t}-ui`).classList.add('hidden'); document.getElementById(`examen-${t}-ui`).classList.remove('flex'); });
 
             if(testPreguntaActual.tipo === 'escritura') {
                 document.getElementById('examen-tipo-badge').innerText = "Traducción Escrita";
                 document.getElementById('examen-escritura-ui').classList.remove('hidden'); document.getElementById('examen-escritura-ui').classList.add('flex');
-                document.getElementById('examen-escritura-espanol').innerText = testPreguntaActual.data.espanol;
-                document.getElementById('examen-escritura-input').value = "";
+                document.getElementById('examen-escritura-espanol').innerText = testPreguntaActual.data.espanol; document.getElementById('examen-escritura-input').value = "";
             } 
             else if (testPreguntaActual.tipo === 'dictado') {
                 document.getElementById('examen-tipo-badge').innerText = "Comprensión Auditiva";
                 document.getElementById('examen-dictado-ui').classList.remove('hidden'); document.getElementById('examen-dictado-ui').classList.add('flex');
-                document.getElementById('examen-dictado-input').value = "";
-                setTimeout(() => reproducirVoz(testPreguntaActual.data), 500);
+                document.getElementById('examen-dictado-input').value = ""; setTimeout(() => reproducirVoz(testPreguntaActual.data), 500);
             } 
             else if (testPreguntaActual.tipo === 'armar') {
                 document.getElementById('examen-tipo-badge').innerText = "Lógica Gramatical (SOV)";
                 document.getElementById('examen-armar-ui').classList.remove('hidden'); document.getElementById('examen-armar-ui').classList.add('flex');
                 document.getElementById('examen-armar-espanol').innerText = testPreguntaActual.data.espanol;
-                testPalabrasArmar = [];
-                const src = document.getElementById('examen-armar-source'), tgt = document.getElementById('examen-armar-target');
-                src.innerHTML = ''; tgt.innerHTML = '';
+                testPalabrasArmar = []; const src = document.getElementById('examen-armar-source'), tgt = document.getElementById('examen-armar-target'); src.innerHTML = ''; tgt.innerHTML = '';
                 [...testPreguntaActual.data.palabras].sort(() => 0.5 - Math.random()).forEach(p => {
-                    const btn = document.createElement('button');
-                    btn.className = 'bg-white border-2 border-stone-200 px-4 py-2 rounded-xl text-stone-800 font-medium shadow-sm';
+                    const btn = document.createElement('button'); btn.className = 'bg-white border-2 border-stone-200 px-4 py-2 rounded-xl text-stone-800 font-medium shadow-sm';
                     btn.innerText = p; btn.onclick = () => {
-                        btn.classList.add('hidden'); testPalabrasArmar.push(p);
-                        const b = document.createElement('div');
+                        btn.classList.add('hidden'); testPalabrasArmar.push(p); const b = document.createElement('div');
                         b.className = 'bg-indigo-500 hover:bg-indigo-600 transition-colors text-white px-4 py-2 rounded-xl font-medium shadow-sm cursor-pointer'; b.innerText = p;
                         b.onclick = () => { b.remove(); btn.classList.remove('hidden'); testPalabrasArmar.splice(testPalabrasArmar.lastIndexOf(p), 1); };
                         tgt.appendChild(b); reproducirVoz(p.replace(/[^a-zA-Z가-힣]/g, ''));
@@ -936,18 +794,15 @@
                 respuestaCorrecta = testPreguntaActual.data.palabras.join(" "); correcto = (val === respuestaCorrecta);
             }
             feedback.style.opacity = 1;
-            if(correcto) {
-                testPuntos++; feedback.innerText = "¡Correcto! ✨"; feedback.className = "h-6 text-sm font-bold mb-4 mt-2 transition-opacity text-emerald-500"; reproducirVoz("딩동댕");
-            } else {
-                feedback.innerText = `Incorrecto. Era: ${respuestaCorrecta}`; feedback.className = "h-6 text-sm font-bold mb-4 mt-2 transition-opacity text-rose-500";
-            }
+            if(correcto) { testPuntos++; feedback.innerText = "¡Correcto! ✨"; feedback.className = "h-6 text-sm font-bold mb-4 mt-2 transition-opacity text-emerald-500"; reproducirVoz("딩동댕"); } 
+            else { feedback.innerText = `Incorrecto. Era: ${respuestaCorrecta}`; feedback.className = "h-6 text-sm font-bold mb-4 mt-2 transition-opacity text-rose-500"; }
+            
             const btn = document.getElementById('btn-examen-comprobar');
             btn.innerText = "Siguiente Pregunta ➔"; btn.onclick = () => { testIndice++; cargarPreguntaExamen(); };
         }
         function finalizarExamen() {
             document.getElementById('examen-activo').classList.add('hidden'); document.getElementById('examen-activo').classList.remove('flex');
-            document.getElementById('examen-resultado').classList.remove('hidden');
-            document.getElementById('examen-puntaje-texto').innerText = `${testPuntos} / ${testPreguntas.length}`;
+            document.getElementById('examen-resultado').classList.remove('hidden'); document.getElementById('examen-puntaje-texto').innerText = `${testPuntos} / ${testPreguntas.length}`;
             if(testPuntos >= testPreguntas.length * 0.8) reproducirVoz("축하합니다");
         }
         function cerrarModalRondaYReiniciar() {
