@@ -10,16 +10,16 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Iconos (Phosphor Icons - minimalistas y bonitos) -->
+    <!-- Iconos -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
     <style>
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            -webkit-tap-highlight-color: transparent; /* Quita el recuadro azul al tocar en móviles */
+            -webkit-tap-highlight-color: transparent; 
         }
         
-        /* Animaciones y utilidades para el Memorama */
+        /* Animaciones para Memorama */
         .perspective { perspective: 1000px; }
         .transform-style-3d { transform-style: preserve-3d; }
         .backface-hidden { backface-visibility: hidden; }
@@ -32,13 +32,12 @@
             transform: rotateY(180deg);
         }
         
-        /* ESTILO PARA CARTAS ACERTADAS */
         .card.matched .rotate-y-180 { 
             border-color: #34d399 !important; 
             background-color: #ecfdf5 !important; 
         }
         
-        /* Ocultar scrollbar pero permitir scroll */
+        /* Ocultar scrollbar pero permitir scroll (Horizontal para el menú) */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
@@ -52,15 +51,11 @@
             <span class="text-[9px] text-rose-500 font-bold px-2 py-0.5 bg-rose-50 rounded-full uppercase tracking-wider">App</span>
         </h1>
         <div class="flex items-center gap-3">
-            <!-- Selector de Nivel (Oculto en login) -->
-            <select id="level-selector" class="hidden text-xs bg-stone-100 border-none rounded-xl px-3 py-1.5 font-medium text-stone-600 focus:ring-2 focus:ring-rose-200 outline-none cursor-pointer">
-                <option value="1">Nivel 1: 반갑습니다</option>
-                <option value="2">Nivel 2: 이게 뭐예요?</option>
-                <option value="3">Nivel 3: 커피 주세요</option>
-                <option value="4">Nivel 4: 서울역이 어디에 있어요?</option>
-                <option value="5">Nivel 5: 전화번호가 몇 번이에요?</option>
-            </select>
-            <div id="user-info" class="text-xs text-stone-400 font-medium"></div>
+            <!-- Botón de Opciones de Estudio (Mezcla de Niveles) -->
+            <button id="btn-opciones" onclick="abrirFiltro()" class="hidden text-[11px] bg-stone-100 border border-stone-200 rounded-xl px-3 py-1.5 font-bold text-stone-600 outline-none cursor-pointer flex items-center gap-1.5 hover:bg-rose-50 hover:text-rose-600 transition-colors shadow-sm">
+                <i class="ph-bold ph-faders"></i> Niveles
+            </button>
+            <div id="user-info" class="text-xs text-stone-400 font-medium hidden"></div>
         </div>
     </header>
 
@@ -121,28 +116,21 @@
                     <div class="flex justify-between items-end px-2 mb-2">
                         <div>
                             <h2 class="text-xl font-bold text-stone-900">Memorama</h2>
-                            <p class="text-xs text-stone-500">Encuentra los pares (Coreano - Español)</p>
+                            <p class="text-xs text-stone-500">6 pares mezclados de tus niveles.</p>
                         </div>
                         <button onclick="iniciarMemorama()" class="text-xs font-bold text-rose-500 bg-rose-50 px-3 py-1.5 rounded-xl active:scale-95 transition-all">Reiniciar</button>
                     </div>
                     
-                    <!-- Grid del memorama (Se llena con JS) -->
-                    <div id="memo-grid" class="grid grid-cols-3 gap-3 w-full">
-                        <!-- Las cartas se inyectan aquí -->
-                    </div>
+                    <div id="memo-grid" class="grid grid-cols-3 gap-3 w-full"></div>
                 </div>
 
                 <!-- 3. SECCIÓN LECTURA -->
                 <div id="view-lectura" class="app-view hidden flex-col gap-6 w-full animate-fade-in">
                     <h2 class="text-xl font-bold text-stone-900 px-2">Lectura Guiada</h2>
-                    
                     <div class="bg-white p-6 rounded-[32px] shadow-sm border border-stone-100 relative">
                         <div class="text-3xl text-rose-200 absolute top-4 left-4"><i class="ph-fill ph-quotes"></i></div>
-                        <p id="lectura-coreano" class="text-2xl font-medium text-stone-800 leading-relaxed mt-6 mb-6 text-center px-4">
-                            ...
-                        </p>
+                        <p id="lectura-coreano" class="text-2xl font-medium text-stone-800 leading-relaxed mt-6 mb-6 text-center px-4">...</p>
                         
-                        <!-- Mini Quiz de Comprensión -->
                         <div id="lectura-quiz" class="mb-6 bg-rose-50/50 p-4 rounded-2xl border border-rose-100 hidden">
                             <p class="text-[10px] font-bold text-rose-500 uppercase tracking-wider mb-2">Completar la lectura:</p>
                             <div class="flex gap-2">
@@ -152,9 +140,7 @@
                             <div id="lectura-feedback" class="h-4 text-xs font-bold mt-2 opacity-0 transition-opacity"></div>
                         </div>
 
-                        <div id="lectura-traduccion" class="hidden text-sm text-stone-500 text-center mb-6 p-4 bg-stone-50 rounded-2xl font-medium">
-                            ...
-                        </div>
+                        <div id="lectura-traduccion" class="hidden text-sm text-stone-500 text-center mb-6 p-4 bg-stone-50 rounded-2xl font-medium">...</div>
 
                         <div class="grid grid-cols-2 gap-3">
                             <button onclick="reproducirVoz(document.getElementById('lectura-coreano').dataset.textoCompleto || document.getElementById('lectura-coreano').innerText, 0.7)" class="bg-stone-900 text-white py-3 rounded-2xl text-sm font-semibold active:scale-95 transition-all flex flex-col items-center justify-center gap-1">
@@ -172,7 +158,7 @@
                 <div id="view-dictado" class="app-view hidden flex-col gap-6 w-full animate-fade-in">
                     <div class="text-center px-4">
                         <h2 class="text-xl font-bold text-stone-900 mb-1">Dictado al oído</h2>
-                        <p class="text-xs text-stone-500">Escucha atentamente y escribe en coreano.</p>
+                        <p class="text-xs text-stone-500">Escucha y escribe en coreano.</p>
                     </div>
 
                     <div class="bg-white p-6 rounded-[32px] shadow-sm border border-stone-100 text-center">
@@ -181,7 +167,6 @@
                         </button>
                         
                         <input type="text" id="dictado-input" placeholder="Escribe aquí en coreano..." class="w-full text-center px-5 py-4 rounded-2xl bg-stone-50 border-2 border-stone-100 text-lg font-medium focus:outline-none focus:border-rose-300 transition-colors mb-4" autocomplete="off" autocorrect="off" spellcheck="false">
-                        
                         <div id="dictado-feedback" class="h-6 text-sm font-bold mb-4 opacity-0 transition-opacity"></div>
 
                         <button onclick="verificarDictado()" class="w-full bg-stone-900 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">
@@ -194,21 +179,15 @@
                 <div id="view-armar" class="app-view hidden flex-col gap-6 w-full animate-fade-in">
                     <div class="text-center px-4">
                         <h2 class="text-xl font-bold text-stone-900 mb-1">Estructura</h2>
-                        <p class="text-xs text-stone-500">El coreano es SOV. Ordena las palabras de la oración.</p>
+                        <p class="text-xs text-stone-500">El coreano es SOV. Ordena las palabras.</p>
                     </div>
 
                     <div class="bg-white p-6 rounded-[32px] shadow-sm border border-stone-100 flex flex-col items-center">
                         <p id="armar-espanol" class="text-base text-stone-700 font-medium mb-6 text-center">...</p>
                         
-                        <!-- Zona destino (donde caen las palabras elegidas) -->
-                        <div id="armar-target" class="w-full min-h-[60px] bg-stone-50 rounded-2xl border-2 border-dashed border-stone-200 mb-2 p-2 flex flex-wrap gap-2 items-center justify-center">
-                        </div>
-                        
+                        <div id="armar-target" class="w-full min-h-[60px] bg-stone-50 rounded-2xl border-2 border-dashed border-stone-200 mb-2 p-2 flex flex-wrap gap-2 items-center justify-center"></div>
                         <div id="armar-feedback" class="h-5 text-sm mb-4 opacity-0 transition-opacity"></div>
-                        
-                        <!-- Zona origen (botones de palabras) -->
-                        <div id="armar-source" class="w-full flex flex-wrap gap-2 justify-center mb-6">
-                        </div>
+                        <div id="armar-source" class="w-full flex flex-wrap gap-2 justify-center mb-6"></div>
 
                         <div class="grid grid-cols-2 gap-3 w-full">
                             <button onclick="limpiarOracion()" class="bg-stone-100 text-stone-700 py-3 rounded-2xl text-sm font-semibold active:scale-95 transition-all">Limpiar</button>
@@ -217,7 +196,7 @@
                     </div>
                 </div>
 
-                <!-- 6. SECCIÓN ESCRITURA (NUEVA) -->
+                <!-- 6. SECCIÓN ESCRITURA -->
                 <div id="view-escritura" class="app-view hidden flex-col gap-6 w-full animate-fade-in">
                     <div class="text-center px-4">
                         <h2 class="text-xl font-bold text-stone-900 mb-1">Práctica Escrita</h2>
@@ -240,10 +219,141 @@
                     </div>
                 </div>
 
-                <!-- Modal Ganador Memorama -->
-                <div id="modal-ganador" class="hidden absolute top-0 left-0 w-full h-full bg-stone-900/40 backdrop-blur-sm z-50 flex-col items-center justify-center p-6 animate-fade-in rounded-[32px]">
-                    <div class="bg-white w-full max-w-sm p-8 rounded-[32px] shadow-xl text-center transform scale-100 transition-transform">
+                <!-- 7. SECCIÓN NUEVA: EXAMEN TEST -->
+                <div id="view-examen" class="app-view hidden flex-col gap-6 w-full animate-fade-in">
+                    
+                    <!-- Pantalla Inicial de Examen -->
+                    <div id="examen-inicio" class="text-center bg-white p-8 rounded-[32px] shadow-sm border border-stone-100 mt-4">
+                        <div class="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-6 text-indigo-500 text-4xl shadow-inner border border-indigo-100">
+                            <i class="ph-fill ph-medal"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-stone-900 mb-2">Simulador de Examen</h2>
+                        <p class="text-sm text-stone-500 mb-8">20 ejercicios aleatorios que mezclan dictado, escritura y gramática de los niveles que seleccionaste.</p>
+                        <button onclick="iniciarExamen()" class="w-full bg-indigo-500 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">
+                            Comenzar Test
+                        </button>
+                    </div>
+
+                    <!-- Examen Activo -->
+                    <div id="examen-activo" class="hidden flex-col gap-4 w-full">
+                        <div class="w-full bg-stone-100 h-2 rounded-full overflow-hidden mt-4">
+                            <div id="examen-progreso" class="bg-indigo-500 h-full w-0 transition-all duration-300"></div>
+                        </div>
+                        <div class="text-xs text-stone-400 text-center font-bold tracking-widest uppercase mb-2" id="examen-contador">1 / 20</div>
+
+                        <div class="bg-white p-6 rounded-[32px] shadow-sm border border-stone-100 flex flex-col items-center text-center">
+                            <span id="examen-tipo-badge" class="text-[10px] uppercase tracking-widest text-indigo-500 font-bold bg-indigo-50 px-3 py-1.5 rounded-full inline-block mb-6 mx-auto">Tipo</span>
+
+                            <!-- Contenedor Dinámico para preguntas de escritura -->
+                            <div id="examen-escritura-ui" class="w-full hidden flex-col">
+                                <p id="examen-escritura-espanol" class="text-2xl font-medium text-stone-800 mb-6">...</p>
+                                <input type="text" id="examen-escritura-input" placeholder="Escribe en coreano..." class="w-full text-center px-5 py-4 rounded-2xl bg-stone-50 border-2 border-stone-100 text-lg font-medium focus:outline-none focus:border-indigo-300 transition-colors mb-2" autocomplete="off" spellcheck="false">
+                            </div>
+
+                            <!-- Contenedor Dinámico para dictado -->
+                            <div id="examen-dictado-ui" class="w-full hidden flex-col">
+                                 <button onclick="reproducirVoz(testPreguntaActual.data)" class="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-6 text-indigo-500 hover:bg-indigo-100 active:scale-90 transition-all shadow-inner border border-indigo-100">
+                                    <i class="ph-fill ph-headphones text-4xl"></i>
+                                </button>
+                                <input type="text" id="examen-dictado-input" placeholder="¿Qué escuchaste?" class="w-full text-center px-5 py-4 rounded-2xl bg-stone-50 border-2 border-stone-100 text-lg font-medium focus:outline-none focus:border-indigo-300 transition-colors mb-2" autocomplete="off" spellcheck="false">
+                            </div>
+
+                            <!-- Contenedor Dinámico para armar oraciones -->
+                            <div id="examen-armar-ui" class="w-full hidden flex-col items-center">
+                                <p id="examen-armar-espanol" class="text-base text-stone-700 font-medium mb-6 text-center">...</p>
+                                <div id="examen-armar-target" class="w-full min-h-[60px] bg-stone-50 rounded-2xl border-2 border-dashed border-stone-200 mb-2 p-2 flex flex-wrap gap-2 items-center justify-center"></div>
+                                <div id="examen-armar-source" class="w-full flex flex-wrap gap-2 justify-center mb-4"></div>
+                            </div>
+
+                            <div id="examen-feedback" class="h-6 text-sm font-bold mb-4 mt-2 opacity-0 transition-opacity"></div>
+
+                            <button id="btn-examen-comprobar" class="w-full bg-stone-900 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">
+                                Comprobar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Resultado de Examen -->
+                    <div id="examen-resultado" class="hidden text-center bg-white p-8 rounded-[32px] shadow-sm border border-stone-100 mt-4">
+                        <div class="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-4 text-indigo-500 text-4xl shadow-inner border border-indigo-100">
+                            <i class="ph-fill ph-confetti"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-stone-900 mb-2">¡Terminaste el Test!</h2>
+                        <p class="text-sm text-stone-500 mb-6">Tu puntuación final es:</p>
+                        <p id="examen-puntaje-texto" class="text-5xl font-bold text-indigo-500 mb-10">18 / 20</p>
+                        
+                        <div class="space-y-3">
+                            <button onclick="iniciarExamen()" class="w-full bg-indigo-500 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">
+                                Volver a intentar
+                            </button>
+                            <button onclick="document.getElementById('examen-resultado').classList.add('hidden'); document.getElementById('examen-inicio').classList.remove('hidden');" class="w-full bg-stone-100 text-stone-700 py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all">
+                                Salir del examen
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= MODALES FLOTANTES ================= -->
+                
+                <!-- Modal: Filtro de Niveles -->
+                <div id="modal-filtro" class="hidden absolute top-0 left-0 w-full h-full bg-stone-900/50 backdrop-blur-sm z-50 flex-col items-center justify-center p-6 animate-fade-in rounded-[32px]">
+                    <div class="bg-white w-full max-w-sm p-8 rounded-[32px] shadow-xl">
+                        <h3 class="text-xl font-bold text-stone-900 mb-1">Niveles a practicar</h3>
+                        <p class="text-xs text-stone-500 mb-6">Selecciona los módulos que deseas mezclar para tus juegos y el examen.</p>
+
+                        <!-- Usamos has-[:checked] nativo de tailwind para un efecto wow -->
+                        <div class="space-y-3 mb-8 max-h-[40vh] overflow-y-auto no-scrollbar" id="filtro-niveles-container">
+                            <label class="flex items-center gap-3 p-4 rounded-2xl border-2 border-stone-100 hover:border-rose-200 cursor-pointer transition-all focus-within:border-rose-400 bg-stone-50">
+                                <input type="checkbox" value="1" class="filtro-cb w-5 h-5 accent-rose-500" checked>
+                                <span class="text-sm font-bold text-stone-700">Nivel 1</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-4 rounded-2xl border-2 border-stone-100 hover:border-rose-200 cursor-pointer transition-all focus-within:border-rose-400 bg-stone-50">
+                                <input type="checkbox" value="2" class="filtro-cb w-5 h-5 accent-rose-500">
+                                <span class="text-sm font-bold text-stone-700">Nivel 2</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-4 rounded-2xl border-2 border-stone-100 hover:border-rose-200 cursor-pointer transition-all focus-within:border-rose-400 bg-stone-50">
+                                <input type="checkbox" value="3" class="filtro-cb w-5 h-5 accent-rose-500">
+                                <span class="text-sm font-bold text-stone-700">Nivel 3</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-4 rounded-2xl border-2 border-stone-100 hover:border-rose-200 cursor-pointer transition-all focus-within:border-rose-400 bg-stone-50">
+                                <input type="checkbox" value="4" class="filtro-cb w-5 h-5 accent-rose-500">
+                                <span class="text-sm font-bold text-stone-700">Nivel 4</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-4 rounded-2xl border-2 border-stone-100 hover:border-rose-200 cursor-pointer transition-all focus-within:border-rose-400 bg-stone-50">
+                                <input type="checkbox" value="5" class="filtro-cb w-5 h-5 accent-rose-500">
+                                <span class="text-sm font-bold text-stone-700">Nivel 5</span>
+                            </label>
+                        </div>
+
+                        <button onclick="aplicarFiltroYRecargar()" class="w-full bg-stone-900 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">
+                            Guardar y Aplicar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Modal: Ronda Completada (Juegos 20) -->
+                <div id="modal-ronda" class="hidden absolute top-0 left-0 w-full h-full bg-stone-900/50 backdrop-blur-sm z-50 flex-col items-center justify-center p-6 animate-fade-in rounded-[32px]">
+                    <div class="bg-white w-full max-w-sm p-8 rounded-[32px] shadow-xl text-center">
                         <div class="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-500 text-4xl shadow-inner border border-emerald-100">
+                            <i class="ph-fill ph-check-circle"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-stone-900 mb-2">¡Ronda completada! ✨</h3>
+                        <p class="text-sm text-stone-500 mb-8">Has terminado una sesión de 20 ejercicios aleatorios.</p>
+                        <div class="space-y-3">
+                            <button onclick="cerrarModalRondaYReiniciar()" class="w-full bg-emerald-500 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">
+                                Jugar otra ronda
+                            </button>
+                            <button onclick="document.getElementById('modal-ronda').classList.add('hidden'); abrirFiltro();" class="w-full bg-stone-100 text-stone-700 py-4 rounded-2xl text-sm font-semibold border-2 border-stone-100 active:scale-95 transition-all">
+                                Mezclar otros niveles
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Ganador Memorama -->
+                <div id="modal-ganador" class="hidden absolute top-0 left-0 w-full h-full bg-stone-900/50 backdrop-blur-sm z-50 flex-col items-center justify-center p-6 animate-fade-in rounded-[32px]">
+                    <div class="bg-white w-full max-w-sm p-8 rounded-[32px] shadow-xl text-center">
+                        <div class="w-20 h-20 bg-rose-50 rounded-full flex items-center justify-center mx-auto mb-4 text-rose-500 text-4xl shadow-inner border border-rose-100">
                             <i class="ph-fill ph-confetti"></i>
                         </div>
                         <h3 class="text-2xl font-bold text-stone-900 mb-2">¡Lo lograste!</h3>
@@ -254,7 +364,7 @@
                     </div>
                 </div>
 
-                <!-- Botón de logout (al final de todas las vistas) -->
+                <!-- Botón de logout -->
                 <div class="text-center mt-4">
                     <button id="btn-logout" class="text-xs font-bold text-stone-400 hover:text-rose-500 transition-colors">Cerrar Sesión</button>
                 </div>
@@ -263,38 +373,44 @@
         </div>
     </main>
 
-    <!-- Bottom Navigation Bar (Fija abajo) -->
+    <!-- Bottom Navigation Bar (Ahora con Scroll Horizontal super aesthetic) -->
     <nav id="bottom-nav" class="hidden bg-white border-t border-stone-200/60 pb-safe shrink-0 z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.03)] rounded-t-[32px]">
-        <div class="max-w-md mx-auto w-full px-4 py-4 flex justify-between items-center">
+        <div class="max-w-md mx-auto w-full px-6 py-4 flex gap-6 overflow-x-auto no-scrollbar items-center">
             
-            <button onclick="cambiarVista('vocab')" class="nav-btn flex flex-col items-center gap-1 active:scale-90 transition-all text-rose-500" data-target="view-vocab">
+            <button onclick="cambiarVista('vocab')" class="nav-btn shrink-0 flex flex-col items-center gap-1 active:scale-90 transition-all text-rose-500" data-target="view-vocab">
                 <i class="ph-fill ph-cards text-2xl"></i>
                 <span class="text-[9px] font-bold tracking-wide">Tarjetas</span>
             </button>
             
-            <button onclick="cambiarVista('memo')" class="nav-btn flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-memo">
+            <button onclick="cambiarVista('memo')" class="nav-btn shrink-0 flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-memo">
                 <i class="ph-fill ph-puzzle-piece text-2xl"></i>
                 <span class="text-[9px] font-bold tracking-wide">Juego</span>
             </button>
             
-            <button onclick="cambiarVista('lectura')" class="nav-btn flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-lectura">
-                <i class="ph-fill ph-book-open-text text-2xl"></i>
-                <span class="text-[9px] font-bold tracking-wide">Lectura</span>
-            </button>
-            
-            <button onclick="cambiarVista('dictado')" class="nav-btn flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-dictado">
+            <button onclick="cambiarVista('dictado')" class="nav-btn shrink-0 flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-dictado">
                 <i class="ph-fill ph-headphones text-2xl"></i>
                 <span class="text-[9px] font-bold tracking-wide">Dictado</span>
             </button>
             
-            <button onclick="cambiarVista('escritura')" class="nav-btn flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-escritura">
+            <button onclick="cambiarVista('escritura')" class="nav-btn shrink-0 flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-escritura">
                 <i class="ph-fill ph-keyboard text-2xl"></i>
                 <span class="text-[9px] font-bold tracking-wide">Escribir</span>
             </button>
             
-            <button onclick="cambiarVista('armar')" class="nav-btn flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-armar">
+            <button onclick="cambiarVista('armar')" class="nav-btn shrink-0 flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-armar">
                 <i class="ph-fill ph-magic-wand text-2xl"></i>
                 <span class="text-[9px] font-bold tracking-wide">Armar</span>
+            </button>
+
+            <button onclick="cambiarVista('lectura')" class="nav-btn shrink-0 flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-lectura">
+                <i class="ph-fill ph-book-open-text text-2xl"></i>
+                <span class="text-[9px] font-bold tracking-wide">Lectura</span>
+            </button>
+
+            <!-- NUEVO BOTON EXAMEN -->
+            <button onclick="cambiarVista('examen')" class="nav-btn shrink-0 flex flex-col items-center gap-1 active:scale-90 transition-all text-indigo-400 hover:text-indigo-600" data-target="view-examen">
+                <i class="ph-fill ph-medal text-2xl"></i>
+                <span class="text-[9px] font-bold tracking-wide">Test</span>
             </button>
             
         </div>
@@ -309,18 +425,21 @@
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdrdW5pZ3lxZ2V0cXZqc292emp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUzNjc1MzEsImV4cCI6MjEwMDk0MzUzMX0.Co8JkEWVJGlexJGG5WJbnLPb63pYvdX-y5HfYTd6fsg';
         const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // --- 2. ESTADO DE LA APP Y DATOS DINÁMICOS ---
-        let nivelActual = 1;
-        let indiceVocab = 0;
-        let indiceLectura = 0;
-        let indiceOracion = 0;
-        let indiceEscritura = 0;
-        let palabraDictadoActual = "";
-        let colaDictado = []; // Para repetir palabras que se fallen
+        // --- 2. BASE DE DATOS GLOBAL Y ESTADO ---
+        // Ahora descargamos todo al iniciar sesión y guardamos en caché
+        let dbCache = { vocabulario: [], lecturas: [], dictados: [], oraciones: [] };
+        let nivelesActivos = [1]; // Por defecto solo Nivel 1
         
-        let contenidoNivelActual = {
-            vocabulario: [], lecturas: [], dictados: [], oraciones: []
-        };
+        let contenidoNivelActual = { vocabulario: [], lecturas: [], dictados: [], oraciones: [] };
+        
+        // Colas de 20 ejercicios para cada juego
+        let queueVocab = [];
+        let queueDictado = [];
+        let queueEscritura = [];
+        let queueArmar = [];
+        let indiceLectura = 0; // La lectura se mantiene secuencial
+        
+        const MAX_RONDA = 20; // Límite de ejercicios por ronda
 
         // --- 3. INICIALIZACIÓN ---
         document.addEventListener('DOMContentLoaded', () => {
@@ -328,11 +447,6 @@
             document.getElementById('btn-signup').addEventListener('click', handleSignup);
             document.getElementById('btn-login').addEventListener('click', handleLogin);
             document.getElementById('btn-logout').addEventListener('click', cerrarSesion);
-            
-            document.getElementById('level-selector').addEventListener('change', (e) => {
-                nivelActual = parseInt(e.target.value);
-                cargarDatosDelNivelDesdeSupabase(nivelActual);
-            });
         });
 
         // --- 4. LÓGICA DE AUTENTICACIÓN ---
@@ -370,13 +484,13 @@
                 document.getElementById('auth-section').classList.add('hidden');
                 document.getElementById('app-section').classList.remove('hidden');
                 document.getElementById('bottom-nav').classList.remove('hidden');
-                document.getElementById('level-selector').classList.remove('hidden');
+                document.getElementById('btn-opciones').classList.remove('hidden');
                 document.getElementById('app-section').classList.add('flex');
                 
                 const nombreUsuario = session.user.email.split('@')[0];
-                document.getElementById('user-info').innerText = `¡Hola, ${nombreUsuario}! ✨`;
+                // document.getElementById('user-info').innerText = `¡Hola, ${nombreUsuario}! ✨`; // Oculto para que el header quede más limpio
                 
-                cargarDatosDelNivelDesdeSupabase(nivelActual);
+                cargarTodaLaBaseDeDatos();
             }
         }
 
@@ -385,35 +499,95 @@
             location.reload();
         }
 
-        // --- 5. CARGAR DATOS DESDE SUPABASE ---
-        async function cargarDatosDelNivelDesdeSupabase(nivel) {
-            document.getElementById('palabra-coreano').innerText = "Cargando...";
-            document.getElementById('palabra-espanol').innerText = "Conectando con Supabase...";
-            
+        // --- 5. CARGAR TODA LA DB Y FILTROS ---
+        async function cargarTodaLaBaseDeDatos() {
             try {
                 const [resVocab, resLecturas, resDictados, resOraciones] = await Promise.all([
-                    _supabase.from('app_vocabulario').select('*').eq('nivel', nivel),
-                    _supabase.from('app_lecturas').select('*').eq('nivel', nivel),
-                    _supabase.from('app_dictados').select('*').eq('nivel', nivel),
-                    _supabase.from('app_oraciones').select('*').eq('nivel', nivel)
+                    _supabase.from('app_vocabulario').select('*'),
+                    _supabase.from('app_lecturas').select('*'),
+                    _supabase.from('app_dictados').select('*'),
+                    _supabase.from('app_oraciones').select('*')
                 ]);
 
-                contenidoNivelActual.vocabulario = resVocab.data || [];
-                contenidoNivelActual.lecturas = resLecturas.data || [];
-                contenidoNivelActual.dictados = (resDictados.data || []).map(d => d.palabra);
-                contenidoNivelActual.oraciones = (resOraciones.data || []).map(o => ({
-                    espanol: o.espanol, 
-                    palabras: o.palabras
-                }));
+                dbCache.vocabulario = resVocab.data || [];
+                dbCache.lecturas = resLecturas.data || [];
+                dbCache.dictados = resDictados.data || [];
+                dbCache.oraciones = resOraciones.data || [];
 
-                reiniciarContenidos();
+                aplicarFiltroLocal();
             } catch (error) {
-                console.error("Error cargando nivel:", error);
-                alert("Hubo un error cargando el nivel desde Supabase.");
+                console.error("Error cargando DB:", error);
+                alert("Hubo un error cargando los datos.");
             }
         }
 
-        // --- 6. NAVEGACIÓN Y SISTEMA DE NIVELES ---
+        function abrirFiltro() {
+            document.getElementById('modal-filtro').classList.remove('hidden');
+            document.getElementById('modal-filtro').classList.add('flex');
+        }
+
+        function aplicarFiltroYRecargar() {
+            const checkboxes = document.querySelectorAll('.filtro-cb');
+            nivelesActivos = Array.from(checkboxes).filter(cb => cb.checked).map(cb => parseInt(cb.value));
+
+            if(nivelesActivos.length === 0) {
+                alert("Debes seleccionar al menos un nivel.");
+                checkboxes[0].checked = true;
+                nivelesActivos = [1];
+            }
+
+            document.getElementById('modal-filtro').classList.add('hidden');
+            document.getElementById('modal-filtro').classList.remove('flex');
+            
+            aplicarFiltroLocal();
+        }
+
+        function aplicarFiltroLocal() {
+            // Filtramos la data masiva para dejar solo los niveles seleccionados
+            contenidoNivelActual.vocabulario = dbCache.vocabulario.filter(x => nivelesActivos.includes(x.nivel));
+            contenidoNivelActual.lecturas = dbCache.lecturas.filter(x => nivelesActivos.includes(x.nivel));
+            contenidoNivelActual.dictados = dbCache.dictados.filter(x => nivelesActivos.includes(x.nivel)).map(d => d.palabra);
+            contenidoNivelActual.oraciones = dbCache.oraciones.filter(x => nivelesActivos.includes(x.nivel)).map(o => ({ espanol: o.espanol, palabras: o.palabras }));
+
+            reiniciarContenidos();
+        }
+
+        // Crea una lista aleatoria cortada a un máximo (20)
+        function mezclarYCortar(array, max) {
+            if(!array || array.length === 0) return [];
+            let mezclado = [...array].sort(() => 0.5 - Math.random());
+            return mezclado.slice(0, max);
+        }
+
+        function reiniciarContenidos() {
+            // Llenamos las colas de cada juego con 20 elementos aleatorios de la mezcla
+            queueVocab = mezclarYCortar(contenidoNivelActual.vocabulario, MAX_RONDA);
+            queueDictado = mezclarYCortar(contenidoNivelActual.dictados, MAX_RONDA);
+            queueEscritura = mezclarYCortar(contenidoNivelActual.vocabulario, MAX_RONDA);
+            queueArmar = mezclarYCortar(contenidoNivelActual.oraciones, MAX_RONDA);
+            
+            indiceLectura = 0;
+            
+            if(queueVocab.length > 0) { cargarVocabularioUI(); iniciarMemorama(); }
+            if(contenidoNivelActual.lecturas.length > 0) cargarLecturaUI();
+            if(queueDictado.length > 0) resetDictadoUI();
+            if(queueEscritura.length > 0) resetEscrituraUI();
+            if(queueArmar.length > 0) resetArmarUI();
+        }
+
+        function mostrarModalRondaTerminada() {
+            document.getElementById('modal-ronda').classList.remove('hidden');
+            document.getElementById('modal-ronda').classList.add('flex');
+            reproducirVoz("축하합니다"); // Congrats!
+        }
+        
+        function cerrarModalRondaYReiniciar() {
+            document.getElementById('modal-ronda').classList.add('hidden');
+            document.getElementById('modal-ronda').classList.remove('flex');
+            reiniciarContenidos();
+        }
+
+        // --- 6. NAVEGACIÓN ---
         function cambiarVista(vistaId) {
             document.querySelectorAll('.app-view').forEach(el => el.classList.add('hidden', 'flex'));
             document.querySelectorAll('.app-view').forEach(el => el.classList.remove('flex'));
@@ -424,43 +598,23 @@
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 if(btn.dataset.target === `view-${vistaId}`) {
                     btn.classList.remove('text-stone-400');
-                    btn.classList.add('text-rose-500');
+                    if(vistaId === 'examen') btn.classList.add('text-indigo-500');
+                    else btn.classList.add('text-rose-500');
                     btn.querySelector('i').classList.replace('ph', 'ph-fill');
                 } else {
-                    btn.classList.remove('text-rose-500');
+                    btn.classList.remove('text-rose-500', 'text-indigo-500');
                     btn.classList.add('text-stone-400');
                     btn.querySelector('i').classList.replace('ph-fill', 'ph');
                 }
             });
 
             if(vistaId === 'memo') iniciarMemorama();
-            if(vistaId === 'dictado') resetDictadoUI(true); 
-            if(vistaId === 'armar') resetArmarUI();
-            if(vistaId === 'escritura') resetEscrituraUI();
         }
 
-        function reiniciarContenidos() {
-            indiceVocab = 0;
-            indiceLectura = 0;
-            indiceOracion = 0;
-            indiceEscritura = 0;
-            colaDictado = [];
-            
-            if(contenidoNivelActual.vocabulario.length > 0) {
-                cargarVocabularioUI();
-                iniciarMemorama();
-                resetEscrituraUI();
-            }
-            if(contenidoNivelActual.lecturas.length > 0) cargarLecturaUI();
-            if(contenidoNivelActual.dictados.length > 0) resetDictadoUI(true);
-            if(contenidoNivelActual.oraciones.length > 0) resetArmarUI();
-        }
-
-        // --- 7. MÓDULO: VOCABULARIO ---
+        // --- 7. MÓDULO: VOCABULARIO (TARJETAS) ---
         function cargarVocabularioUI() {
-            const lista = contenidoNivelActual.vocabulario;
-            if(lista.length === 0) return;
-            const item = lista[indiceVocab];
+            if(queueVocab.length === 0) return;
+            const item = queueVocab[0];
             
             const textoCoreano = document.getElementById('palabra-coreano');
             textoCoreano.style.opacity = 0;
@@ -472,9 +626,12 @@
         }
 
         function siguienteVocabulario() {
-            const lista = contenidoNivelActual.vocabulario;
-            indiceVocab = (indiceVocab + 1) % lista.length;
-            cargarVocabularioUI();
+            queueVocab.shift();
+            if(queueVocab.length === 0) {
+                mostrarModalRondaTerminada();
+            } else {
+                cargarVocabularioUI();
+            }
         }
 
         // --- 8. MÓDULO: MEMORAMA ---
@@ -498,7 +655,6 @@
                 mazo.push({ texto: p.coreano, tipo: 'kr', id: p.coreano });
                 mazo.push({ texto: p.espanol, tipo: 'es', id: p.coreano });
             });
-
             mazo.sort(() => 0.5 - Math.random());
 
             mazo.forEach((carta) => {
@@ -517,7 +673,6 @@
                         </div>
                     </div>
                 `;
-                
                 cardEl.addEventListener('click', () => voltearCarta(cardEl));
                 grid.appendChild(cardEl);
             });
@@ -538,7 +693,7 @@
         function verificarPar() {
             const [c1, c2] = cartasVolteadas;
             if (c1.dataset.id === c2.dataset.id) {
-                c1.classList.add('matched'); // El CSS ahora aplicará colores a estas!
+                c1.classList.add('matched');
                 c2.classList.add('matched');
                 paresEncontrados++;
                 
@@ -546,7 +701,7 @@
                     setTimeout(() => {
                         document.getElementById('modal-ganador').classList.remove('hidden');
                         document.getElementById('modal-ganador').classList.add('flex');
-                        reproducirVoz("축하합니다"); // ¡Felicidades!
+                        reproducirVoz("딩동댕"); 
                     }, 600);
                 }
                 resetearTurno();
@@ -567,7 +722,7 @@
             iniciarMemorama();
         }
 
-        // --- 9. MÓDULO: LECTURA CON COMPRENSIÓN (QUIZ) ---
+        // --- 9. MÓDULO: LECTURA ---
         let palabraFaltanteLectura = "";
         let textoCoreanoCompleto = "";
 
@@ -579,7 +734,6 @@
             textoCoreanoCompleto = item.coreano;
             document.getElementById('lectura-coreano').dataset.textoCompleto = textoCoreanoCompleto;
             
-            // Lógica inteligente para ocultar una palabra (Fill in the blank)
             const palabras = textoCoreanoCompleto.split(" ");
             let palabrasValidas = palabras.filter(p => p.replace(/[^\w가-힣]/g, '').length >= 1);
             
@@ -611,8 +765,6 @@
             if(input === palabraFaltanteLectura) {
                 feedback.innerText = "¡Excelente comprensión! ✨";
                 feedback.className = "h-4 text-xs font-bold mt-2 transition-opacity text-emerald-500";
-                
-                // Mostrar palabra en el texto original y leerlo todo
                 document.getElementById('lectura-coreano').innerText = textoCoreanoCompleto;
                 reproducirVoz(textoCoreanoCompleto, 0.8);
             } else {
@@ -628,58 +780,44 @@
             cargarLecturaUI();
         }
 
-        function toggleTraduccion() {
-            document.getElementById('lectura-traduccion').classList.toggle('hidden');
-        }
+        function toggleTraduccion() { document.getElementById('lectura-traduccion').classList.toggle('hidden'); }
 
-        // --- 10. MÓDULO: DICTADO (CON REPETICIÓN ESPACIADA) ---
-        function resetDictadoUI(forzarReinicio = false) {
-            const lista = contenidoNivelActual.dictados;
-            if(lista.length === 0) return;
-            
-            // Si obligamos a reiniciar o si ya vaciamos la cola
-            if (forzarReinicio || colaDictado.length === 0) {
-                colaDictado = [...lista].sort(() => 0.5 - Math.random());
-            }
-            
-            palabraDictadoActual = colaDictado[0];
+        // --- 10. MÓDULO: DICTADO ---
+        function resetDictadoUI() {
+            if(queueDictado.length === 0) return;
             document.getElementById('dictado-input').value = '';
             document.getElementById('dictado-feedback').style.opacity = 0;
         }
 
         function reproducirDictado() {
-            reproducirVoz(palabraDictadoActual, 0.75);
+            if(queueDictado.length > 0) reproducirVoz(queueDictado[0], 0.75);
         }
 
         function verificarDictado() {
+            if(queueDictado.length === 0) return;
             const input = document.getElementById('dictado-input').value.trim();
             const feedback = document.getElementById('dictado-feedback');
             if(!input) return;
 
             feedback.style.opacity = 1;
-            if(input === palabraDictadoActual) {
+            if(input === queueDictado[0]) {
                 feedback.innerText = "¡Perfecto! ✨";
                 feedback.className = "h-6 text-sm font-bold mb-4 transition-opacity text-emerald-500";
                 reproducirVoz("딩동댕");
                 
-                // Quitamos la palabra que acertó de la lista
-                colaDictado.shift(); 
-                
-                if(colaDictado.length === 0) {
-                    setTimeout(() => alert("¡Terminaste todas las palabras de este dictado!"), 1000);
-                    setTimeout(() => resetDictadoUI(true), 1500); // Volver a empezar
-                } else {
-                    setTimeout(() => resetDictadoUI(false), 1500); // Siguiente palabra
-                }
+                setTimeout(() => {
+                    queueDictado.shift();
+                    if(queueDictado.length === 0) mostrarModalRondaTerminada();
+                    else resetDictadoUI();
+                }, 1500);
             } else {
                 feedback.innerText = "¡Ups! Pasando al final de la fila...";
                 feedback.className = "h-6 text-sm font-bold mb-4 transition-opacity text-rose-500";
                 
-                // Mueve la palabra actual al final de la lista para volver a intentarla
-                const palabraFallada = colaDictado.shift();
-                colaDictado.push(palabraFallada); 
-                
-                setTimeout(() => resetDictadoUI(false), 1500);
+                // Repetición espaciada: Se equivoca = se va al final de la cola
+                const fail = queueDictado.shift();
+                queueDictado.push(fail); 
+                setTimeout(() => resetDictadoUI(), 1500);
             }
         }
 
@@ -697,14 +835,13 @@
             }
         }
 
-        // --- 12. MÓDULO: CONSTRUCTOR DE ORACIONES ---
+        // --- 12. MÓDULO: ARMAR ORACIONES ---
         let oracionActual = null;
         let palabrasSeleccionadas = [];
 
         function resetArmarUI() {
-            const lista = contenidoNivelActual.oraciones;
-            if(lista.length === 0) return;
-            oracionActual = lista[indiceOracion];
+            if(queueArmar.length === 0) return;
+            oracionActual = queueArmar[0];
             palabrasSeleccionadas = [];
             
             document.getElementById('armar-espanol').innerText = oracionActual.espanol;
@@ -715,7 +852,6 @@
             source.innerHTML = ''; target.innerHTML = '';
             
             const desordenadas = [...oracionActual.palabras].sort(() => 0.5 - Math.random());
-            
             desordenadas.forEach((palabra) => {
                 const btn = document.createElement('button');
                 btn.className = 'bg-white border-2 border-stone-200 px-4 py-2 rounded-xl text-stone-800 font-medium active:scale-90 transition-all shadow-sm';
@@ -734,7 +870,6 @@
             badge.className = 'bg-rose-500 text-white px-4 py-2 rounded-xl font-medium shadow-sm flex items-center animate-fade-in cursor-pointer hover:bg-rose-600 transition-colors';
             badge.innerText = palabra;
             
-            // CAMBIO: Al tocar en la palabra armada, se regresa al banco de opciones
             badge.onclick = () => {
                 badge.remove();
                 btn.classList.remove('hidden');
@@ -742,14 +877,10 @@
                 if(idx > -1) palabrasSeleccionadas.splice(idx, 1);
                 document.getElementById('armar-feedback').style.opacity = 0;
             };
-            
             target.appendChild(badge);
-            
             reproducirVoz(palabra.replace(/[^a-zA-Z가-힣]/g, '')); 
             
-            if (palabrasSeleccionadas.length === oracionActual.palabras.length) {
-                verificarOracionArmada();
-            }
+            if (palabrasSeleccionadas.length === oracionActual.palabras.length) verificarOracionArmada();
         }
 
         function limpiarOracion() { resetArmarUI(); }
@@ -764,38 +895,31 @@
                 feedback.innerText = "¡Excelente estructura! ✨";
                 feedback.className = "text-center text-sm font-bold h-5 transition-opacity text-emerald-500";
                 reproducirVoz(correcta, 0.8);
-                setTimeout(siguienteOracion, 2500);
+                
+                setTimeout(() => {
+                    queueArmar.shift();
+                    if(queueArmar.length === 0) mostrarModalRondaTerminada();
+                    else resetArmarUI();
+                }, 2000);
             } else {
                 feedback.innerText = "Revisa el orden, vuelve a intentarlo.";
                 feedback.className = "text-center text-sm font-bold h-5 transition-opacity text-rose-500";
             }
         }
 
-        function siguienteOracion() {
-            const lista = contenidoNivelActual.oraciones;
-            indiceOracion = (indiceOracion + 1) % lista.length;
-            resetArmarUI();
-        }
-
-        // --- 13. MÓDULO NUEVO: PRÁCTICA DE ESCRITURA ---
+        // --- 13. MÓDULO: PRÁCTICA DE ESCRITURA ---
         function resetEscrituraUI() {
-            const lista = contenidoNivelActual.vocabulario;
-            if(lista.length === 0) return;
-            
-            const item = lista[indiceEscritura];
-            document.getElementById('escritura-espanol').innerText = item.espanol;
+            if(queueEscritura.length === 0) return;
+            document.getElementById('escritura-espanol').innerText = queueEscritura[0].espanol;
             document.getElementById('escritura-input').value = '';
             document.getElementById('escritura-feedback').style.opacity = 0;
         }
 
         function verificarEscritura() {
-            const lista = contenidoNivelActual.vocabulario;
-            if(lista.length === 0) return;
-            
-            const item = lista[indiceEscritura];
+            if(queueEscritura.length === 0) return;
+            const item = queueEscritura[0];
             const input = document.getElementById('escritura-input').value.trim();
             const feedback = document.getElementById('escritura-feedback');
-            
             if(!input) return;
 
             feedback.style.opacity = 1;
@@ -805,14 +929,176 @@
                 reproducirVoz(item.coreano);
                 
                 setTimeout(() => {
-                    indiceEscritura = (indiceEscritura + 1) % lista.length;
-                    resetEscrituraUI();
+                    queueEscritura.shift();
+                    if(queueEscritura.length === 0) mostrarModalRondaTerminada();
+                    else resetEscrituraUI();
                 }, 1500);
             } else {
                 feedback.innerText = `Incorrecto. Pista: empieza con la sílaba "${item.coreano.charAt(0)}"`;
                 feedback.className = "h-6 text-sm font-bold mb-4 transition-opacity text-rose-500";
             }
         }
+
+        // --- 14. MÓDULO NUEVO: TEST GLOBAL (20 PREGUNTAS MIXTAS) ---
+        let testPreguntas = [];
+        let testIndice = 0;
+        let testPuntos = 0;
+        let testPreguntaActual = null;
+        let testPalabrasArmar = [];
+
+        function iniciarExamen() {
+            let p = [];
+            contenidoNivelActual.vocabulario.forEach(v => p.push({tipo: 'escritura', data: v}));
+            contenidoNivelActual.dictados.forEach(d => p.push({tipo: 'dictado', data: d}));
+            contenidoNivelActual.oraciones.forEach(o => p.push({tipo: 'armar', data: o}));
+
+            p.sort(() => 0.5 - Math.random());
+            testPreguntas = p.slice(0, 20); // Escoge 20 al azar
+            testIndice = 0;
+            testPuntos = 0;
+
+            if(testPreguntas.length === 0) {
+                alert("Debes descargar contenido seleccionando niveles primero.");
+                return;
+            }
+
+            document.getElementById('examen-inicio').classList.add('hidden');
+            document.getElementById('examen-resultado').classList.add('hidden');
+            document.getElementById('examen-activo').classList.remove('hidden');
+            document.getElementById('examen-activo').classList.add('flex');
+
+            cargarPreguntaExamen();
+        }
+
+        function cargarPreguntaExamen() {
+            if(testIndice >= testPreguntas.length) {
+                finalizarExamen();
+                return;
+            }
+
+            testPreguntaActual = testPreguntas[testIndice];
+            document.getElementById('examen-progreso').style.width = `${(testIndice / testPreguntas.length) * 100}%`;
+            document.getElementById('examen-contador').innerText = `${testIndice + 1} / ${testPreguntas.length}`;
+            document.getElementById('examen-feedback').style.opacity = 0;
+            
+            const btnComprobar = document.getElementById('btn-examen-comprobar');
+            btnComprobar.innerText = "Comprobar";
+            btnComprobar.onclick = comprobarPreguntaExamen;
+
+            // Ocultar todas las sub-UI
+            ['escritura', 'dictado', 'armar'].forEach(t => {
+                document.getElementById(`examen-${t}-ui`).classList.add('hidden');
+                document.getElementById(`examen-${t}-ui`).classList.remove('flex');
+            });
+
+            // Mostrar solo la correspondiente
+            if(testPreguntaActual.tipo === 'escritura') {
+                document.getElementById('examen-tipo-badge').innerText = "Traducción Escrita";
+                document.getElementById('examen-escritura-ui').classList.remove('hidden');
+                document.getElementById('examen-escritura-ui').classList.add('flex');
+                document.getElementById('examen-escritura-espanol').innerText = testPreguntaActual.data.espanol;
+                document.getElementById('examen-escritura-input').value = "";
+            } 
+            else if (testPreguntaActual.tipo === 'dictado') {
+                document.getElementById('examen-tipo-badge').innerText = "Comprensión Auditiva";
+                document.getElementById('examen-dictado-ui').classList.remove('hidden');
+                document.getElementById('examen-dictado-ui').classList.add('flex');
+                document.getElementById('examen-dictado-input').value = "";
+                setTimeout(() => reproducirVoz(testPreguntaActual.data), 500);
+            } 
+            else if (testPreguntaActual.tipo === 'armar') {
+                document.getElementById('examen-tipo-badge').innerText = "Lógica Gramatical (SOV)";
+                document.getElementById('examen-armar-ui').classList.remove('hidden');
+                document.getElementById('examen-armar-ui').classList.add('flex');
+                document.getElementById('examen-armar-espanol').innerText = testPreguntaActual.data.espanol;
+                
+                testPalabrasArmar = [];
+                const src = document.getElementById('examen-armar-source');
+                const tgt = document.getElementById('examen-armar-target');
+                src.innerHTML = ''; tgt.innerHTML = '';
+                
+                [...testPreguntaActual.data.palabras].sort(() => 0.5 - Math.random()).forEach(p => {
+                    const btn = document.createElement('button');
+                    btn.className = 'bg-white border-2 border-stone-200 px-4 py-2 rounded-xl text-stone-800 font-medium active:scale-90 transition-all shadow-sm';
+                    btn.innerText = p;
+                    btn.onclick = () => testSeleccionarPalabraArmar(btn, p);
+                    src.appendChild(btn);
+                });
+            }
+        }
+
+        function testSeleccionarPalabraArmar(btn, palabra) {
+            btn.classList.add('hidden');
+            testPalabrasArmar.push(palabra);
+            const tgt = document.getElementById('examen-armar-target');
+            const badge = document.createElement('div');
+            badge.className = 'bg-indigo-500 text-white px-4 py-2 rounded-xl font-medium shadow-sm flex items-center animate-fade-in cursor-pointer hover:bg-indigo-600 transition-colors';
+            badge.innerText = palabra;
+            badge.onclick = () => {
+                badge.remove();
+                btn.classList.remove('hidden');
+                const idx = testPalabrasArmar.lastIndexOf(palabra);
+                if(idx > -1) testPalabrasArmar.splice(idx, 1);
+            };
+            tgt.appendChild(badge);
+            reproducirVoz(palabra.replace(/[^a-zA-Z가-힣]/g, ''));
+        }
+
+        function comprobarPreguntaExamen() {
+            const feedback = document.getElementById('examen-feedback');
+            let correcto = false;
+            let respuestaCorrecta = "";
+
+            if (testPreguntaActual.tipo === 'escritura') {
+                const val = document.getElementById('examen-escritura-input').value.trim();
+                respuestaCorrecta = testPreguntaActual.data.coreano;
+                correcto = (val === respuestaCorrecta);
+            } else if (testPreguntaActual.tipo === 'dictado') {
+                const val = document.getElementById('examen-dictado-input').value.trim();
+                respuestaCorrecta = testPreguntaActual.data;
+                correcto = (val === respuestaCorrecta);
+            } else if (testPreguntaActual.tipo === 'armar') {
+                const val = testPalabrasArmar.join(" ");
+                respuestaCorrecta = testPreguntaActual.data.palabras.join(" ");
+                correcto = (val === respuestaCorrecta);
+            }
+
+            feedback.style.opacity = 1;
+            if(correcto) {
+                testPuntos++;
+                feedback.innerText = "¡Correcto! ✨";
+                feedback.className = "h-6 text-sm font-bold mb-4 mt-2 transition-opacity text-emerald-500";
+                reproducirVoz("딩동댕");
+            } else {
+                feedback.innerText = `Incorrecto. Era: ${respuestaCorrecta}`;
+                feedback.className = "h-6 text-sm font-bold mb-4 mt-2 transition-opacity text-rose-500";
+            }
+
+            // Cambiar botón para ir a la siguiente pregunta
+            const btn = document.getElementById('btn-examen-comprobar');
+            btn.innerText = "Siguiente Pregunta ➔";
+            btn.onclick = () => {
+                testIndice++;
+                cargarPreguntaExamen();
+            };
+        }
+
+        function finalizarExamen() {
+            document.getElementById('examen-activo').classList.add('hidden');
+            document.getElementById('examen-activo').classList.remove('flex');
+            document.getElementById('examen-resultado').classList.remove('hidden');
+            
+            document.getElementById('examen-puntaje-texto').innerText = `${testPuntos} / ${testPreguntas.length}`;
+            if(testPuntos >= testPreguntas.length * 0.8) reproducirVoz("축하합니다"); // Felicidades por sacar más del 80%
+        }
     </script>
 </body>
 </html>
+```
+
+### ¿Qué notarás al recargar?
+1. **Nuevo botón de Menú Inferior:** Notarás que el menú inferior ahora tiene un diseño deslizable hacia la izquierda y derecha (para que los iconos no se vean aplastados en celulares pequeños), ¡e incluye la medalla del modo **Test**!
+2. **Ajustes Arriba:** Quitamos el selector aburrido de "Nivel actual" y ahora tienes un botón que dice **⚙️ Opciones de Estudio**. Tíldalas todas, ve a Memorama o Test ¡y ve la magia!
+3. **El Ciclo del Juego:** Como experta, sabes que el estudiante necesita sentir que "terminó" su tarea. Ahora todos los juegos paran al llegar a 20 y les dan una estrellita y un premio virtual 🏆.
+
+Pruébalo a fondo seleccionando 2 o 3 niveles al mismo tiempo y cuéntame, ¿está lista la plataforma para que le metamos más vocabulario tuyo?
