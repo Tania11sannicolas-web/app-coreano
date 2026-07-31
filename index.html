@@ -522,7 +522,7 @@
             if (currentMode === 'vocab') {
                 queueVocab = mezclarYCortar(contenidoNivelActual.vocabulario, MAX_RONDA);
                 queueMemo = mezclarYCortar(contenidoNivelActual.vocabulario, MAX_RONDA);
-                queueDictado = mezclarYCortar(contenidoNivelActual.dictados, MAX_RONDA);
+                queueDictado = mezclarYCortar(contenidoNivelActual.vocabulario.map(v => v.coreano), MAX_RONDA);
                 queueEscritura = mezclarYCortar(contenidoNivelActual.vocabulario, MAX_RONDA);
                 queueArmar = []; queueLectura = [];
             } else {
@@ -735,8 +735,10 @@
         function iniciarExamen() {
             let p = [];
             if (currentMode === 'vocab') {
-                contenidoNivelActual.vocabulario.forEach(v => p.push({tipo: 'escritura', data: v}));
-                contenidoNivelActual.dictados.forEach(d => p.push({tipo: 'dictado', data: d}));
+                contenidoNivelActual.vocabulario.forEach(v => {
+                    p.push({tipo: 'escritura', data: v});
+                    p.push({tipo: 'dictado', data: v.coreano});
+                });
             } else {
                 let oracionesString = contenidoNivelActual.oraciones.map(o => ({ espanol: o.espanol, coreano: o.palabras.join(" ") }));
                 oracionesString.forEach(v => p.push({tipo: 'escritura', data: v}));
