@@ -499,7 +499,16 @@
             if(currentMode === 'vocab') cambiarVista('vocab'); else cambiarVista('armar');
         }
 
-        function mezclarYCortar(array, max) { if(!array || array.length === 0) return []; return [...array].sort(() => 0.5 - Math.random()).slice(0, max); }
+        function mezclarYCortar(array, max) { 
+            if(!array || array.length === 0) return []; 
+            let resultado = [];
+            // Repite y rellena de forma aleatoria hasta llegar exactamente al máximo (20)
+            while(resultado.length < max) {
+                let temp = [...array].sort(() => 0.5 - Math.random());
+                resultado = resultado.concat(temp.slice(0, max - resultado.length));
+            }
+            return resultado;
+        }
 
         function aplicarFiltroLocal() {
             contenidoNivelActual.vocabulario = dbCache.vocabulario.filter(x => nivelesActivos.includes(x.nivel));
@@ -734,8 +743,9 @@
                 oracionesString.forEach(d => p.push({tipo: 'dictado', data: d.coreano}));
                 contenidoNivelActual.oraciones.forEach(o => p.push({tipo: 'armar', data: o}));
             }
-            p.sort(() => 0.5 - Math.random());
-            testPreguntas = p.slice(0, MAX_RONDA);
+            
+            // Usamos la nueva función para obligar a que el examen sea de 20 preguntas exactas
+            testPreguntas = mezclarYCortar(p, MAX_RONDA);
             testIndice = 0; testPuntos = 0; totales.examen = testPreguntas.length;
             if(testPreguntas.length === 0) return showToast("Selecciona temas primero.", "⚠️");
 
