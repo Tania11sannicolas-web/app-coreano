@@ -494,31 +494,44 @@
             return result.slice(0, max);
         }
 
-        /* =========================================================================
+       /* =========================================================================
            ¡LA MAGIA DEL MOTOR GRAMATICAL SOV! (Creación dinámica de oraciones)
            ========================================================================= */
         function generarOracionDinamica(vocabDisponible) {
-            const sujetos = vocabDisponible.filter(v => v.categoria === 'SUJ');
-            const lugares = vocabDisponible.filter(v => v.categoria === 'LUG');
+            // 1. Filtramos y limpiamos los Sujetos (Quitamos "Hoy, Mañana" que actúan como sujetos especiales)
+            const sujetosRaw = vocabDisponible.filter(v => v.categoria === 'SUJ');
+            const palabrasTiempoEspecial = ['오늘', '내일', '어제', '지금'];
+            const sujetosReales = sujetosRaw.filter(v => !palabrasTiempoEspecial.includes(v.coreano));
+
+            // 2. Separamos los Lugares Físicos de las Fechas/Tiempos
+            const lugaresRaw = vocabDisponible.filter(v => v.categoria === 'LUG');
+            const palabrasTiempoLugar = ['일월', '이월', '삼월', '사월', '오월', '유월', '칠월', '팔월', '구월', '시월', '십일월', '십이월', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일', '아침', '점심', '저녁', '밤', '새벽', '주말', '오전', '오후'];
+            
+            const lugaresFisicos = lugaresRaw.filter(v => !palabrasTiempoLugar.includes(v.coreano));
+            const lugaresTiempo = lugaresRaw.filter(v => palabrasTiempoLugar.includes(v.coreano));
+
+            // 3. Verbos, Adjetivos y Objetos
             const verbosMov = vocabDisponible.filter(v => v.categoria === 'VER_MOV');
             const verbosAcc = vocabDisponible.filter(v => v.categoria === 'VER_ACC');
             const adjetivos = vocabDisponible.filter(v => v.categoria === 'ADJ');
             
-            // Sub-clasificamos los objetos para que tengan sentido con los verbos
-            const objetosComida = vocabDisponible.filter(v => v.categoria === 'OBJ' && ['사과', '물', '커피', '밥', '빵', '우유', '고기', '소고기', '돼지고기', '생선', '치즈'].includes(v.coreano));
-            const objetosGenerales = vocabDisponible.filter(v => v.categoria === 'OBJ' && !objetosComida.includes(v));
+            const objetos = vocabDisponible.filter(v => v.categoria === 'OBJ');
+            const objetosComida = objetos.filter(v => ['사과', '물', '커피', '밥', '쌀', '빵', '우유', '고기', '소고기', '돼지고기', '닭고기', '생선', '계란', '치즈', '해산물', '두부', '소시지', '채소', '당근', '양파', '마늘', '감자', '고구마', '토마토', '오이', '버섯', '호박', '상추', '파', '고추', '배추', '무', '과일', '바나나', '딸기', '포도', '오렌지', '귤', '수박', '배', '복숭아', '파인애플', '레몬', '멜론', '체리', '망고', '면', '국수', '떡', '국', '찌개', '샌드위치', '피자', '햄버거', '샐러드', '김치', '김밥', '반찬', '음료수', '주스', '차', '녹차', '홍차', '맥주', '소주', '와인', '아이스크림', '케이크', '과자', '초콜릿', '소금', '설탕', '간장', '식용유', '참기름'].includes(v.coreano));
+            const objetosGenerales = objetos.filter(v => !objetosComida.includes(v));
 
-            if(sujetos.length === 0 || (verbosMov.length === 0 && verbosAcc.length === 0 && adjetivos.length === 0)) {
+            if(sujetosReales.length === 0 || (verbosMov.length === 0 && verbosAcc.length === 0 && adjetivos.length === 0)) {
                 return { espanol: "Cargando palabras...", palabras: ["에러", "요"], coreanoStr: "에러 요", tipo: 0 };
             }
 
             const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
-            let s = random(sujetos);
+            let s = random(sujetosReales);
             
+            // Decidimos la fórmula a usar según lo que haya disponible
             let opcionesFormulas = [];
-            if(verbosAcc.length > 0 && (objetosComida.length > 0 || objetosGenerales.length > 0)) opcionesFormulas.push(1);
-            if(verbosMov.length > 0 && lugares.length > 0) opcionesFormulas.push(2);
-            if(adjetivos.length > 0) opcionesFormulas.push(3);
+            if(verbosAcc.length > 0 && (objetosComida.length > 0 || objetosGenerales.length > 0)) opcionesFormulas.push(1); // S + O + V
+            if(verbosMov.length > 0 && lugaresFisicos.length > 0) opcionesFormulas.push(2); // S + LugarFisico + V
+            if(adjetivos.length > 0) opcionesFormulas.push(3); // S + Adj
+            if(verbosAcc.length > 0 && lugaresTiempo.length > 0) opcionesFormulas.push(4); // S + Tiempo + V
             
             let formula = opcionesFormulas.length > 0 ? random(opcionesFormulas) : 0;
 
@@ -528,29 +541,41 @@
             if(s.coreano === '나') sujetoConParticula = '나는';
             if(s.coreano === '저') sujetoConParticula = '저는';
 
-            // Fórmula 2: Sujeto + Lugar (에) + Verbo Movimiento
+            // Función rápida para limpiar el español
+            const getSujEspanol = (str) => str.split('/')[0].split('(')[0].trim();
+
+            // Fórmula 2: Sujeto + Lugar Físico (에) + Verbo Movimiento
             if (formula === 2) {
-                let l = random(lugares); let v = random(verbosMov);
+                let l = random(lugaresFisicos); let v = random(verbosMov);
                 let verboConjugado = (v.notas && v.notas.includes('Estándar:')) ? v.notas.split('Estándar:')[1].trim() : v.coreano + "요";
                 return {
-                    espanol: `${s.espanol} va a ${l.espanol.toLowerCase()}`,
+                    espanol: `[${getSujEspanol(s.espanol)}] va/llega a [${getSujEspanol(l.espanol).toLowerCase()}]`,
                     palabras: [sujetoConParticula, `${l.coreano}에`, verboConjugado],
                     coreanoStr: `${sujetoConParticula} ${l.coreano}에 ${verboConjugado}`,
                     tipo: 2
                 };
             } 
+            // Fórmula 4: Sujeto + Tiempo (에) + Verbo Acción
+            else if (formula === 4) {
+                let t = random(lugaresTiempo); let v = random(verbosAcc);
+                let verboConjugado = (v.notas && v.notas.includes('Estándar:')) ? v.notas.split('Estándar:')[1].trim() : v.coreano + "요";
+                return {
+                    espanol: `[${getSujEspanol(s.espanol)}] hace una acción (en/el) [${getSujEspanol(t.espanol).toLowerCase()}]`,
+                    palabras: [sujetoConParticula, `${t.coreano}에`, verboConjugado],
+                    coreanoStr: `${sujetoConParticula} ${t.coreano}에 ${verboConjugado}`,
+                    tipo: 2 // Usa el hint visual del tipo 2 (Ubicación/Tiempo)
+                };
+            }
             // Fórmula 1: Sujeto + Objeto (를/을) + Verbo Acción
             else if (formula === 1) {
                 let v = random(verbosAcc);
                 let o;
-                
-                // Lógica para que las acciones tengan sentido
-                if (['먹다', '마시다', '요리하다', '끓이다', '굽다'].includes(v.coreano) && objetosComida.length > 0) {
-                    o = random(objetosComida); // Verbos de comer/beber con comida
+                if (['먹다', '마시다', '요리하다', '끓이다', '굽다', '시키다'].includes(v.coreano) && objetosComida.length > 0) {
+                    o = random(objetosComida); 
                 } else if (objetosGenerales.length > 0) {
-                    o = random(objetosGenerales); // Otros verbos con objetos generales
+                    o = random(objetosGenerales); 
                 } else {
-                     o = random(vocabDisponible.filter(v => v.categoria === 'OBJ')); // Respaldo
+                     o = random(objetos); 
                 }
 
                 let verboConjugado = (v.notas && v.notas.includes('Estándar:')) ? v.notas.split('Estándar:')[1].trim() : v.coreano + "요";
@@ -559,20 +584,8 @@
                 const tieneConsonanteO = (lastCharO - 44032) % 28 > 0;
                 let objParticula = tieneConsonanteO ? o.coreano + "을" : o.coreano + "를";
 
-                // Traducción al español más natural
-                let verboEspanol = v.espanol.toLowerCase();
-                let articulo = tieneConsonanteO ? "el/los" : "la/las"; // Aproximación
-                
-                // Excepciones para verbos comunes
-                if(v.coreano === '하다') verboEspanol = 'hace';
-                else if(v.coreano === '먹다') verboEspanol = 'come';
-                else if(v.coreano === '마시다') verboEspanol = 'bebe';
-                else if(v.coreano === '보다') verboEspanol = 've';
-                else if(v.coreano === '읽다') verboEspanol = 'lee';
-                else if(v.coreano === '사다') verboEspanol = 'compra';
-
                 return {
-                    espanol: `${s.espanol} ${verboEspanol} ${o.espanol.toLowerCase()}`,
+                    espanol: `[${getSujEspanol(s.espanol)}] interactúa/usa [${getSujEspanol(o.espanol).toLowerCase()}]`,
                     palabras: [sujetoConParticula, objParticula, verboConjugado],
                     coreanoStr: `${sujetoConParticula} ${objParticula} ${verboConjugado}`,
                     tipo: 1
@@ -583,7 +596,7 @@
                 let a = random(adjetivos);
                 let adjConjugado = (a.notas && a.notas.includes('Estándar:')) ? a.notas.split('Estándar:')[1].trim() : a.coreano + "요";
                 return {
-                    espanol: `${s.espanol} es/está ${a.espanol.toLowerCase().replace('ser ', '').replace('estar ', '')}`,
+                    espanol: `[${getSujEspanol(s.espanol)}] es/está [${getSujEspanol(a.espanol).toLowerCase().replace('ser ', '').replace('estar ', '')}]`,
                     palabras: [sujetoConParticula, adjConjugado],
                     coreanoStr: `${sujetoConParticula} ${adjConjugado}`,
                     tipo: 3
@@ -593,7 +606,6 @@
             return { espanol: `${s.espanol} es/existe`, palabras: [s.coreano, "입니다"], coreanoStr: `${s.coreano} 입니다`, tipo: 0 };
         }
         /* ========================================================================= */
-
         function aplicarFiltroLocal() {
             if (currentMode === 'vocab') {
                 contenidoNivelActual.vocabulario = dbCache.vocabulario.filter(x => filtrosActivos.includes(x.categoria));
