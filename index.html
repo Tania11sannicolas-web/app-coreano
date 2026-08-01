@@ -42,7 +42,7 @@
         </h1>
         <div class="flex items-center gap-3">
             <button id="btn-opciones" onclick="abrirFiltro()" class="hidden text-[11px] bg-stone-100 border border-stone-200 rounded-xl px-3 py-1.5 font-bold text-stone-600 outline-none cursor-pointer flex items-center gap-1.5 hover:bg-stone-200 transition-colors shadow-sm">
-                <i class="ph-bold ph-faders"></i> Opciones
+                <i class="ph-bold ph-list-numbers"></i> Subniveles
             </button>
             <div id="user-info" class="text-xs text-stone-400 font-medium hidden"></div>
         </div>
@@ -75,143 +75,219 @@
 
             <!-- Seleccion de Modo -->
             <div id="mode-selection" class="hidden flex-col gap-6 w-full animate-fade-in text-center mt-4">
-                <h2 class="text-2xl font-bold text-stone-900 mb-2">¿Qué vamos a estudiar hoy?</h2>
+                <h2 class="text-2xl font-bold text-stone-900 mb-2">¿Qué haremos hoy?</h2>
                 <p class="text-sm text-stone-500 mb-6">Elige tu enfoque de aprendizaje.</p>
                 
-                <button onclick="iniciarModo('vocab')" class="bg-white p-8 rounded-[32px] shadow-sm border-2 border-transparent hover:border-amber-200 focus:border-amber-400 transition-all flex flex-col items-center gap-4 active:scale-95 group">
-                    <div class="w-16 h-16 bg-amber-50 text-amber-500 group-hover:bg-amber-100 group-hover:scale-110 transition-all rounded-full flex items-center justify-center text-3xl"><i class="ph-fill ph-cards"></i></div>
+                <button onclick="iniciarEstudio()" class="bg-white p-8 rounded-[32px] shadow-sm border-2 border-transparent hover:border-indigo-200 focus:border-indigo-400 transition-all flex flex-col items-center gap-4 active:scale-95 group">
+                    <div class="w-16 h-16 bg-indigo-50 text-indigo-500 group-hover:bg-indigo-100 group-hover:scale-110 transition-all rounded-full flex items-center justify-center text-3xl"><i class="ph-fill ph-student"></i></div>
                     <div>
-                        <h3 class="font-bold text-lg text-stone-900">Vocabulario</h3>
-                        <p class="text-xs text-stone-500 mt-1">Tarjetas, Memorama y Práctica Escrita.</p>
+                        <h3 class="font-bold text-lg text-stone-900">Iniciar Práctica</h3>
+                        <p class="text-xs text-stone-500 mt-1">Vocabulario y Gramática por Subniveles.</p>
                     </div>
                 </button>
 
-                <button onclick="iniciarModo('grammar')" class="bg-white p-8 rounded-[32px] shadow-sm border-2 border-transparent hover:border-fuchsia-200 focus:border-fuchsia-400 transition-all flex flex-col items-center gap-4 active:scale-95 group">
-                    <div class="w-16 h-16 bg-fuchsia-50 text-fuchsia-500 group-hover:bg-fuchsia-100 group-hover:scale-110 transition-all rounded-full flex items-center justify-center text-3xl"><i class="ph-fill ph-magic-wand"></i></div>
-                    <div>
-                        <h3 class="font-bold text-lg text-stone-900">Gramática Dinámica</h3>
-                        <p class="text-xs text-stone-500 mt-1">Armar oraciones SOV y dictado avanzado.</p>
-                    </div>
-                </button>
-
-                <button onclick="iniciarModo('teoria')" class="bg-white p-8 rounded-[32px] shadow-sm border-2 border-transparent hover:border-teal-200 focus:border-teal-400 transition-all flex flex-col items-center gap-4 active:scale-95 group">
+                <button onclick="cambiarVista('teoria'); document.getElementById('mode-selection').classList.add('hidden'); document.getElementById('mode-selection').classList.remove('flex'); document.getElementById('app-section').classList.remove('hidden'); document.getElementById('app-section').classList.add('flex'); document.getElementById('bottom-nav').classList.remove('hidden'); document.getElementById('header-badge').innerText = 'Teoría'; document.getElementById('header-badge').className = 'text-[9px] text-teal-500 font-bold px-2 py-0.5 bg-teal-50 rounded-full uppercase tracking-wider';" class="bg-white p-8 rounded-[32px] shadow-sm border-2 border-transparent hover:border-teal-200 focus:border-teal-400 transition-all flex flex-col items-center gap-4 active:scale-95 group">
                     <div class="w-16 h-16 bg-teal-50 text-teal-500 group-hover:bg-teal-100 group-hover:scale-110 transition-all rounded-full flex items-center justify-center text-3xl"><i class="ph-fill ph-notebook"></i></div>
                     <div>
-                        <h3 class="font-bold text-lg text-stone-900">Teoría y Apuntes</h3>
-                        <p class="text-xs text-stone-500 mt-1">Reglas, Partículas, Conjugaciones e Irregulares.</p>
+                        <h3 class="font-bold text-lg text-stone-900">Mis Apuntes (Teoría)</h3>
+                        <p class="text-xs text-stone-500 mt-1">Reglas, Partículas, Tiempos y Fórmulas.</p>
                     </div>
                 </button>
                 
                 <button id="btn-logout" class="mt-8 text-xs font-bold text-stone-400 hover:text-rose-500 transition-colors">Cerrar Sesión</button>
             </div>
 
-            <!-- APPS -->
             <div id="app-section" class="hidden flex-col gap-6 w-full h-full mt-4">
-                
+
                 <!-- 0. TEORÍA Y APUNTES -->
                 <div id="view-teoria" class="app-view hidden flex-col gap-6 w-full animate-fade-in pb-10">
                     <div class="flex justify-between items-center px-2 mb-2">
-                        <h2 class="text-xl font-bold text-stone-900">Cuaderno de Reglas</h2>
+                        <h2 class="text-xl font-bold text-stone-900">Cuaderno de Tania 🌸</h2>
                     </div>
 
                     <div class="bg-white p-6 rounded-[32px] shadow-sm border border-stone-100 flex flex-col gap-6">
                         
-                        <!-- Estructura SOV -->
-                        <div class="p-4 bg-fuchsia-50 rounded-2xl border border-fuchsia-100">
-                            <h3 class="font-bold text-fuchsia-700 mb-2 flex items-center gap-2"><i class="ph-fill ph-magic-wand"></i> 1. Estructura SOV</h3>
+                        <!-- Sección 1: Estructura SOV y Preguntas -->
+                        <div class="p-4 bg-yellow-50 rounded-2xl border border-yellow-200">
+                            <h3 class="font-bold text-yellow-700 mb-2 flex items-center gap-2"><i class="ph-fill ph-magic-wand"></i> 1. Estructura y Preguntas</h3>
                             <p class="text-xs text-stone-600 mb-3">En coreano, el verbo <b>SIEMPRE</b> va al final.</p>
-                            <div class="bg-white p-3 rounded-xl border border-fuchsia-200 mb-2 text-xs font-medium text-center">
-                                <span class="text-stone-800">Sujeto</span> + <span class="text-stone-800">Tiempo</span> + <span class="text-stone-800">Lugar</span> + <span class="text-stone-800">Objeto</span> + <span class="text-fuchsia-500 font-bold">Verbo</span>
+                            
+                            <div class="bg-white p-3 rounded-xl border border-yellow-200 mb-4 text-xs font-bold text-center text-stone-700">
+                                Sujeto + Tiempo + Lugar + Objeto + Cantidad + <span class="text-yellow-600">Verbo</span>
                             </div>
+                            
+                            <h4 class="font-bold text-xs text-yellow-800 mb-2 border-b border-yellow-200 pb-1">¿Palabras para Preguntar?</h4>
+                            <ul class="grid grid-cols-2 gap-2 text-xs text-stone-700">
+                                <li><b>뭐</b> - ¿Qué / Cuál?</li>
+                                <li><b>무슨</b> - ¿Qué tipo? (Sust)</li>
+                                <li><b>언제</b> - ¿Cuándo?</li>
+                                <li><b>몇 시</b> - ¿A qué hora?</li>
+                                <li><b>며칠</b> - ¿Qué fecha?</li>
+                                <li><b>누구</b> - ¿Quién?</li>
+                                <li><b>어디</b> - ¿Dónde?</li>
+                                <li><b>몇</b> - ¿Cuántos?</li>
+                                <li><b>얼마</b> - ¿Cuánto cuesta?</li>
+                            </ul>
                         </div>
 
-                        <!-- Partículas -->
-                        <div class="p-4 bg-sky-50 rounded-2xl border border-sky-100">
-                            <h3 class="font-bold text-sky-700 mb-2 flex items-center gap-2"><i class="ph-fill puzzle-piece"></i> 2. Partículas (El Pegamento)</h3>
+                        <!-- Sección 2: Partículas (Pegamento) -->
+                        <div class="p-4 bg-sky-50 rounded-2xl border border-sky-200">
+                            <h3 class="font-bold text-sky-700 mb-2 flex items-center gap-2"><i class="ph-fill ph-puzzle-piece"></i> 2. Partículas (Pegamento)</h3>
                             <ul class="space-y-3 text-sm">
-                                <li class="bg-white p-3 rounded-xl border border-sky-200">
-                                    <b class="text-sky-600">이 / 가</b> (Sujeto): Menos común. Para verbos de movimiento/estado.
-                                </li>
-                                <li class="bg-white p-3 rounded-xl border border-sky-200">
+                                <li class="bg-white p-3 rounded-xl border border-sky-100">
                                     <b class="text-sky-600">은 / 는</b> (Tema/Sujeto): Común, verdades absolutas.
                                 </li>
-                                <li class="bg-white p-3 rounded-xl border border-sky-200">
-                                    <b class="text-sky-600">을 / 를</b> (Objeto Directo): Responde al verbo (la cosa afectada).
+                                <li class="bg-white p-3 rounded-xl border border-sky-100">
+                                    <b class="text-sky-600">이 / 가</b> (Sujeto): Menos común. Se usa para verbos de estado, tener/estar, o "deme por favor" (주세요).
                                 </li>
-                                <li class="bg-white p-3 rounded-xl border border-sky-200">
+                                <li class="bg-white p-3 rounded-xl border border-sky-100">
+                                    <b class="text-sky-600">을 / 를</b> (Objeto Directo): Lo que recibe la acción (Responde al verbo).
+                                </li>
+                                <li class="bg-white p-3 rounded-xl border border-sky-100">
                                     <b class="text-sky-600">에</b> (Lugar / Tiempo): Dirección, destino o tiempo.
                                 </li>
-                                <li class="bg-white p-3 rounded-xl border border-sky-200">
-                                    <b class="text-sky-600">에서</b> (Lugar): Dónde ocurre una acción.
+                                <li class="bg-white p-3 rounded-xl border border-sky-100">
+                                    <b class="text-sky-600">에서</b> (Lugar de Acción): Dónde OCURRE una acción.
                                 </li>
-                                <li class="bg-white p-3 rounded-xl border border-sky-200">
-                                    <b class="text-sky-600">도</b> (También): Sustituye a 은/는 o 을/를. <i>Ej: 타니아 씨도 한국어를 공부해요.</i>
+                                <li class="bg-white p-3 rounded-xl border border-sky-100">
+                                    <b class="text-sky-600">도</b> (También): Sustituye a 은/는 y 을/를. <i>Ej: 타니아 씨도 공부해요.</i>
+                                </li>
+                                <li class="bg-white p-3 rounded-xl border border-sky-100">
+                                    <b class="text-sky-600">하고 / (이)랑 / 와/과</b>: Y (Para unir sustantivos).
+                                </li>
+                                <li class="bg-white p-3 rounded-xl border border-sky-100">
+                                    <b class="text-sky-600">그리고</b>: Y (Punto y aparte, une oraciones).
+                                </li>
+                                <li class="bg-white p-3 rounded-xl border border-sky-100 text-xs">
+                                    <b class="text-sky-600 text-sm">(으)로</b>: Hacia, con, en. Sustituye a 에. Palabras clave: <i>시간이, 얼마나, 걸려요, 쯤.</i>
                                 </li>
                             </ul>
                         </div>
 
-                        <!-- Conjugación de Verbos -->
-                        <div class="p-4 bg-amber-50 rounded-2xl border border-amber-100">
-                            <h3 class="font-bold text-amber-700 mb-2 flex items-center gap-2"><i class="ph-fill ph-book-open"></i> 3. Conjugación (Presente y Pasado)</h3>
-                            <p class="text-xs text-stone-600 mb-3">Primero <b>siempre</b> elimina el <i>다</i> del verbo en diccionario.</p>
+                        <!-- Sección 3: Conjugación -->
+                        <div class="p-4 bg-fuchsia-50 rounded-2xl border border-fuchsia-200">
+                            <h3 class="font-bold text-fuchsia-700 mb-2 flex items-center gap-2"><i class="ph-fill ph-book-open"></i> 3. Conjugación y Pasado</h3>
+                            <p class="text-xs text-stone-600 mb-3">Primero <b>siempre</b> se elimina el <i>다</i> del verbo base.</p>
                             
                             <div class="space-y-2 text-sm">
-                                <div class="bg-white p-3 rounded-xl border border-amber-200">
-                                    <span class="font-bold text-amber-600 block mb-1">Presente:</span>
+                                <div class="bg-white p-3 rounded-xl border border-fuchsia-100">
+                                    <span class="font-bold text-fuchsia-600 block mb-1">Presente:</span>
                                     1. Termina en ㅏ / ㅗ → <b>아요</b><br>
-                                    2. Termina en Otra Vocal → <b>어요</b><br>
+                                    2. Termina en otra vocal → <b>어요</b><br>
                                     3. Termina en 하다 → <b>해요</b>
                                 </div>
-                                <div class="bg-white p-3 rounded-xl border border-amber-200">
-                                    <span class="font-bold text-amber-600 block mb-1">Pasado:</span>
-                                    Se usa <b>았어요</b> / <b>었어요</b> / <b>했어요</b> (siguiendo las mismas reglas vocálicas).
-                                </div>
-                                <div class="bg-white p-3 rounded-xl border border-amber-200">
-                                    <span class="font-bold text-amber-600 block mb-1">Negación (No):</span>
-                                    Pon <b>안</b> antes del verbo. <i>(En verbos con 하다, va en medio: 공부 안 해요).</i>
+                                <div class="bg-white p-3 rounded-xl border border-fuchsia-100">
+                                    <span class="font-bold text-fuchsia-600 block mb-1">Tiempo Pasado:</span>
+                                    Sigue la misma regla anterior pero con: <b>았어요</b> / <b>었어요</b> / <b>했어요</b>.
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Verbos Irregulares -->
-                        <div class="p-4 bg-orange-50 rounded-2xl border border-orange-100">
+                        <!-- Sección 4: Verbos Irregulares -->
+                        <div class="p-4 bg-orange-50 rounded-2xl border border-orange-200">
                             <h3 class="font-bold text-orange-700 mb-2 flex items-center gap-2"><i class="ph-fill ph-warning"></i> 4. Verbos Irregulares</h3>
                             <ul class="space-y-2 text-sm">
-                                <li class="bg-white p-2 rounded-lg border border-orange-200">
-                                    <b>ㄷ</b> → Se elimina por <b>ㄹ</b> (Ej: 듣다 -> 들어요)
+                                <li class="bg-white p-2 rounded-lg border border-orange-100">
+                                    <b>ㄷ</b> → Se elimina por <b>ㄹ</b>
                                 </li>
-                                <li class="bg-white p-2 rounded-lg border border-orange-200">
-                                    <b>ㅂ</b> → Se elimina por <b>우</b> (Ej: 춥다 -> 추워요)
+                                <li class="bg-white p-2 rounded-lg border border-orange-100">
+                                    <b>ㅂ</b> → Se elimina por <b>오/우</b>
                                 </li>
-                                <li class="bg-white p-2 rounded-lg border border-orange-200">
-                                    <b>ㅡ</b> → Se elimina si no tiene consonante final, toma vocal anterior. (Ej: 크다 -> 커요, 바쁘다 -> 바빠요)
+                                <li class="bg-white p-2 rounded-lg border border-orange-100">
+                                    <b>ㅡ</b> → Se elimina si no tiene consonante final (Toma 아요/어요 de la vocal anterior).
                                 </li>
-                                <li class="bg-white p-2 rounded-lg border border-orange-200">
-                                    <b>르</b> → Se elimina por <b>ㄹ</b> y duplica. (Ej: 빠르다 -> 빨라요)
+                                <li class="bg-white p-2 rounded-lg border border-orange-100">
+                                    <b>르</b> → Se elimina por <b>ㄹ</b> y se duplica.
                                 </li>
                             </ul>
                         </div>
 
-                        <!-- Expresiones Útiles -->
-                        <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
-                            <h3 class="font-bold text-emerald-700 mb-2 flex items-center gap-2"><i class="ph-fill ph-chat-circle"></i> 5. Expresiones y Fórmulas</h3>
-                            <ul class="space-y-2 text-sm">
-                                <li class="bg-white p-2 rounded-lg border border-emerald-200">
-                                    <b>Tener/Haber/Estar:</b> 있어요 (Tengo/Hay) / 없어요 (No tengo/No hay)
+                        <!-- Sección 5: Tiempos, Fechas y Hora -->
+                        <div class="p-4 bg-indigo-50 rounded-2xl border border-indigo-200">
+                            <h3 class="font-bold text-indigo-700 mb-2 flex items-center gap-2"><i class="ph-fill ph-calendar-blank"></i> 5. Tiempos, Fechas y Hora</h3>
+                            <div class="bg-white p-3 rounded-xl border border-indigo-100 mb-3 text-xs">
+                                <div class="grid grid-cols-3 gap-1 mb-2 border-b border-indigo-50 pb-2">
+                                    <b>Pasado</b><b>Presente</b><b>Futuro</b>
+                                    <span>어제 (Ayer)</span><span>오늘 (Hoy)</span><span>내일 (Mañana)</span>
+                                    <span>작년 (Año)</span><span>올해</span><span>내년 / 다음해</span>
+                                    <span>지난달 (Mes)</span><span>이번달</span><span>다음달</span>
+                                    <span>지난주 (Sem)</span><span>이번주</span><span>다음주</span>
+                                </div>
+                                <div class="grid grid-cols-2 gap-1 pt-1">
+                                    <span><b>전:</b> Antes</span><span><b>전에:</b> Hace tiempo</span>
+                                    <span><b>동안:</b> Durante</span><span><b>후:</b> Después</span>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white p-3 rounded-xl border border-indigo-100 mb-3 text-xs">
+                                <span class="font-bold text-indigo-600 block mb-1">La Hora:</span>
+                                Momento del día + <b># (Coreano) 시</b> + <b># (Sino) 분</b>
+                            </div>
+
+                            <div class="bg-white p-3 rounded-xl border border-indigo-100 text-xs">
+                                <span class="font-bold text-indigo-600 block mb-1">Fechas:</span>
+                                <b>#년</b> (Año) + <b>#월</b> (Mes) + <b>#일</b> (Día).
+                            </div>
+                        </div>
+
+                        <!-- Sección 6: Ubicaciones -->
+                        <div class="p-4 bg-rose-50 rounded-2xl border border-rose-200">
+                            <h3 class="font-bold text-rose-700 mb-2 flex items-center gap-2"><i class="ph-fill ph-map-pin"></i> 6. Ubicaciones</h3>
+                            <p class="text-xs text-stone-600 mb-2">Estructura: <i>Lugar + Ubicación + 에 / 에서</i></p>
+                            <div class="bg-white p-3 rounded-xl border border-rose-100 text-xs grid grid-cols-2 gap-2">
+                                <span><b>위:</b> Arriba</span><span><b>아래:</b> Abajo</span>
+                                <span><b>앞:</b> Enfrente</span><span><b>뒤:</b> Atrás</span>
+                                <span><b>옆:</b> A los lados</span><span><b>사이:</b> Entre</span>
+                                <span><b>안:</b> Dentro</span><span><b>밖:</b> Fuera</span>
+                            </div>
+                            <div class="mt-3 bg-white p-3 rounded-xl border border-rose-100 text-xs grid grid-cols-1 gap-1">
+                                <span><b>에서:</b> Desde (Lugar)</span>
+                                <span><b>부터:</b> Desde (Tiempo)</span>
+                                <span><b>까지:</b> Hasta</span>
+                            </div>
+                        </div>
+
+                        <!-- Sección 7: Expresiones, Ser/Estar y Contadores -->
+                        <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-200">
+                            <h3 class="font-bold text-emerald-700 mb-2 flex items-center gap-2"><i class="ph-fill ph-chat-circle"></i> 7. Expresiones y Contadores</h3>
+                            <ul class="space-y-2 text-xs">
+                                <li class="bg-white p-2 rounded-lg border border-emerald-100">
+                                    <b>Ser (Es):</b> 이에요 (Consonante) / 예요 (Vocal).
                                 </li>
-                                <li class="bg-white p-2 rounded-lg border border-emerald-200">
-                                    <b>Ser (Es):</b> 이에요 (Consonante) / 예요 (Vocal)
+                                <li class="bg-white p-2 rounded-lg border border-emerald-100">
+                                    <b>Tener/Haber/Estar:</b> 있어요 (Hay) / 없어요 (No hay).
                                 </li>
-                                <li class="bg-white p-2 rounded-lg border border-emerald-200">
-                                    <b>Quiero... :</b> Verbo sin 다 + <b>고 싶어요</b>
+                                <li class="bg-white p-2 rounded-lg border border-emerald-100">
+                                    <b>Gustar:</b> 좋아해요 (Me gusta) / 싫어해요 (No me gusta).
                                 </li>
-                                <li class="bg-white p-2 rounded-lg border border-emerald-200">
-                                    <b>Voy a hacer... :</b> Vocal + <b>러 가요</b> / Consonante + <b>으러 가요</b>
+                                <li class="bg-white p-2 rounded-lg border border-emerald-100">
+                                    <b>Negación:</b> 안 + Verbo (Ej: 공부 안 해요).
                                 </li>
-                                <li class="bg-white p-2 rounded-lg border border-emerald-200 text-xs text-stone-500">
-                                    <b>Preguntas:</b> 뭐 (Qué), 무슨 (Qué tipo), 언제 (Cuándo), 어디 (Dónde), 누구 (Quién).
+                                <li class="bg-white p-2 rounded-lg border border-emerald-100">
+                                    <b>Quiero... :</b> Verbo sin 다 + <b>고 싶어요</b> (Pasado: 고 싶었어요).
+                                </li>
+                                <li class="bg-white p-2 rounded-lg border border-emerald-100">
+                                    <b>Voy a hacer... :</b> Vocal + <b>러 가요</b> / Consonante + <b>으러 가요</b>.
+                                </li>
+                                <li class="bg-white p-2 rounded-lg border border-emerald-100">
+                                    <b>Instrucción:</b> 으세요 (Haz) / 지 마세요 (No hagas).
+                                </li>
+                                <li class="bg-white p-2 rounded-lg border border-emerald-100 text-emerald-800 font-medium">
+                                    <b>Esto/Eso/Aquello:</b> 이게(Esto), 그게(Eso), 저게(Aquello). 여기(Aquí), 거기(Ahí), 저기(Allá).
                                 </li>
                             </ul>
+                            
+                            <h4 class="font-bold text-xs text-emerald-800 mt-4 mb-2">Contadores Básicos</h4>
+                            <p class="text-[10px] text-stone-500 mb-2">Sustantivo + Número (Nativo) + Contador</p>
+                            <div class="grid grid-cols-2 gap-1 text-[11px]">
+                                <span class="bg-white px-2 py-1 rounded border border-emerald-100"><b>개:</b> Objetos</span>
+                                <span class="bg-white px-2 py-1 rounded border border-emerald-100"><b>명:</b> Personas</span>
+                                <span class="bg-white px-2 py-1 rounded border border-emerald-100"><b>마리:</b> Animales</span>
+                                <span class="bg-white px-2 py-1 rounded border border-emerald-100"><b>권:</b> Libros/Hojas</span>
+                                <span class="bg-white px-2 py-1 rounded border border-emerald-100"><b>병:</b> Embotellados</span>
+                                <span class="bg-white px-2 py-1 rounded border border-emerald-100"><b>대:</b> Grandes/Autos</span>
+                                <span class="bg-white px-2 py-1 rounded border border-emerald-100"><b>장:</b> Boletos/Hojas</span>
+                            </div>
                         </div>
 
                     </div>
@@ -325,18 +401,75 @@
                     </div>
                 </div>
 
+                <!-- 6. EXAMEN TEST -->
+                <div id="view-examen" class="app-view hidden flex-col gap-6 w-full animate-fade-in">
+                    <div id="examen-inicio" class="text-center bg-white p-8 rounded-[32px] shadow-sm border border-stone-100 mt-4">
+                        <div class="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-6 text-indigo-500 text-4xl shadow-inner border border-indigo-100"><i class="ph-fill ph-medal"></i></div>
+                        <h2 class="text-2xl font-bold text-stone-900 mb-2">Simulador de Examen</h2>
+                        <p class="text-sm text-stone-500 mb-8">20 ejercicios combinando las palabras de esta ronda.</p>
+                        <button onclick="iniciarExamen()" class="w-full bg-indigo-500 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">Comenzar Test</button>
+                    </div>
+
+                    <div id="examen-activo" class="hidden flex-col gap-4 w-full">
+                        <div class="flex justify-between items-center mt-2 px-2">
+                            <div class="text-xs text-stone-400 font-bold tracking-widest uppercase" id="examen-contador-top">TEST</div>
+                            <button onclick="terminarExamenTemprano()" class="text-indigo-500 bg-indigo-50 p-2 rounded-xl active:scale-95 transition-all"><i class="ph-bold ph-arrows-clockwise text-lg"></i></button>
+                        </div>
+                        <div class="w-full bg-indigo-50 h-2 rounded-full overflow-hidden mb-2">
+                            <div id="examen-progreso" class="bg-indigo-500 h-full w-0 transition-all duration-300"></div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-[32px] shadow-sm border border-stone-100 flex flex-col items-center text-center min-h-[350px]">
+                            <div class="flex gap-2 justify-center mb-6">
+                                <span id="examen-tipo-badge" class="text-[10px] uppercase tracking-widest text-indigo-600 font-bold bg-indigo-50 px-3 py-1.5 rounded-full inline-block">Tipo</span>
+                                <span class="text-[10px] uppercase tracking-widest text-indigo-600 font-bold bg-indigo-50 px-3 py-1.5 rounded-full inline-block" id="examen-contador">0 / 20</span>
+                            </div>
+
+                            <div id="examen-escritura-ui" class="w-full hidden flex-col flex-1 justify-center">
+                                <p id="examen-escritura-espanol" class="text-xl font-bold text-stone-800 mb-6">...</p>
+                                <input type="text" id="examen-escritura-input" placeholder="Escribe en coreano..." class="w-full text-center px-5 py-4 rounded-2xl bg-stone-50 border-2 border-stone-100 text-lg font-medium text-indigo-700 focus:outline-none focus:border-indigo-400 transition-colors mb-2" autocomplete="off" spellcheck="false">
+                            </div>
+                            
+                            <div id="examen-dictado-ui" class="w-full hidden flex-col flex-1 justify-center">
+                                 <button onclick="reproducirVoz(testPreguntaActual.data.coreanoStr || testPreguntaActual.data.coreano)" class="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-6 text-indigo-500 hover:bg-indigo-100 active:scale-90 transition-all shadow-inner border border-indigo-100"><i class="ph-fill ph-headphones text-4xl"></i></button>
+                                <input type="text" id="examen-dictado-input" placeholder="¿Qué escuchaste?" class="w-full text-center px-5 py-4 rounded-2xl bg-stone-50 border-2 border-stone-100 text-lg font-medium text-indigo-700 focus:outline-none focus:border-indigo-400 transition-colors mb-2" autocomplete="off" spellcheck="false">
+                            </div>
+                            
+                            <div id="examen-armar-ui" class="w-full hidden flex-col items-center flex-1 justify-center">
+                                <p id="examen-armar-espanol" class="text-base text-stone-700 font-bold mb-6 text-center">...</p>
+                                <div id="examen-armar-target" class="w-full min-h-[60px] bg-indigo-50/50 rounded-2xl border-2 border-dashed border-indigo-200 mb-2 p-2 flex flex-wrap gap-2 items-center justify-center"></div>
+                                <div id="examen-armar-source" class="w-full flex flex-wrap gap-2 justify-center mb-4 mt-2"></div>
+                            </div>
+
+                            <div id="examen-feedback" class="h-auto min-h-[2.5rem] text-sm font-bold mb-4 mt-2 opacity-0 transition-opacity whitespace-pre-line flex items-center text-center justify-center"></div>
+                            <button id="btn-examen-comprobar" class="w-full bg-stone-900 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm mt-auto">Comprobar</button>
+                        </div>
+                    </div>
+
+                    <div id="examen-resultado" class="hidden text-center bg-white p-8 rounded-[32px] shadow-sm border border-stone-100 mt-4">
+                        <div class="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-4 text-indigo-500 text-4xl shadow-inner border border-indigo-100"><i class="ph-fill ph-confetti"></i></div>
+                        <h2 class="text-2xl font-bold text-stone-900 mb-2">¡Terminaste el Test!</h2>
+                        <p class="text-sm text-stone-500 mb-6">Tu puntuación final es:</p>
+                        <p id="examen-puntaje-texto" class="text-5xl font-bold text-indigo-500 mb-10">18 / 20</p>
+                        <div class="space-y-3">
+                            <button onclick="iniciarExamen()" class="w-full bg-indigo-500 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">Volver a intentar</button>
+                            <button onclick="document.getElementById('examen-resultado').classList.add('hidden'); document.getElementById('examen-inicio').classList.remove('hidden');" class="w-full bg-stone-100 text-stone-700 py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all">Salir</button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- MODALES -->
                 <div id="modal-filtro" class="hidden absolute top-0 left-0 w-full h-full bg-stone-900/50 backdrop-blur-sm z-50 flex-col items-center justify-center p-6 animate-fade-in rounded-[32px]">
                     <div class="bg-white w-full max-w-sm p-8 rounded-[32px] shadow-xl text-center">
-                        <h3 class="text-xl font-bold text-stone-900 mb-1" id="filtro-title">Niveles Base</h3>
-                        <p class="text-xs text-stone-500 mb-3" id="filtro-desc">Selecciona el vocabulario a utilizar.</p>
+                        <h3 class="text-xl font-bold text-stone-900 mb-1" id="filtro-title">Subniveles de Estudio</h3>
+                        <p class="text-xs text-stone-500 mb-3" id="filtro-desc">¿Qué lotes de palabras repasaremos hoy?</p>
                         
-                        <div id="filtro-contador-texto" class="text-xs font-bold text-amber-500 mb-6 bg-amber-50 inline-block px-3 py-1.5 rounded-full transition-colors">0 temas seleccionados</div>
+                        <div id="filtro-contador-texto" class="text-xs font-bold text-indigo-500 mb-6 bg-indigo-50 inline-block px-3 py-1.5 rounded-full transition-colors">0 seleccionados</div>
                         
                         <div class="space-y-3 mb-8 max-h-[50vh] overflow-y-auto no-scrollbar text-left" id="filtro-niveles-container">
                             <!-- Se llena por JS -->
                         </div>
-                        <button onclick="aplicarFiltroYRecargar()" class="w-full bg-stone-900 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">Guardar y Aplicar</button>
+                        <button onclick="aplicarFiltroYRecargar()" class="w-full bg-stone-900 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">Iniciar Práctica</button>
                     </div>
                 </div>
 
@@ -346,9 +479,9 @@
                         <h3 class="text-2xl font-bold text-stone-900 mb-2">¡Ronda completada! ✨</h3>
                         <p class="text-sm text-stone-500 mb-8">Has terminado los 20 ejercicios.</p>
                         <div class="space-y-3">
-                            <button onclick="repetirRondaActiva()" class="w-full bg-amber-500 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">Repetir estas 20</button>
-                            <button onclick="cerrarModalRondaYReiniciar()" class="w-full bg-emerald-500 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">Siguiente Ronda</button>
-                            <button onclick="document.getElementById('modal-ronda').classList.add('hidden'); abrirFiltro();" class="w-full bg-stone-100 text-stone-700 py-4 rounded-2xl text-sm font-semibold border-2 border-stone-100 active:scale-95 transition-all">Cambiar Temas</button>
+                            <button onclick="repetirRondaActiva()" class="w-full bg-sky-500 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">Repetir estas 20</button>
+                            <button onclick="cerrarModalRondaYReiniciar()" class="w-full bg-emerald-500 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">Cargar otras 20 palabras</button>
+                            <button onclick="document.getElementById('modal-ronda').classList.add('hidden'); abrirFiltro();" class="w-full bg-stone-100 text-stone-700 py-4 rounded-2xl text-sm font-semibold border-2 border-stone-100 active:scale-95 transition-all">Cambiar Subniveles</button>
                         </div>
                     </div>
                 </div>
@@ -366,14 +499,17 @@
             <button id="nav-memo" onclick="cambiarVista('memo')" class="nav-btn shrink-0 flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-memo">
                 <i class="ph-fill ph-puzzle-piece text-2xl"></i><span class="text-[9px] font-bold tracking-wide">Juego</span>
             </button>
-            <button id="nav-armar" onclick="cambiarVista('armar')" class="nav-btn shrink-0 flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-armar">
-                <i class="ph-fill ph-magic-wand text-2xl"></i><span class="text-[9px] font-bold tracking-wide">Armar</span>
-            </button>
             <button id="nav-dictado" onclick="cambiarVista('dictado')" class="nav-btn shrink-0 flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-dictado">
                 <i class="ph-fill ph-headphones text-2xl"></i><span class="text-[9px] font-bold tracking-wide">Dictado</span>
             </button>
             <button id="nav-escritura" onclick="cambiarVista('escritura')" class="nav-btn shrink-0 flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-escritura">
                 <i class="ph-fill ph-keyboard text-2xl"></i><span class="text-[9px] font-bold tracking-wide">Escribir</span>
+            </button>
+            <button id="nav-armar" onclick="cambiarVista('armar')" class="nav-btn shrink-0 flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-armar">
+                <i class="ph-fill ph-magic-wand text-2xl"></i><span class="text-[9px] font-bold tracking-wide">Armar</span>
+            </button>
+            <button id="nav-examen" onclick="cambiarVista('examen')" class="nav-btn shrink-0 flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-examen">
+                <i class="ph-fill ph-medal text-2xl"></i><span class="text-[9px] font-bold tracking-wide">Test</span>
             </button>
             <button id="nav-teoria" onclick="cambiarVista('teoria')" class="nav-btn shrink-0 flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-teoria">
                 <i class="ph-fill ph-notebook text-2xl"></i><span class="text-[9px] font-bold tracking-wide">Teoría</span>
@@ -392,9 +528,8 @@
         let contenidoNivelActual = { vocabulario: [] };
         let oracionesGeneradasDinamicamente = [];
         
-        let currentMode = ''; 
         const MAX_RONDA = 20;
-        let rondaMaestra = []; // Variable global para la ronda maestra de 20 palabras
+        let rondaMaestra = []; // AQUI GUARDAMOS LAS 20 PALABRAS DE LA SESIÓN
         
         let queueVocab = [], queueMemo = [], queueDictado = [], queueEscritura = [], queueArmar = [];
         let progreso = { vocab: 0, memo: 0, dictado: 0, armar: 0, escritura: 0, examen: 0 };
@@ -463,53 +598,35 @@
             document.getElementById('header-badge').innerText = "Inicio"; document.getElementById('header-badge').className = "text-[9px] text-rose-500 font-bold px-2 py-0.5 bg-rose-50 rounded-full uppercase tracking-wider";
         }
 
-        function iniciarModo(modo) {
-            currentMode = modo;
+        function iniciarEstudio() {
             document.getElementById('mode-selection').classList.add('hidden'); document.getElementById('mode-selection').classList.remove('flex');
             document.getElementById('app-section').classList.remove('hidden'); document.getElementById('app-section').classList.add('flex');
             document.getElementById('bottom-nav').classList.remove('hidden'); document.getElementById('btn-opciones').classList.remove('hidden');
             
-            if (modo === 'teoria') {
-                document.getElementById('header-badge').innerText = "Teoría"; document.getElementById('header-badge').className = "text-[9px] text-teal-500 font-bold px-2 py-0.5 bg-teal-50 rounded-full uppercase tracking-wider";
-                document.getElementById('btn-opciones').classList.add('hidden');
-                cambiarVista('teoria');
-                return; // Teoría no necesita cargar filtros ni palabras
-            }
-
-            if (modo === 'vocab') {
-                document.getElementById('header-badge').innerText = "Vocabulario"; document.getElementById('header-badge').className = "text-[9px] text-amber-500 font-bold px-2 py-0.5 bg-amber-50 rounded-full uppercase tracking-wider";
-                document.getElementById('nav-armar').classList.add('hidden'); document.getElementById('nav-teoria').classList.add('hidden');
-                document.getElementById('nav-vocab').classList.remove('hidden'); document.getElementById('nav-memo').classList.remove('hidden');
-                filtrosActivos = [1, 2, 3, 4, 5, 6]; 
-            } else {
-                document.getElementById('header-badge').innerText = "Gramática"; document.getElementById('header-badge').className = "text-[9px] text-fuchsia-500 font-bold px-2 py-0.5 bg-fuchsia-50 rounded-full uppercase tracking-wider";
-                document.getElementById('nav-armar').classList.remove('hidden'); document.getElementById('nav-teoria').classList.add('hidden');
-                document.getElementById('nav-vocab').classList.add('hidden'); document.getElementById('nav-memo').classList.add('hidden');
-                filtrosActivos = [1, 2, 3, 4, 5, 6]; 
-            }
+            document.getElementById('header-badge').innerText = "Práctica"; document.getElementById('header-badge').className = "text-[9px] text-indigo-500 font-bold px-2 py-0.5 bg-indigo-50 rounded-full uppercase tracking-wider";
+            
+            filtrosActivos = [1, 2, 3, 4, 5, 6]; 
+            
             construirModalFiltro(); abrirFiltro();
         }
 
         function construirModalFiltro() {
             const container = document.getElementById('filtro-niveles-container'); container.innerHTML = '';
-            document.getElementById('filtro-title').innerText = "Subniveles / Lotes";
-            document.getElementById('filtro-desc').innerText = "¿Qué vocabulario usamos para los ejercicios?";
             
             let opciones = [
-                {val: 1, label: "Lote 1: Personas y Esenciales"},
-                {val: 2, label: "Lote 2: La Casa y Objetos"},
-                {val: 3, label: "Lote 3: Comida y Bebida"},
-                {val: 4, label: "Lote 4: Ciudad y Direcciones"},
-                {val: 5, label: "Lote 5: Verbos de Rutina"},
-                {val: 6, label: "Lote 6: Números y Tiempo"}
+                {val: 1, label: "🌱 Subnivel 1.1: Familia y Personas"},
+                {val: 2, label: "🏠 Subnivel 1.2: La Casa y Muebles"},
+                {val: 3, label: "🍎 Subnivel 1.3: Comida y Bebidas"},
+                {val: 4, label: "🏙️ Subnivel 1.4: Ciudad y Direcciones"},
+                {val: 5, label: "🏃‍♂️ Subnivel 1.5: Verbos de Rutina"},
+                {val: 6, label: "🔢 Subnivel 1.6: Números y Tiempo"}
             ];
             
             opciones.forEach(opc => {
                 const checked = filtrosActivos.includes(opc.val) ? "checked" : "";
-                const color = currentMode === 'vocab' ? 'amber' : 'fuchsia';
                 container.innerHTML += `
-                    <label class="flex items-center gap-3 p-4 rounded-2xl border-2 border-stone-100 hover:border-${color}-200 cursor-pointer transition-all focus-within:border-${color}-400 bg-stone-50">
-                        <input type="checkbox" value="${opc.val}" class="filtro-cb w-5 h-5 accent-${color}-500" ${checked} onchange="actualizarContadorFiltro()">
+                    <label class="flex items-center gap-3 p-4 rounded-2xl border-2 border-stone-100 hover:border-indigo-200 cursor-pointer transition-all focus-within:border-indigo-400 bg-stone-50">
+                        <input type="checkbox" value="${opc.val}" class="filtro-cb w-5 h-5 accent-indigo-500" ${checked} onchange="actualizarContadorFiltro()">
                         <span class="text-sm font-bold text-stone-700">${opc.label}</span>
                     </label>`;
             });
@@ -518,10 +635,9 @@
 
         function actualizarContadorFiltro() {
             const sel = document.querySelectorAll('.filtro-cb:checked').length;
-            const color = currentMode === 'vocab' ? 'amber' : 'fuchsia';
             const txt = document.getElementById('filtro-contador-texto');
             txt.innerText = `${sel} subnivel${sel !== 1 ? 'es' : ''} seleccionado${sel !== 1 ? 's' : ''}`;
-            txt.className = `text-xs font-bold text-${color}-600 mb-6 bg-${color}-50 inline-block px-3 py-1.5 rounded-full transition-colors`;
+            txt.className = `text-xs font-bold text-indigo-600 mb-6 bg-indigo-50 inline-block px-3 py-1.5 rounded-full transition-colors`;
         }
 
         function abrirFiltro() { document.getElementById('modal-filtro').classList.remove('hidden'); document.getElementById('modal-filtro').classList.add('flex'); }
@@ -539,7 +655,7 @@
             document.getElementById('modal-filtro').classList.add('hidden'); document.getElementById('modal-filtro').classList.remove('flex');
             
             aplicarFiltroLocal();
-            if(currentMode === 'vocab') cambiarVista('vocab'); else cambiarVista('armar');
+            cambiarVista('vocab'); // Siempre arranca en Tarjetas tras aplicar filtro
         }
 
         function mezclarYCortar(array, max) { 
@@ -552,11 +668,7 @@
             return result.slice(0, max);
         }
 
-        /* =========================================================================
-           ¡LA MAGIA DEL MOTOR GRAMATICAL SOV! (Creación dinámica de oraciones)
-           ========================================================================= */
         function generarOracionDinamica(vocabDisponible) {
-            // Filtramos el vocabulario disponible en esta ronda
             const sujetosRaw = vocabDisponible.filter(v => v.categoria === 'SUJ');
             const palabrasTiempoEspecial = ['오늘', '내일', '어제', '지금'];
             const sujetosReales = sujetosRaw.filter(v => !palabrasTiempoEspecial.includes(v.coreano));
@@ -615,7 +727,7 @@
                     espanol: `[${getSujEspanol(s.espanol)}] hace una acción (en/el) [${getSujEspanol(t.espanol).toLowerCase()}]`,
                     palabras: [sujetoConParticula, `${t.coreano}에`, verboConjugado],
                     coreanoStr: `${sujetoConParticula} ${t.coreano}에 ${verboConjugado}`,
-                    tipo: 2 
+                    tipo: 2
                 };
             }
             else if (formula === 1) {
@@ -655,14 +767,13 @@
             
             return { espanol: `${s.espanol} es/existe`, palabras: [s.coreano, "입니다"], coreanoStr: `${s.coreano} 입니다`, tipo: 0 };
         }
-        /* ========================================================================= */
 
         function aplicarFiltroLocal() {
-            // Filtramos siempre basándonos en los subniveles/lotes
+            // Filtramos la base de datos maestra según los niveles seleccionados (1, 2, 3, etc)
             contenidoNivelActual.vocabulario = dbCache.vocabulario.filter(x => filtrosActivos.includes(x.nivel));
 
             if(contenidoNivelActual.vocabulario.length === 0) {
-                contenidoNivelActual.vocabulario = dbCache.vocabulario; // Fallback
+                contenidoNivelActual.vocabulario = dbCache.vocabulario;
                 if(dbCache.vocabulario.length > 0) showToast("Mostrando todo el vocabulario.", "💡");
                 else showToast("No hay palabras en la BD.", "⚠️");
             }
@@ -670,60 +781,44 @@
         }
 
         function reiniciarContenidos() {
-            // 1. CREAR LA RONDA MAESTRA DE 20
+            // 1. SELECCIONAR LAS 20 PALABRAS MAESTRAS PARA ESTA RONDA
             rondaMaestra = mezclarYCortar(contenidoNivelActual.vocabulario, MAX_RONDA);
             
-            if (currentMode === 'vocab') {
-                queueVocab = [...rondaMaestra];
-                queueMemo = [...rondaMaestra];
-                queueDictado = rondaMaestra.map(v => v.coreano);
-                queueEscritura = rondaMaestra.map(v => ({espanol: v.espanol, coreanoStr: v.coreano}));
-                queueArmar = []; 
-            } else { 
-                queueVocab = []; queueMemo = [];
-                oracionesGeneradasDinamicamente = [];
-                
-                // IMPORTANTE: Mezclamos palabras de los niveles seleccionados + algunas esenciales para que la gramática tenga sentido.
-                // Si eligen "Lote 3 (Comida)", necesitamos sujetos (Lote 1) para que haya frases lógicas.
-                let vocabParaGramatica = dbCache.vocabulario.filter(x => filtrosActivos.includes(x.nivel) || x.nivel === 1);
-
-                for(let i=0; i < MAX_RONDA; i++) {
-                    oracionesGeneradasDinamicamente.push(generarOracionDinamica(vocabParaGramatica));
-                }
-
-                queueArmar = [...oracionesGeneradasDinamicamente];
-                queueDictado = oracionesGeneradasDinamicamente.map(o => o.coreanoStr);
-                queueEscritura = [...oracionesGeneradasDinamicamente]; 
+            // 2. REPARTIR EXACTAMENTE LAS MISMAS 20 A LOS JUEGOS DE VOCABULARIO
+            queueVocab = [...rondaMaestra];
+            queueMemo = [...rondaMaestra];
+            queueDictado = rondaMaestra.map(v => v.coreano);
+            queueEscritura = rondaMaestra.map(v => ({espanol: v.espanol, coreanoStr: v.coreano}));
+            
+            // 3. GENERAR 20 ORACIONES GRAMATICALES (Usando TODA la base para que tenga sentido, pero priorizando las 20 maestras si es posible)
+            oracionesGeneradasDinamicamente = [];
+            for(let i=0; i < MAX_RONDA; i++) {
+                oracionesGeneradasDinamicamente.push(generarOracionDinamica(dbCache.vocabulario)); 
             }
+            queueArmar = [...oracionesGeneradasDinamicamente];
             
             totales = { vocab: queueVocab.length, memo: queueMemo.length, dictado: queueDictado.length, armar: queueArmar.length, escritura: queueEscritura.length, examen: MAX_RONDA };
             progreso = { vocab: 0, memo: 0, dictado: 0, armar: 0, escritura: 0, examen: 0 };
             
-            if(currentMode === 'vocab') { cargarVocabularioUI(); iniciarMemorama(); }
-            resetDictadoUI(); resetEscrituraUI(); resetArmarUI();
+            cargarVocabularioUI(); 
+            iniciarMemorama();
+            resetDictadoUI(); 
+            resetEscrituraUI(); 
+            resetArmarUI();
         }
 
-        // FUNCION PARA REPETIR EXACTAMENTE LA MISMA RONDA DE 20
+        // FUNCION PARA REPETIR EXACTAMENTE LA MISMA RONDA
         function repetirRondaActiva() {
-            document.getElementById('modal-ronda').classList.add('hidden'); 
-            document.getElementById('modal-ronda').classList.remove('flex');
-            
-            if (currentMode === 'vocab') {
-                queueVocab = [...rondaMaestra];
-                queueMemo = [...rondaMaestra];
-                queueDictado = rondaMaestra.map(v => v.coreano);
-                queueEscritura = rondaMaestra.map(v => ({espanol: v.espanol, coreanoStr: v.coreano}));
-                queueArmar = [];
-            } else {
-                queueArmar = [...oracionesGeneradasDinamicamente];
-                queueDictado = oracionesGeneradasDinamicamente.map(o => o.coreanoStr);
-                queueEscritura = [...oracionesGeneradasDinamicamente];
-            }
+            document.getElementById('modal-ronda').classList.add('hidden'); document.getElementById('modal-ronda').classList.remove('flex');
             
             progreso = { vocab: 0, memo: 0, dictado: 0, armar: 0, escritura: 0, examen: 0 };
             
-            if(currentMode === 'vocab') { cargarVocabularioUI(); iniciarMemorama(); }
-            resetDictadoUI(); resetEscrituraUI(); resetArmarUI();
+            cargarVocabularioUI(); 
+            iniciarMemorama();
+            resetDictadoUI(); 
+            resetEscrituraUI(); 
+            resetArmarUI();
+            
             showToast("Repitiendo los mismos 20 ejercicios.", "🔁");
         }
 
@@ -739,7 +834,7 @@
             });
         }
 
-        function reiniciarJuegoActivo() { reiniciarContenidos(); showToast("Nueva ronda aleatoria de 20 generada.", "✨"); }
+        function reiniciarJuegoActivo() { reiniciarContenidos(); showToast("Nueva ronda maestra de 20 cargada.", "✨"); }
 
         function cargarVocabularioUI() {
             if(queueVocab.length === 0) return;
@@ -848,7 +943,7 @@
                 hint.innerHTML = "💡 <b>Fórmula de Acción:</b><br/>Primero <b>quién</b> (Sujeto), luego <b>qué cosa</b> (Objeto), y siempre cerramos con la <b>acción</b> (Verbo).<br/><span class='text-fuchsia-500 mt-1 inline-block'>[Sujeto]는/은 + [Objeto]를/을 + [Verbo]</span>";
             }
             else if(oracionActual.tipo === 2) {
-                hint.innerHTML = "💡 <b>Fórmula de Destino:</b><br/>Primero <b>quién</b> (Sujeto), luego <b>a dónde / cuándo</b> (Lugar/Tiempo), y cerramos con el <b>movimiento</b> (Verbo).<br/><span class='text-fuchsia-500 mt-1 inline-block'>[Sujeto]는/은 + [Lugar]에 + [Verbo]</span>";
+                hint.innerHTML = "💡 <b>Fórmula de Destino:</b><br/>Primero <b>quién</b> (Sujeto), luego <b>a dónde</b> (Lugar), y siempre cerramos con el <b>movimiento</b> (Verbo).<br/><span class='text-fuchsia-500 mt-1 inline-block'>[Sujeto]는/은 + [Lugar]에 + [Verbo]</span>";
             }
             else if(oracionActual.tipo === 3) {
                 hint.innerHTML = "💡 <b>Fórmula de Descripción:</b><br/>Primero <b>qué/quién</b> (Sujeto), y cerramos con el <b>adjetivo/estado</b> (que en coreano funciona como verbo).<br/><span class='text-fuchsia-500 mt-1 inline-block'>[Sujeto]는/은 + [Adjetivo]</span>";
@@ -925,18 +1020,14 @@
         let testPreguntas = [], testIndice = 0, testPuntos = 0, testPreguntaActual = null, testPalabrasArmar = [];
         function iniciarExamen() {
             let p = [];
-            if (currentMode === 'vocab') {
-                queueVocab.forEach(v => {
-                    p.push({tipo: 'escritura', data: {espanol: v.espanol, coreanoStr: v.coreano} });
-                    p.push({tipo: 'dictado', data: {coreanoStr: v.coreano} });
-                });
-            } else {
-                oracionesGeneradasDinamicamente.forEach(o => {
-                    p.push({tipo: 'escritura', data: o});
-                    p.push({tipo: 'dictado', data: o});
-                    p.push({tipo: 'armar', data: o});
-                });
-            }
+            // Toma de la ronda maestra para el examen
+            queueVocab.forEach(v => {
+                p.push({tipo: 'escritura', data: {espanol: v.espanol, coreanoStr: v.coreano} });
+                p.push({tipo: 'dictado', data: {coreanoStr: v.coreano} });
+            });
+            oracionesGeneradasDinamicamente.forEach(o => {
+                p.push({tipo: 'armar', data: o});
+            });
             
             testPreguntas = mezclarYCortar(p, MAX_RONDA);
             testIndice = 0; testPuntos = 0; totales.examen = testPreguntas.length;
