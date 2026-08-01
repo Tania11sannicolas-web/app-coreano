@@ -710,6 +710,30 @@
 
             const getSujEspanol = (str) => str.split('/')[0].split('(')[0].trim();
 
+            const traducirVerbo = (v) => {
+                if(v.coreano === '하다') return 'hace algo con';
+                if(v.coreano === '먹다') return 'come';
+                if(v.coreano === '마시다') return 'bebe';
+                if(v.coreano === '보다') return 've';
+                if(v.coreano === '읽다') return 'lee';
+                if(v.coreano === '사다') return 'compra';
+                if(v.coreano === '배우다') return 'aprende';
+                if(v.coreano === '만나다') return 'se reúne con';
+                if(v.coreano === '듣다') return 'escucha';
+                if(v.coreano === '자다') return 'duerme';
+                if(v.coreano === '일하다') return 'trabaja';
+                if(v.coreano === '공부하다') return 'estudia';
+                if(v.coreano === '운동하다') return 'hace ejercicio';
+                if(v.coreano === '요리하다') return 'cocina';
+                
+                let base = getSujEspanol(v.espanol).toLowerCase();
+                if(base.endsWith('ar')) return base.slice(0, -2) + 'a';
+                if(base.endsWith('er')) return base.slice(0, -2) + 'e';
+                if(base.endsWith('ir')) return base.slice(0, -2) + 'e';
+                return base;
+            };
+
+            // Fórmula 2: Sujeto + Lugar Físico (에) + Verbo Movimiento
             if (formula === 2) {
                 let l = random(lugaresFisicos); let v = random(verbosMov);
                 let verboConjugado = (v.notas && v.notas.includes('Estándar:')) ? v.notas.split('Estándar:')[1].split('(')[0].trim() : v.coreano + "요";
@@ -720,16 +744,22 @@
                     tipo: 2
                 };
             } 
+            // Fórmula 4: Sujeto + Tiempo (에) + Verbo Acción
             else if (formula === 4) {
                 let t = random(lugaresTiempo); let v = random(verbosAcc);
                 let verboConjugado = (v.notas && v.notas.includes('Estándar:')) ? v.notas.split('Estándar:')[1].split('(')[0].trim() : v.coreano + "요";
+                
+                let verboEspanol = traducirVerbo(v);
+                if (verboEspanol === 'hace algo con') verboEspanol = 'hace algo'; // Limpieza para el tiempo
+
                 return {
-                    espanol: `[${getSujEspanol(s.espanol)}] hace una acción (en/el) [${getSujEspanol(t.espanol).toLowerCase()}]`,
+                    espanol: `[${getSujEspanol(s.espanol)}] ${verboEspanol} (en/el) [${getSujEspanol(t.espanol).toLowerCase()}]`,
                     palabras: [sujetoConParticula, `${t.coreano}에`, verboConjugado],
                     coreanoStr: `${sujetoConParticula} ${t.coreano}에 ${verboConjugado}`,
-                    tipo: 2
+                    tipo: 2 // Usa el hint visual del tipo 2 (Ubicación/Tiempo)
                 };
             }
+            // Fórmula 1: Sujeto + Objeto (를/을) + Verbo Acción
             else if (formula === 1) {
                 let v = random(verbosAcc);
                 let o;
@@ -748,12 +778,13 @@
                 let objParticula = tieneConsonanteO ? o.coreano + "을" : o.coreano + "를";
 
                 return {
-                    espanol: `[${getSujEspanol(s.espanol)}] interactúa/usa [${getSujEspanol(o.espanol).toLowerCase()}]`,
+                    espanol: `[${getSujEspanol(s.espanol)}] ${traducirVerbo(v)} [${getSujEspanol(o.espanol).toLowerCase()}]`,
                     palabras: [sujetoConParticula, objParticula, verboConjugado],
                     coreanoStr: `${sujetoConParticula} ${objParticula} ${verboConjugado}`,
                     tipo: 1
                 };
             }
+            // Fórmula 3: Sujeto + Adjetivo
             else if (formula === 3) {
                 let a = random(adjetivos);
                 let adjConjugado = (a.notas && a.notas.includes('Estándar:')) ? a.notas.split('Estándar:')[1].split('(')[0].trim() : a.coreano + "요";
