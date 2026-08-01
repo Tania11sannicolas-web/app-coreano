@@ -179,7 +179,7 @@
                 </div>
                 
                 <!-- 1. VOCABULARIO (Tarjetas) -->
-                <div id="view-vocab" class="app-view flex flex-col gap-6 w-full animate-fade-in">
+                <div id="view-vocab" class="app-view hidden flex-col gap-6 w-full animate-fade-in">
                     <div class="flex justify-between items-center px-2 mb-2">
                         <h2 class="text-xl font-bold text-stone-900">Tarjetas</h2>
                         <button onclick="reiniciarJuegoActivo()" class="text-amber-500 bg-amber-50 p-2 rounded-xl active:scale-95 transition-all"><i class="ph-bold ph-arrows-clockwise text-lg"></i></button>
@@ -413,7 +413,7 @@
         let oracionesGeneradasDinamicamente = [];
         
         const MAX_RONDA = 20;
-        let rondaMaestra = []; // <--- AQUI GUARDAMOS LAS 20 PALABRAS DE LA SESIÓN
+        let rondaMaestra = []; // AQUI GUARDAMOS LAS 20 PALABRAS DE LA SESIÓN
         
         let queueVocab = [], queueMemo = [], queueDictado = [], queueEscritura = [], queueArmar = [];
         let progreso = { vocab: 0, memo: 0, dictado: 0, armar: 0, escritura: 0, examen: 0 };
@@ -421,83 +421,12 @@
 
         const navColors = { vocab: 'text-amber-500', memo: 'text-rose-500', dictado: 'text-emerald-500', armar: 'text-fuchsia-500', escritura: 'text-orange-500', examen: 'text-indigo-500', teoria: 'text-teal-500' };
 
-                        <p class="text-xs text-stone-500 mb-3" id="filtro-desc">Selecciona el vocabulario a utilizar.</p>
-                        
-                        <div id="filtro-contador-texto" class="text-xs font-bold text-amber-500 mb-6 bg-amber-50 inline-block px-3 py-1.5 rounded-full transition-colors">0 temas seleccionados</div>
-                        
-                        <div class="space-y-3 mb-8 max-h-[50vh] overflow-y-auto no-scrollbar text-left" id="filtro-niveles-container">
-                            <!-- Se llena por JS -->
-                        </div>
-                        <button onclick="aplicarFiltroYRecargar()" class="w-full bg-stone-900 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">Guardar y Aplicar</button>
-                    </div>
-                </div>
-
-                <div id="modal-ronda" class="hidden absolute top-0 left-0 w-full h-full bg-stone-900/50 backdrop-blur-sm z-50 flex-col items-center justify-center p-6 animate-fade-in rounded-[32px]">
-                    <div class="bg-white w-full max-w-sm p-8 rounded-[32px] shadow-xl text-center">
-                        <div class="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-500 text-4xl shadow-inner border border-emerald-100"><i class="ph-fill ph-check-circle"></i></div>
-                        <h3 class="text-2xl font-bold text-stone-900 mb-2">¡Ronda completada! ✨</h3>
-                        <p class="text-sm text-stone-500 mb-8">Has terminado los 20 ejercicios.</p>
-                        <div class="space-y-3">
-                            <button onclick="cerrarModalRondaYReiniciar()" class="w-full bg-emerald-500 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">Siguiente Ronda</button>
-        function iniciarEstudio() {
-            document.getElementById('mode-selection').classList.add('hidden'); document.getElementById('mode-selection').classList.remove('flex');
-            document.getElementById('app-section').classList.remove('hidden'); document.getElementById('app-section').classList.add('flex');
-            document.getElementById('bottom-nav').classList.remove('hidden'); document.getElementById('btn-opciones').classList.remove('hidden');
-            
-            document.getElementById('header-badge').innerText = "Práctica"; document.getElementById('header-badge').className = "text-[9px] text-indigo-500 font-bold px-2 py-0.5 bg-indigo-50 rounded-full uppercase tracking-wider";
-            
-            // Por defecto seleccionamos el Subnivel 1 (Lote 1 y 2 en nuestra BD lo marcaremos todo como '1' por el momento o agrupado)
-            filtrosActivos = [1, 2, 3, 4, 5, 6]; 
-            
-            construirModalFiltro(); abrirFiltro();
-        }
-
-        function construirModalFiltro() {
-            const container = document.getElementById('filtro-niveles-container'); container.innerHTML = '';
-            
-            let opciones = [
-                {val: 1, label: "🌱 Subnivel 1.1: Familia y Personas"},
-                {val: 2, label: "🏠 Subnivel 1.2: La Casa y Muebles"},
-                {val: 3, label: "🍎 Subnivel 1.3: Comida y Bebidas"},
-                {val: 4, label: "🏙️ Subnivel 1.4: Ciudad y Direcciones"},
-                {val: 5, label: "🏃‍♂️ Subnivel 1.5: Verbos de Rutina"},
-                {val: 6, label: "🔢 Subnivel 1.6: Números y Contadores"}
-            ];
-            
-            opciones.forEach(opc => {
-                const checked = filtrosActivos.includes(opc.val) ? "checked" : "";
-                container.innerHTML += `
-                    <label class="flex items-center gap-3 p-4 rounded-2xl border-2 border-stone-100 hover:border-indigo-200 cursor-pointer transition-all focus-within:border-indigo-400 bg-stone-50">
-                        <input type="checkbox" value="${opc.val}" class="filtro-cb w-5 h-5 accent-indigo-500" ${checked} onchange="actualizarContadorFiltro()">
-                        <span class="text-sm font-bold text-stone-700">${opc.label}</span>
-                    </label>`;
-            });
-            actualizarContadorFiltro();
-        }
-
-        function actualizarContadorFiltro() {
-            const sel = document.querySelectorAll('.filtro-cb:checked').length;
-            const txt = document.getElementById('filtro-contador-texto');
-            txt.innerText = `${sel} subnivel${sel !== 1 ? 'es' : ''} seleccionado${sel !== 1 ? 's' : ''}`;
-            txt.className = `text-xs font-bold text-indigo-600 mb-6 bg-indigo-50 inline-block px-3 py-1.5 rounded-full transition-colors`;
-        }
-
-        function abrirFiltro() { document.getElementById('modal-filtro').classList.remove('hidden'); document.getElementById('modal-filtro').classList.add('flex'); }
-
-        function aplicarFiltroYRecargar() {
-            const checkboxes = document.querySelectorAll('.filtro-cb');
-            filtrosActivos = Array.from(checkboxes).filter(cb => cb.checked).map(cb => parseInt(cb.value));
-            
-            if(filtrosActivos.length === 0) { 
-                showToast("Selecciona al menos un subnivel.", '⚠️'); 
-                checkboxes[0].checked = true; 
-                filtrosActivos = [parseInt(checkboxes[0].value)]; 
-            }
-            
-            document.getElementById('modal-filtro').classList.add('hidden'); document.getElementById('modal-filtro').classList.remove('flex');
-            
-            aplicarFiltroLocal();
-            cambiarVista('vocab'); // Siempre arranca en Tarjetas
+        function showToast(msg, icon = '✨') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            document.getElementById('toast-icon').innerText = icon;
+            toast.classList.remove('-translate-y-24', 'opacity-0'); toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => { toast.classList.remove('translate-y-0', 'opacity-100'); toast.classList.add('-translate-y-24', 'opacity-0'); }, 3000);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -542,7 +471,7 @@
                 if(dbCache.vocabulario.length === 0) showToast("Base de datos vacía. Sube el CSV en Supabase.", "⚠️");
             } catch (error) { 
                 console.error("Error BD:", error); 
-                showToast("Error de conexión. ¿Borraste las tablas viejas?", "❌"); 
+                showToast("Error de conexión.", "❌"); 
             }
         }
 
@@ -553,58 +482,36 @@
             document.getElementById('header-badge').innerText = "Inicio"; document.getElementById('header-badge').className = "text-[9px] text-rose-500 font-bold px-2 py-0.5 bg-rose-50 rounded-full uppercase tracking-wider";
         }
 
-        function iniciarModo(modo) {
-            currentMode = modo;
+        function iniciarEstudio() {
             document.getElementById('mode-selection').classList.add('hidden'); document.getElementById('mode-selection').classList.remove('flex');
             document.getElementById('app-section').classList.remove('hidden'); document.getElementById('app-section').classList.add('flex');
             document.getElementById('bottom-nav').classList.remove('hidden'); document.getElementById('btn-opciones').classList.remove('hidden');
             
-            if (modo === 'vocab') {
-                document.getElementById('header-badge').innerText = "Vocabulario"; document.getElementById('header-badge').className = "text-[9px] text-amber-500 font-bold px-2 py-0.5 bg-amber-50 rounded-full uppercase tracking-wider";
-                document.getElementById('nav-armar').classList.add('hidden'); 
-                document.getElementById('nav-vocab').classList.remove('hidden'); document.getElementById('nav-memo').classList.remove('hidden');
-                filtrosActivos = ['SUJ', 'LUG', 'OBJ', 'VER_ACC', 'VER_MOV', 'ADJ', 'NUM']; 
-            } else {
-                document.getElementById('header-badge').innerText = "Gramática"; document.getElementById('header-badge').className = "text-[9px] text-fuchsia-500 font-bold px-2 py-0.5 bg-fuchsia-50 rounded-full uppercase tracking-wider";
-                document.getElementById('nav-armar').classList.remove('hidden'); 
-                document.getElementById('nav-vocab').classList.add('hidden'); document.getElementById('nav-memo').classList.add('hidden');
-                filtrosActivos = [1]; 
-            }
+            document.getElementById('header-badge').innerText = "Práctica"; document.getElementById('header-badge').className = "text-[9px] text-indigo-500 font-bold px-2 py-0.5 bg-indigo-50 rounded-full uppercase tracking-wider";
+            
+            // Por defecto seleccionamos todos los subniveles disponibles (lotes del 1 al 6)
+            filtrosActivos = [1, 2, 3, 4, 5, 6]; 
+            
             construirModalFiltro(); abrirFiltro();
         }
 
         function construirModalFiltro() {
             const container = document.getElementById('filtro-niveles-container'); container.innerHTML = '';
             
-            let opciones = [];
-            if (currentMode === 'vocab') {
-                document.getElementById('filtro-title').innerText = "Categorías de Palabras";
-                document.getElementById('filtro-desc').innerText = "¿Qué tipo de palabras quieres estudiar?";
-                opciones = [
-                    {val: 'SUJ', label: "👤 Sujetos y Personas"},
-                    {val: 'LUG', label: "📍 Lugares y Espacios"},
-                    {val: 'OBJ', label: "🍎 Objetos y Cosas"},
-                    {val: 'VER_ACC', label: "🏃‍♂️ Verbos de Acción"},
-                    {val: 'VER_MOV', label: "🚶‍♂️ Verbos de Movimiento"},
-                    {val: 'ADJ', label: "✨ Adjetivos y Descripciones"},
-                    {val: 'NUM', label: "🔢 Números y Contadores"}
-                ];
-            } else {
-                document.getElementById('filtro-title').innerText = "Niveles Gramaticales";
-                document.getElementById('filtro-desc').innerText = "Selecciona de qué niveles armar oraciones.";
-                opciones = [
-                    {val: 1, label: "Nivel 1: Esenciales y Supervivencia"},
-                    {val: 2, label: "Nivel 2: Entorno y Ciudad"},
-                    {val: 3, label: "Nivel 3: Interacción"}
-                ];
-            }
+            let opciones = [
+                {val: 1, label: "🌱 Subnivel 1.1: Familia y Personas (Lote 1)"},
+                {val: 2, label: "🏠 Subnivel 1.2: La Casa y Muebles (Lote 2)"},
+                {val: 3, label: "🍎 Subnivel 1.3: Comida y Bebidas (Lote 3)"},
+                {val: 4, label: "🏙️ Subnivel 1.4: Ciudad y Direcciones (Lote 4)"},
+                {val: 5, label: "🏃‍♂️ Subnivel 1.5: Verbos de Rutina (Lote 5)"},
+                {val: 6, label: "🔢 Subnivel 1.6: Números y Tiempo (Lote 6)"}
+            ];
             
             opciones.forEach(opc => {
                 const checked = filtrosActivos.includes(opc.val) ? "checked" : "";
-                const color = currentMode === 'vocab' ? 'amber' : 'fuchsia';
                 container.innerHTML += `
-                    <label class="flex items-center gap-3 p-4 rounded-2xl border-2 border-stone-100 hover:border-${color}-200 cursor-pointer transition-all focus-within:border-${color}-400 bg-stone-50">
-                        <input type="checkbox" value="${opc.val}" class="filtro-cb w-5 h-5 accent-${color}-500" ${checked} onchange="actualizarContadorFiltro()">
+                    <label class="flex items-center gap-3 p-4 rounded-2xl border-2 border-stone-100 hover:border-indigo-200 cursor-pointer transition-all focus-within:border-indigo-400 bg-stone-50">
+                        <input type="checkbox" value="${opc.val}" class="filtro-cb w-5 h-5 accent-indigo-500" ${checked} onchange="actualizarContadorFiltro()">
                         <span class="text-sm font-bold text-stone-700">${opc.label}</span>
                     </label>`;
             });
@@ -613,28 +520,27 @@
 
         function actualizarContadorFiltro() {
             const sel = document.querySelectorAll('.filtro-cb:checked').length;
-            const color = currentMode === 'vocab' ? 'amber' : 'fuchsia';
             const txt = document.getElementById('filtro-contador-texto');
-            txt.innerText = `${sel} opción${sel !== 1 ? 'es' : ''} seleccionada${sel !== 1 ? 's' : ''}`;
-            txt.className = `text-xs font-bold text-${color}-600 mb-6 bg-${color}-50 inline-block px-3 py-1.5 rounded-full transition-colors`;
+            txt.innerText = `${sel} subnivel${sel !== 1 ? 'es' : ''} seleccionado${sel !== 1 ? 's' : ''}`;
+            txt.className = `text-xs font-bold text-indigo-600 mb-6 bg-indigo-50 inline-block px-3 py-1.5 rounded-full transition-colors`;
         }
 
         function abrirFiltro() { document.getElementById('modal-filtro').classList.remove('hidden'); document.getElementById('modal-filtro').classList.add('flex'); }
 
         function aplicarFiltroYRecargar() {
             const checkboxes = document.querySelectorAll('.filtro-cb');
-            filtrosActivos = Array.from(checkboxes).filter(cb => cb.checked).map(cb => currentMode === 'vocab' ? cb.value : parseInt(cb.value));
+            filtrosActivos = Array.from(checkboxes).filter(cb => cb.checked).map(cb => parseInt(cb.value));
             
             if(filtrosActivos.length === 0) { 
-                showToast("Selecciona al menos una opción.", '⚠️'); 
+                showToast("Selecciona al menos un subnivel.", '⚠️'); 
                 checkboxes[0].checked = true; 
-                filtrosActivos = currentMode === 'vocab' ? [checkboxes[0].value] : [parseInt(checkboxes[0].value)]; 
+                filtrosActivos = [parseInt(checkboxes[0].value)]; 
             }
             
             document.getElementById('modal-filtro').classList.add('hidden'); document.getElementById('modal-filtro').classList.remove('flex');
             
             aplicarFiltroLocal();
-            if(currentMode === 'vocab') cambiarVista('vocab'); else cambiarVista('armar');
+            cambiarVista('vocab'); // Siempre arranca en Tarjetas tras aplicar filtro
         }
 
         function mezclarYCortar(array, max) { 
@@ -647,23 +553,18 @@
             return result.slice(0, max);
         }
 
-        /* =========================================================================
-           ¡LA MAGIA DEL MOTOR GRAMATICAL SOV! (Creación dinámica de oraciones)
-           ========================================================================= */
         function generarOracionDinamica(vocabDisponible) {
-            // 1. Filtramos y limpiamos los Sujetos (Quitamos "Hoy, Mañana" que actúan como sujetos especiales)
+            // Filtramos las palabras según su categoría
             const sujetosRaw = vocabDisponible.filter(v => v.categoria === 'SUJ');
             const palabrasTiempoEspecial = ['오늘', '내일', '어제', '지금'];
             const sujetosReales = sujetosRaw.filter(v => !palabrasTiempoEspecial.includes(v.coreano));
 
-            // 2. Separamos los Lugares Físicos de las Fechas/Tiempos
             const lugaresRaw = vocabDisponible.filter(v => v.categoria === 'LUG');
             const palabrasTiempoLugar = ['일월', '이월', '삼월', '사월', '오월', '유월', '칠월', '팔월', '구월', '시월', '십일월', '십이월', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일', '아침', '점심', '저녁', '밤', '새벽', '주말', '오전', '오후'];
             
             const lugaresFisicos = lugaresRaw.filter(v => !palabrasTiempoLugar.includes(v.coreano));
             const lugaresTiempo = lugaresRaw.filter(v => palabrasTiempoLugar.includes(v.coreano));
 
-            // 3. Verbos, Adjetivos y Objetos
             const verbosMov = vocabDisponible.filter(v => v.categoria === 'VER_MOV');
             const verbosAcc = vocabDisponible.filter(v => v.categoria === 'VER_ACC');
             const adjetivos = vocabDisponible.filter(v => v.categoria === 'ADJ');
@@ -679,12 +580,11 @@
             const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
             let s = random(sujetosReales);
             
-            // Decidimos la fórmula a usar según lo que haya disponible
             let opcionesFormulas = [];
-            if(verbosAcc.length > 0 && (objetosComida.length > 0 || objetosGenerales.length > 0)) opcionesFormulas.push(1); // S + O + V
-            if(verbosMov.length > 0 && lugaresFisicos.length > 0) opcionesFormulas.push(2); // S + LugarFisico + V
-            if(adjetivos.length > 0) opcionesFormulas.push(3); // S + Adj
-            if(verbosAcc.length > 0 && lugaresTiempo.length > 0) opcionesFormulas.push(4); // S + Tiempo + V
+            if(verbosAcc.length > 0 && (objetosComida.length > 0 || objetosGenerales.length > 0)) opcionesFormulas.push(1); 
+            if(verbosMov.length > 0 && lugaresFisicos.length > 0) opcionesFormulas.push(2); 
+            if(adjetivos.length > 0) opcionesFormulas.push(3); 
+            if(verbosAcc.length > 0 && lugaresTiempo.length > 0) opcionesFormulas.push(4); 
             
             let formula = opcionesFormulas.length > 0 ? random(opcionesFormulas) : 0;
 
@@ -694,10 +594,8 @@
             if(s.coreano === '나') sujetoConParticula = '나는';
             if(s.coreano === '저') sujetoConParticula = '저는';
 
-            // Función rápida para limpiar el español
             const getSujEspanol = (str) => str.split('/')[0].split('(')[0].trim();
 
-            // Fórmula 2: Sujeto + Lugar Físico (에) + Verbo Movimiento
             if (formula === 2) {
                 let l = random(lugaresFisicos); let v = random(verbosMov);
                 let verboConjugado = (v.notas && v.notas.includes('Estándar:')) ? v.notas.split('Estándar:')[1].trim() : v.coreano + "요";
@@ -708,7 +606,6 @@
                     tipo: 2
                 };
             } 
-            // Fórmula 4: Sujeto + Tiempo (에) + Verbo Acción
             else if (formula === 4) {
                 let t = random(lugaresTiempo); let v = random(verbosAcc);
                 let verboConjugado = (v.notas && v.notas.includes('Estándar:')) ? v.notas.split('Estándar:')[1].trim() : v.coreano + "요";
@@ -716,10 +613,9 @@
                     espanol: `[${getSujEspanol(s.espanol)}] hace una acción (en/el) [${getSujEspanol(t.espanol).toLowerCase()}]`,
                     palabras: [sujetoConParticula, `${t.coreano}에`, verboConjugado],
                     coreanoStr: `${sujetoConParticula} ${t.coreano}에 ${verboConjugado}`,
-                    tipo: 2 // Usa el hint visual del tipo 2 (Ubicación/Tiempo)
+                    tipo: 2
                 };
             }
-            // Fórmula 1: Sujeto + Objeto (를/을) + Verbo Acción
             else if (formula === 1) {
                 let v = random(verbosAcc);
                 let o;
@@ -744,7 +640,6 @@
                     tipo: 1
                 };
             }
-            // Fórmula 3: Sujeto + Adjetivo
             else if (formula === 3) {
                 let a = random(adjetivos);
                 let adjConjugado = (a.notas && a.notas.includes('Estándar:')) ? a.notas.split('Estándar:')[1].trim() : a.coreano + "요";
@@ -758,17 +653,12 @@
             
             return { espanol: `${s.espanol} es/existe`, palabras: [s.coreano, "입니다"], coreanoStr: `${s.coreano} 입니다`, tipo: 0 };
         }
-        /* ========================================================================= */
 
         function aplicarFiltroLocal() {
-            // Mapeamos temporalmente "Lote" de la BD con el "Nivel" (Ya que usaremos Nivel 1 para todo, 
-            // asumiremos que cargaste los lotes con la columna Nivel = 1, 2, 3, etc. en el import)
-            // Si todo tiene nivel=1, no se filtrará correctamente. 
-            // **NOTA TÉCNICA:** Asegúrate de que al importar en Supabase, el lote 1 tenga nivel=1, lote 2 nivel=2, etc.
+            // Filtramos la base de datos maestra según los niveles seleccionados (1, 2, 3, etc)
             contenidoNivelActual.vocabulario = dbCache.vocabulario.filter(x => filtrosActivos.includes(x.nivel));
 
             if(contenidoNivelActual.vocabulario.length === 0) {
-                // Failsafe por si cargaste todo como nivel 1
                 contenidoNivelActual.vocabulario = dbCache.vocabulario;
                 if(dbCache.vocabulario.length > 0) showToast("Mostrando todo el vocabulario.", "💡");
                 else showToast("No hay palabras en la BD.", "⚠️");
@@ -776,7 +666,6 @@
             reiniciarContenidos();
         }
 
-        // AQUI ESTÁ LA MAGIA: Una sola ronda maestra de 20 para todos los juegos!
         function reiniciarContenidos() {
             // 1. SELECCIONAR LAS 20 PALABRAS MAESTRAS PARA ESTA RONDA
             rondaMaestra = mezclarYCortar(contenidoNivelActual.vocabulario, MAX_RONDA);
@@ -787,10 +676,10 @@
             queueDictado = rondaMaestra.map(v => v.coreano);
             queueEscritura = rondaMaestra.map(v => ({espanol: v.espanol, coreanoStr: v.coreano}));
             
-            // 3. GENERAR 20 ORACIONES GRAMATICALES (Usando TODA la base para que tenga sentido, pero priorizando enseñar la estructura)
+            // 3. GENERAR 20 ORACIONES GRAMATICALES (Usando TODA la base para que tenga sentido, pero priorizando las 20 maestras si es posible)
             oracionesGeneradasDinamicamente = [];
             for(let i=0; i < MAX_RONDA; i++) {
-                oracionesGeneradasDinamicamente.push(generarOracionDinamica(dbCache.vocabulario)); // Usa toda la BD para armar oraciones lógicas
+                oracionesGeneradasDinamicamente.push(generarOracionDinamica(dbCache.vocabulario)); 
             }
             queueArmar = [...oracionesGeneradasDinamicamente];
             
@@ -802,47 +691,6 @@
             resetDictadoUI(); 
             resetEscrituraUI(); 
             resetArmarUI();
-        }
-
-            if(contenidoNivelActual.vocabulario.length === 0) {
-                showToast("No hay palabras en esta selección aún.", "⚠️");
-            }
-            reiniciarContenidos();
-        }
-
-        // AQUI ESTÁ LA MAGIA: Una sola ronda maestra de 20 para todos los juegos!
-        function reiniciarContenidos() {
-            if (currentMode === 'vocab') {
-                // 1. SELECCIONAR LAS 20 PALABRAS MAESTRAS PARA ESTA RONDA
-                let rondaMaestra = mezclarYCortar(contenidoNivelActual.vocabulario, MAX_RONDA);
-                
-                // 2. REPARTIR EXACTAMENTE LAS MISMAS 20 A TODOS LOS JUEGOS
-                queueVocab = [...rondaMaestra];
-                queueMemo = [...rondaMaestra];
-                queueDictado = rondaMaestra.map(v => v.coreano);
-                queueEscritura = rondaMaestra.map(v => ({espanol: v.espanol, coreanoStr: v.coreano}));
-                queueArmar = []; 
-            } else { 
-                // MODO GRAMMAR: Se generan 20 oraciones dinámicas en el momento.
-                queueVocab = []; queueMemo = [];
-                oracionesGeneradasDinamicamente = [];
-                
-                for(let i=0; i < MAX_RONDA; i++) {
-                    oracionesGeneradasDinamicamente.push(generarOracionDinamica(contenidoNivelActual.vocabulario));
-                }
-
-                // 2. REPARTIR EXACTAMENTE LAS MISMAS 20 ORACIONES A TODOS LOS JUEGOS
-                queueArmar = [...oracionesGeneradasDinamicamente];
-                queueDictado = oracionesGeneradasDinamicamente.map(o => o.coreanoStr);
-                queueEscritura = [...oracionesGeneradasDinamicamente]; 
-            }
-            
-            totales = { vocab: queueVocab.length, memo: queueMemo.length, dictado: queueDictado.length, armar: queueArmar.length, escritura: queueEscritura.length, examen: MAX_RONDA };
-            progreso = { vocab: 0, memo: 0, dictado: 0, armar: 0, escritura: 0, examen: 0 };
-            
-            if(currentMode === 'vocab') { cargarVocabularioUI(); iniciarMemorama(); }
-            
-            resetDictadoUI(); resetEscrituraUI(); resetArmarUI();
         }
 
         function cambiarVista(vistaId) {
@@ -1043,19 +891,14 @@
         let testPreguntas = [], testIndice = 0, testPuntos = 0, testPreguntaActual = null, testPalabrasArmar = [];
         function iniciarExamen() {
             let p = [];
-            if (currentMode === 'vocab') {
-                // Tomamos de la ronda maestra para el examen
-                queueVocab.forEach(v => {
-                    p.push({tipo: 'escritura', data: {espanol: v.espanol, coreanoStr: v.coreano} });
-                    p.push({tipo: 'dictado', data: {coreanoStr: v.coreano} });
-                });
-            } else {
-                oracionesGeneradasDinamicamente.forEach(o => {
-                    p.push({tipo: 'escritura', data: o});
-                    p.push({tipo: 'dictado', data: o});
-                    p.push({tipo: 'armar', data: o});
-                });
-            }
+            // Toma de la ronda maestra para el examen
+            queueVocab.forEach(v => {
+                p.push({tipo: 'escritura', data: {espanol: v.espanol, coreanoStr: v.coreano} });
+                p.push({tipo: 'dictado', data: {coreanoStr: v.coreano} });
+            });
+            oracionesGeneradasDinamicamente.forEach(o => {
+                p.push({tipo: 'armar', data: o});
+            });
             
             testPreguntas = mezclarYCortar(p, MAX_RONDA);
             testIndice = 0; testPuntos = 0; totales.examen = testPreguntas.length;
