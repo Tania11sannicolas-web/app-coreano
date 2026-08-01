@@ -712,7 +712,7 @@
 
             if (formula === 2) {
                 let l = random(lugaresFisicos); let v = random(verbosMov);
-                let verboConjugado = (v.notas && v.notas.includes('Estándar:')) ? v.notas.split('Estándar:')[1].trim() : v.coreano + "요";
+                let verboConjugado = (v.notas && v.notas.includes('Estándar:')) ? v.notas.split('Estándar:')[1].split('(')[0].trim() : v.coreano + "요";
                 return {
                     espanol: `[${getSujEspanol(s.espanol)}] va/llega a [${getSujEspanol(l.espanol).toLowerCase()}]`,
                     palabras: [sujetoConParticula, `${l.coreano}에`, verboConjugado],
@@ -722,7 +722,7 @@
             } 
             else if (formula === 4) {
                 let t = random(lugaresTiempo); let v = random(verbosAcc);
-                let verboConjugado = (v.notas && v.notas.includes('Estándar:')) ? v.notas.split('Estándar:')[1].trim() : v.coreano + "요";
+                let verboConjugado = (v.notas && v.notas.includes('Estándar:')) ? v.notas.split('Estándar:')[1].split('(')[0].trim() : v.coreano + "요";
                 return {
                     espanol: `[${getSujEspanol(s.espanol)}] hace una acción (en/el) [${getSujEspanol(t.espanol).toLowerCase()}]`,
                     palabras: [sujetoConParticula, `${t.coreano}에`, verboConjugado],
@@ -741,7 +741,7 @@
                      o = random(objetos); 
                 }
 
-                let verboConjugado = (v.notas && v.notas.includes('Estándar:')) ? v.notas.split('Estándar:')[1].trim() : v.coreano + "요";
+                let verboConjugado = (v.notas && v.notas.includes('Estándar:')) ? v.notas.split('Estándar:')[1].split('(')[0].trim() : v.coreano + "요";
                 
                 const lastCharO = o.coreano.charCodeAt(o.coreano.length - 1);
                 const tieneConsonanteO = (lastCharO - 44032) % 28 > 0;
@@ -756,7 +756,7 @@
             }
             else if (formula === 3) {
                 let a = random(adjetivos);
-                let adjConjugado = (a.notas && a.notas.includes('Estándar:')) ? a.notas.split('Estándar:')[1].trim() : a.coreano + "요";
+                let adjConjugado = (a.notas && a.notas.includes('Estándar:')) ? a.notas.split('Estándar:')[1].split('(')[0].trim() : a.coreano + "요";
                 return {
                     espanol: `[${getSujEspanol(s.espanol)}] es/está [${getSujEspanol(a.espanol).toLowerCase().replace('ser ', '').replace('estar ', '')}]`,
                     palabras: [sujetoConParticula, adjConjugado],
