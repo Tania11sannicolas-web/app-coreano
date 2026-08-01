@@ -60,11 +60,11 @@
                 <div class="space-y-4 mb-8">
                     <div>
                         <label class="text-[10px] uppercase tracking-wider font-bold text-stone-400 ml-1 mb-1 block">Correo</label>
-                        <input type="email" id="email" class="w-full px-5 py-4 rounded-2xl bg-stone-50 border-2 border-stone-100 text-sm focus:outline-none focus:border-rose-200 transition-colors">
+                        <input type="email" id="email" class="w-full px-5 py-4 rounded-2xl bg-stone-50 border-2 border-stone-100 text-sm focus:outline-none focus:border-rose-200 transition-colors" value="test@test.com">
                     </div>
                     <div>
                         <label class="text-[10px] uppercase tracking-wider font-bold text-stone-400 ml-1 mb-1 block">Contraseña</label>
-                        <input type="password" id="password" class="w-full px-5 py-4 rounded-2xl bg-stone-50 border-2 border-stone-100 text-sm focus:outline-none focus:border-rose-200 transition-colors">
+                        <input type="password" id="password" class="w-full px-5 py-4 rounded-2xl bg-stone-50 border-2 border-stone-100 text-sm focus:outline-none focus:border-rose-200 transition-colors" value="123456">
                     </div>
                 </div>
                 <div class="space-y-3">
@@ -73,6 +73,7 @@
                 </div>
             </div>
 
+            <!-- Seleccion de Modo -->
             <div id="mode-selection" class="hidden flex-col gap-6 w-full animate-fade-in text-center mt-4">
                 <h2 class="text-2xl font-bold text-stone-900 mb-2">¿Qué vamos a estudiar hoy?</h2>
                 <p class="text-sm text-stone-500 mb-6">Elige tu enfoque de aprendizaje.</p>
@@ -88,17 +89,18 @@
                 <button onclick="iniciarModo('grammar')" class="bg-white p-8 rounded-[32px] shadow-sm border-2 border-transparent hover:border-fuchsia-200 focus:border-fuchsia-400 transition-all flex flex-col items-center gap-4 active:scale-95 group">
                     <div class="w-16 h-16 bg-fuchsia-50 text-fuchsia-500 group-hover:bg-fuchsia-100 group-hover:scale-110 transition-all rounded-full flex items-center justify-center text-3xl"><i class="ph-fill ph-magic-wand"></i></div>
                     <div>
-                        <h3 class="font-bold text-lg text-stone-900">Gramática & Estructura</h3>
-                        <p class="text-xs text-stone-500 mt-1">Armar oraciones, Partículas, Escritura y Dictado.</p>
+                        <h3 class="font-bold text-lg text-stone-900">Gramática Dinámica</h3>
+                        <p class="text-xs text-stone-500 mt-1">Estructura SOV, Partículas y Armado.</p>
                     </div>
                 </button>
                 
                 <button id="btn-logout" class="mt-8 text-xs font-bold text-stone-400 hover:text-rose-500 transition-colors">Cerrar Sesión</button>
             </div>
 
+            <!-- APPS -->
             <div id="app-section" class="hidden flex-col gap-6 w-full h-full mt-4">
                 
-                <!-- 1. VOCABULARIO (Tarjetas - Color AMBER) -->
+                <!-- 1. VOCABULARIO (Tarjetas) -->
                 <div id="view-vocab" class="app-view flex flex-col gap-6 w-full animate-fade-in">
                     <div class="flex justify-between items-center px-2 mb-2">
                         <h2 class="text-xl font-bold text-stone-900">Tarjetas</h2>
@@ -106,12 +108,13 @@
                     </div>
                     <div class="bg-white p-8 rounded-[32px] shadow-sm border border-stone-100 text-center relative overflow-hidden flex-1 flex flex-col justify-center min-h-[400px]">
                         <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-amber-200 to-amber-400"></div>
-                        <span class="text-[10px] uppercase tracking-widest text-amber-600 font-bold bg-amber-50 px-3 py-1.5 rounded-full inline-block mb-6 mx-auto" id="vocab-counter">0 / 20</span>
+                        <span class="text-[10px] uppercase tracking-widest text-amber-600 font-bold bg-amber-50 px-3 py-1.5 rounded-full inline-block mb-4 mx-auto" id="vocab-counter">0 / 20</span>
                         
-                        <p id="palabra-coreano" class="text-5xl font-medium text-stone-900 mt-4 mb-4 tracking-wide transition-opacity duration-300">...</p>
-                        <p id="palabra-espanol" class="text-base text-stone-500 font-medium mb-2">...</p>
-                        <!-- Mostrar la categoría/partícula esperada en las tarjetas -->
-                        <p id="palabra-categoria" class="text-xs text-amber-500 font-bold uppercase tracking-wider mb-8">...</p>
+                        <!-- Pista visual de categoría -->
+                        <span id="palabra-categoria" class="text-[11px] font-bold text-stone-400 uppercase tracking-wider mb-2 block">Categoría</span>
+                        
+                        <p id="palabra-coreano" class="text-5xl font-medium text-stone-900 mt-2 mb-4 tracking-wide transition-opacity duration-300">...</p>
+                        <p id="palabra-espanol" class="text-base text-stone-500 mb-10 font-medium">...</p>
                         
                         <div class="flex flex-col gap-3 mt-auto">
                             <button onclick="reproducirVoz(document.getElementById('palabra-coreano').innerText)" class="w-full bg-amber-400 text-white py-4 rounded-2xl text-sm font-bold active:scale-95 transition-all shadow-sm flex items-center justify-center gap-2">
@@ -129,7 +132,7 @@
                     </div>
                 </div>
 
-                <!-- 2. MEMORAMA (Color ROSA) -->
+                <!-- 2. MEMORAMA -->
                 <div id="view-memo" class="app-view hidden flex-col gap-4 w-full animate-fade-in">
                     <div class="flex justify-between items-center px-2 mb-2">
                         <div>
@@ -143,49 +146,14 @@
                     <div id="memo-grid" class="grid grid-cols-3 gap-3 w-full"></div>
                 </div>
 
-                <!-- 3. LECTURA (Color CELESTE/SKY) -->
-                <!-- Mantenemos la vista pero la reorientamos a comprensión de partículas si es necesario, o la ocultamos si no hay lecturas largas -->
-                <div id="view-lectura" class="app-view hidden flex-col gap-6 w-full animate-fade-in">
-                    <div class="flex justify-between items-center px-2 mb-2">
-                        <h2 class="text-xl font-bold text-stone-900">Lectura Guiada</h2>
-                        <button onclick="reiniciarJuegoActivo()" class="text-sky-500 bg-sky-50 p-2 rounded-xl active:scale-95 transition-all"><i class="ph-bold ph-arrows-clockwise text-lg"></i></button>
-                    </div>
-                    <div class="bg-white p-6 rounded-[32px] shadow-sm border border-stone-100 relative text-center">
-                        <span class="text-[10px] uppercase tracking-widest text-sky-600 font-bold bg-sky-50 px-3 py-1.5 rounded-full inline-block mb-2 mx-auto" id="lectura-counter">0 / 20</span>
-                        
-                        <div class="text-3xl text-sky-200 absolute top-4 left-4"><i class="ph-fill ph-quotes"></i></div>
-                        <p id="lectura-coreano" class="text-2xl font-medium text-stone-800 leading-relaxed mt-4 mb-6 text-center px-4">...</p>
-                        
-                        <div id="lectura-quiz" class="mb-6 bg-sky-50/60 p-4 rounded-2xl border border-sky-100 hidden text-left">
-                            <p class="text-[10px] font-bold text-sky-600 uppercase tracking-wider mb-2">Completar la lectura:</p>
-                            <div class="flex gap-2">
-                                <input type="text" id="lectura-input" placeholder="Escribe aquí..." class="flex-1 px-4 py-3 rounded-xl bg-white border border-stone-200 text-sm focus:outline-none focus:border-sky-300 transition-colors text-sky-700 font-medium" autocomplete="off">
-                                <button onclick="verificarLectura()" class="bg-sky-500 text-white px-4 py-3 rounded-xl text-sm font-semibold active:scale-95 transition-all shadow-sm"><i class="ph-bold ph-check"></i></button>
-                            </div>
-                            <div id="lectura-feedback" class="h-4 text-xs font-bold mt-2 opacity-0 transition-opacity"></div>
-                        </div>
-
-                        <div id="lectura-traduccion" class="hidden text-sm text-stone-500 text-center mb-6 p-4 bg-stone-50 rounded-2xl font-medium">...</div>
-
-                        <div class="grid grid-cols-2 gap-3">
-                            <button onclick="reproducirVoz(document.getElementById('lectura-coreano').dataset.textoCompleto || document.getElementById('lectura-coreano').innerText, 0.7)" class="bg-stone-900 text-white py-3 rounded-2xl text-sm font-semibold active:scale-95 transition-all flex flex-col items-center justify-center gap-1">
-                                <i class="ph-fill ph-play-circle text-xl"></i> Escuchar
-                            </button>
-                            <button onclick="toggleTraduccion()" class="bg-stone-100 text-stone-700 py-3 rounded-2xl text-sm font-semibold active:scale-95 transition-all flex flex-col items-center justify-center gap-1">
-                                <i class="ph-bold ph-translate text-xl"></i> Traducir
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 4. DICTADO (Color ESMERALDA/EMERALD) -->
+                <!-- 3. DICTADO -->
                 <div id="view-dictado" class="app-view hidden flex-col gap-6 w-full animate-fade-in">
                     <div class="flex justify-between items-center px-2 mb-2">
                         <h2 class="text-xl font-bold text-stone-900">Dictado al oído</h2>
                         <button onclick="reiniciarJuegoActivo()" class="text-emerald-500 bg-emerald-50 p-2 rounded-xl active:scale-95 transition-all"><i class="ph-bold ph-arrows-clockwise text-lg"></i></button>
                     </div>
 
-                    <div class="bg-white p-6 rounded-[32px] shadow-sm border border-stone-100 text-center flex flex-col justify-center min-h-[300px]">
+                    <div class="bg-white p-6 rounded-[32px] shadow-sm border border-stone-100 text-center flex flex-col min-h-[300px] justify-center">
                         <span class="text-[10px] uppercase tracking-widest text-emerald-600 font-bold bg-emerald-50 px-3 py-1.5 rounded-full inline-block mb-6 mx-auto" id="dictado-counter">0 / 20</span>
                         <button onclick="reproducirDictado()" class="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6 text-emerald-500 hover:bg-emerald-100 active:scale-90 transition-all shadow-inner border border-emerald-100">
                             <i class="ph-fill ph-headphones text-4xl"></i>
@@ -196,35 +164,33 @@
                     </div>
                 </div>
 
-                <!-- 5. ARMAR ORACIONES (Color FUCSIA/FUCHSIA) -->
+                <!-- 4. ARMAR ORACIONES (DINÁMICO SOV) -->
                 <div id="view-armar" class="app-view hidden flex-col gap-6 w-full animate-fade-in">
                     <div class="flex justify-between items-center px-2 mb-2">
-                        <h2 class="text-xl font-bold text-stone-900">Armar (SOV)</h2>
+                        <h2 class="text-xl font-bold text-stone-900">Estructura</h2>
                         <button onclick="reiniciarJuegoActivo()" class="text-fuchsia-500 bg-fuchsia-50 p-2 rounded-xl active:scale-95 transition-all"><i class="ph-bold ph-arrows-clockwise text-lg"></i></button>
                     </div>
 
                     <div class="bg-white p-6 rounded-[32px] shadow-sm border border-stone-100 flex flex-col items-center text-center">
                         <span class="text-[10px] uppercase tracking-widest text-fuchsia-600 font-bold bg-fuchsia-50 px-3 py-1.5 rounded-full inline-block mb-4 mx-auto" id="armar-counter">0 / 20</span>
                         
-                        <!-- Caja de Explicación Gramatical -->
+                        <!-- RECUADRO DE AYUDA GRAMATICAL -->
                         <div id="armar-hint" class="w-full bg-stone-50 border border-stone-200 rounded-2xl p-3 mb-4 text-left">
-                            <p class="text-[11px] font-bold text-stone-500 uppercase tracking-wider mb-1"><i class="ph-fill ph-info"></i> Recordatorio Estructura</p>
-                            <p id="armar-hint-text" class="text-xs text-stone-600">Sujeto (는/이) + Objeto (를/을) + Verbo (요)</p>
+                            <p class="text-[11px] font-bold text-stone-500 uppercase tracking-wider mb-1"><i class="ph-fill ph-info"></i> Lógica de la oración:</p>
+                            <p id="armar-hint-text" class="text-xs text-stone-600">Sujeto + Objeto/Lugar + Verbo</p>
                         </div>
 
-                        <p id="armar-espanol" class="text-lg text-stone-800 font-bold mb-6 text-center">...</p>
+                        <p id="armar-espanol" class="text-base text-stone-700 font-bold mb-6 text-center">...</p>
                         
-                        <div id="armar-target" class="w-full min-h-[70px] bg-fuchsia-50/50 rounded-2xl border-2 border-dashed border-fuchsia-200 mb-2 p-3 flex flex-wrap gap-2 items-center justify-center"></div>
-                        
-                        <div id="armar-feedback" class="h-10 text-sm mb-2 opacity-0 transition-opacity flex items-center text-center justify-center"></div>
-                        
+                        <div id="armar-target" class="w-full min-h-[60px] bg-fuchsia-50/50 rounded-2xl border-2 border-dashed border-fuchsia-200 mb-2 p-2 flex flex-wrap gap-2 items-center justify-center"></div>
+                        <div id="armar-feedback" class="h-auto min-h-[2.5rem] text-sm mb-2 opacity-0 transition-opacity flex items-center text-center justify-center whitespace-pre-line font-bold"></div>
                         <div id="armar-source" class="w-full flex flex-wrap gap-2 justify-center mb-2"></div>
                         
                         <button onclick="limpiarOracion()" class="w-full mt-4 bg-stone-100 text-stone-700 py-3 rounded-2xl text-sm font-semibold active:scale-95 transition-all hover:bg-stone-200">Limpiar Caja</button>
                     </div>
                 </div>
 
-                <!-- 6. ESCRITURA (Color NARANJA/ORANGE) -->
+                <!-- 5. ESCRITURA -->
                 <div id="view-escritura" class="app-view hidden flex-col gap-6 w-full animate-fade-in">
                     <div class="flex justify-between items-center px-2 mb-2">
                         <h2 class="text-xl font-bold text-stone-900">Práctica Escrita</h2>
@@ -233,7 +199,7 @@
 
                     <div class="bg-white p-6 rounded-[32px] shadow-sm border border-stone-100 text-center flex flex-col min-h-[300px] justify-center">
                         <span class="text-[10px] uppercase tracking-widest text-orange-600 font-bold bg-orange-50 px-3 py-1.5 rounded-full inline-block mb-6 mx-auto" id="escritura-counter">0 / 20</span>
-                        <p id="escritura-espanol" class="text-2xl font-medium text-stone-800 mb-8">...</p>
+                        <p id="escritura-espanol" class="text-xl font-bold text-stone-800 mb-8">...</p>
                         <div class="w-full relative">
                             <input type="text" id="escritura-input" placeholder="Escribe en coreano..." class="w-full text-center px-5 py-4 rounded-2xl bg-stone-50 border-2 border-stone-100 text-lg font-medium text-orange-700 focus:outline-none focus:border-orange-400 transition-colors mb-2" autocomplete="off" spellcheck="false">
                             <div id="escritura-feedback" class="h-auto min-h-[1.5rem] text-sm font-bold mb-4 opacity-0 transition-opacity whitespace-pre-line"></div>
@@ -242,17 +208,15 @@
                     </div>
                 </div>
 
-                <!-- 7. EXAMEN TEST (Color ÍNDIGO/INDIGO) -->
+                <!-- 6. EXAMEN TEST -->
                 <div id="view-examen" class="app-view hidden flex-col gap-6 w-full animate-fade-in">
-                    <!-- Pantalla Inicial -->
                     <div id="examen-inicio" class="text-center bg-white p-8 rounded-[32px] shadow-sm border border-stone-100 mt-4">
                         <div class="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-6 text-indigo-500 text-4xl shadow-inner border border-indigo-100"><i class="ph-fill ph-medal"></i></div>
                         <h2 class="text-2xl font-bold text-stone-900 mb-2">Simulador de Examen</h2>
-                        <p class="text-sm text-stone-500 mb-8">20 ejercicios aleatorios de escritura, comprensión auditiva y estructura (SOV).</p>
+                        <p class="text-sm text-stone-500 mb-8">20 ejercicios aleatorios combinando todo lo aprendido.</p>
                         <button onclick="iniciarExamen()" class="w-full bg-indigo-500 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">Comenzar Test</button>
                     </div>
 
-                    <!-- Examen Activo -->
                     <div id="examen-activo" class="hidden flex-col gap-4 w-full">
                         <div class="flex justify-between items-center mt-2 px-2">
                             <div class="text-xs text-stone-400 font-bold tracking-widest uppercase" id="examen-contador-top">TEST</div>
@@ -268,27 +232,27 @@
                                 <span class="text-[10px] uppercase tracking-widest text-indigo-600 font-bold bg-indigo-50 px-3 py-1.5 rounded-full inline-block" id="examen-contador">0 / 20</span>
                             </div>
 
-                            <!-- UI Dinámicas -->
                             <div id="examen-escritura-ui" class="w-full hidden flex-col flex-1 justify-center">
-                                <p id="examen-escritura-espanol" class="text-2xl font-medium text-stone-800 mb-6">...</p>
+                                <p id="examen-escritura-espanol" class="text-xl font-bold text-stone-800 mb-6">...</p>
                                 <input type="text" id="examen-escritura-input" placeholder="Escribe en coreano..." class="w-full text-center px-5 py-4 rounded-2xl bg-stone-50 border-2 border-stone-100 text-lg font-medium text-indigo-700 focus:outline-none focus:border-indigo-400 transition-colors mb-2" autocomplete="off" spellcheck="false">
                             </div>
+                            
                             <div id="examen-dictado-ui" class="w-full hidden flex-col flex-1 justify-center">
-                                 <button onclick="reproducirVoz(testPreguntaActual.data)" class="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-6 text-indigo-500 hover:bg-indigo-100 active:scale-90 transition-all shadow-inner border border-indigo-100"><i class="ph-fill ph-headphones text-4xl"></i></button>
+                                 <button onclick="reproducirVoz(testPreguntaActual.data.coreanoStr || testPreguntaActual.data.coreano)" class="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-6 text-indigo-500 hover:bg-indigo-100 active:scale-90 transition-all shadow-inner border border-indigo-100"><i class="ph-fill ph-headphones text-4xl"></i></button>
                                 <input type="text" id="examen-dictado-input" placeholder="¿Qué escuchaste?" class="w-full text-center px-5 py-4 rounded-2xl bg-stone-50 border-2 border-stone-100 text-lg font-medium text-indigo-700 focus:outline-none focus:border-indigo-400 transition-colors mb-2" autocomplete="off" spellcheck="false">
                             </div>
+                            
                             <div id="examen-armar-ui" class="w-full hidden flex-col items-center flex-1 justify-center">
-                                <p id="examen-armar-espanol" class="text-lg text-stone-800 font-bold mb-6 text-center">...</p>
-                                <div id="examen-armar-target" class="w-full min-h-[70px] bg-indigo-50/50 rounded-2xl border-2 border-dashed border-indigo-200 mb-2 p-3 flex flex-wrap gap-2 items-center justify-center"></div>
+                                <p id="examen-armar-espanol" class="text-base text-stone-700 font-bold mb-6 text-center">...</p>
+                                <div id="examen-armar-target" class="w-full min-h-[60px] bg-indigo-50/50 rounded-2xl border-2 border-dashed border-indigo-200 mb-2 p-2 flex flex-wrap gap-2 items-center justify-center"></div>
                                 <div id="examen-armar-source" class="w-full flex flex-wrap gap-2 justify-center mb-4 mt-2"></div>
                             </div>
 
-                            <div id="examen-feedback" class="h-8 text-sm font-bold mb-4 mt-2 opacity-0 transition-opacity whitespace-pre-line"></div>
+                            <div id="examen-feedback" class="h-auto min-h-[2.5rem] text-sm font-bold mb-4 mt-2 opacity-0 transition-opacity whitespace-pre-line flex items-center text-center justify-center"></div>
                             <button id="btn-examen-comprobar" class="w-full bg-stone-900 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm mt-auto">Comprobar</button>
                         </div>
                     </div>
 
-                    <!-- Resultado -->
                     <div id="examen-resultado" class="hidden text-center bg-white p-8 rounded-[32px] shadow-sm border border-stone-100 mt-4">
                         <div class="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-4 text-indigo-500 text-4xl shadow-inner border border-indigo-100"><i class="ph-fill ph-confetti"></i></div>
                         <h2 class="text-2xl font-bold text-stone-900 mb-2">¡Terminaste el Test!</h2>
@@ -296,18 +260,18 @@
                         <p id="examen-puntaje-texto" class="text-5xl font-bold text-indigo-500 mb-10">18 / 20</p>
                         <div class="space-y-3">
                             <button onclick="iniciarExamen()" class="w-full bg-indigo-500 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">Volver a intentar</button>
-                            <button onclick="document.getElementById('examen-resultado').classList.add('hidden'); document.getElementById('examen-inicio').classList.remove('hidden');" class="w-full bg-stone-100 text-stone-700 py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all">Salir del examen</button>
+                            <button onclick="document.getElementById('examen-resultado').classList.add('hidden'); document.getElementById('examen-inicio').classList.remove('hidden');" class="w-full bg-stone-100 text-stone-700 py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all">Salir</button>
                         </div>
                     </div>
                 </div>
 
+                <!-- MODALES -->
                 <div id="modal-filtro" class="hidden absolute top-0 left-0 w-full h-full bg-stone-900/50 backdrop-blur-sm z-50 flex-col items-center justify-center p-6 animate-fade-in rounded-[32px]">
                     <div class="bg-white w-full max-w-sm p-8 rounded-[32px] shadow-xl text-center">
-                        <h3 class="text-xl font-bold text-stone-900 mb-1" id="filtro-title">Opciones</h3>
-                        <p class="text-xs text-stone-500 mb-3">Selecciona los niveles a estudiar.</p>
+                        <h3 class="text-xl font-bold text-stone-900 mb-1" id="filtro-title">Niveles Base</h3>
+                        <p class="text-xs text-stone-500 mb-3">Selecciona el vocabulario a utilizar.</p>
                         
-                        <!-- CONTADOR DE TEMAS SELECCIONADOS -->
-                        <div id="filtro-contador-texto" class="text-xs font-bold text-rose-500 mb-6 bg-rose-50 inline-block px-3 py-1.5 rounded-full transition-colors">0 temas seleccionados</div>
+                        <div id="filtro-contador-texto" class="text-xs font-bold text-amber-500 mb-6 bg-amber-50 inline-block px-3 py-1.5 rounded-full transition-colors">0 temas seleccionados</div>
                         
                         <div class="space-y-3 mb-8 max-h-[50vh] overflow-y-auto no-scrollbar text-left" id="filtro-niveles-container">
                             <!-- Se llena por JS -->
@@ -320,7 +284,7 @@
                     <div class="bg-white w-full max-w-sm p-8 rounded-[32px] shadow-xl text-center">
                         <div class="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-500 text-4xl shadow-inner border border-emerald-100"><i class="ph-fill ph-check-circle"></i></div>
                         <h3 class="text-2xl font-bold text-stone-900 mb-2">¡Ronda completada! ✨</h3>
-                        <p class="text-sm text-stone-500 mb-8">Has terminado los 20 ejercicios de esta sección.</p>
+                        <p class="text-sm text-stone-500 mb-8">Has terminado los 20 ejercicios.</p>
                         <div class="space-y-3">
                             <button onclick="cerrarModalRondaYReiniciar()" class="w-full bg-emerald-500 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">Siguiente Ronda</button>
                             <button onclick="document.getElementById('modal-ronda').classList.add('hidden'); abrirFiltro();" class="w-full bg-stone-100 text-stone-700 py-4 rounded-2xl text-sm font-semibold border-2 border-stone-100 active:scale-95 transition-all">Cambiar Temas</button>
@@ -332,9 +296,9 @@
         </div>
     </main>
 
+    <!-- Barra Navegacion Inferior -->
     <nav id="bottom-nav" class="hidden bg-white border-t border-stone-200/60 pb-safe shrink-0 z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.03)] rounded-t-[32px]">
         <div class="max-w-md mx-auto w-full px-6 py-4 flex gap-6 overflow-x-auto no-scrollbar items-center justify-center">
-            
             <button id="nav-vocab" onclick="cambiarVista('vocab')" class="nav-btn shrink-0 flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400" data-target="view-vocab">
                 <i class="ph-fill ph-cards text-2xl"></i><span class="text-[9px] font-bold tracking-wide">Tarjetas</span>
             </button>
@@ -343,10 +307,6 @@
             </button>
             <button id="nav-armar" onclick="cambiarVista('armar')" class="nav-btn shrink-0 flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-armar">
                 <i class="ph-fill ph-magic-wand text-2xl"></i><span class="text-[9px] font-bold tracking-wide">Armar</span>
-            </button>
-            <!-- Ocultamos lectura por ahora ya que usaremos el motor SOV dinámico -->
-            <button id="nav-lectura" onclick="cambiarVista('lectura')" class="nav-btn hidden shrink-0 flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-lectura">
-                <i class="ph-fill ph-book-open-text text-2xl"></i><span class="text-[9px] font-bold tracking-wide">Lectura</span>
             </button>
             <button id="nav-dictado" onclick="cambiarVista('dictado')" class="nav-btn shrink-0 flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-dictado">
                 <i class="ph-fill ph-headphones text-2xl"></i><span class="text-[9px] font-bold tracking-wide">Dictado</span>
@@ -357,37 +317,35 @@
             <button id="nav-examen" onclick="cambiarVista('examen')" class="nav-btn shrink-0 flex flex-col items-center gap-1 active:scale-90 transition-all text-stone-400 hover:text-stone-900" data-target="view-examen">
                 <i class="ph-fill ph-medal text-2xl"></i><span class="text-[9px] font-bold tracking-wide">Test</span>
             </button>
-            
         </div>
     </nav>
 
+    <!-- JAVASCRIPT & SUPABASE -->
     <script>
-        // ¡Asegúrate de cambiar esto si creaste un nuevo proyecto en Supabase!
         const SUPABASE_URL = 'https://gkunigyqgetqvjsovzjy.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdrdW5pZ3lxZ2V0cXZqc292emp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUzNjc1MzEsImV4cCI6MjEwMDk0MzUzMX0.Co8JkEWVJGlexJGG5WJbnLPb63pYvdX-y5HfYTd6fsg';
         const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Ahora solo necesitamos almacenar EL VOCABULARIO (la super tabla)
+        // ¡AHORA SOLO USAMOS UNA TABLA PARA TODO! (app_vocabulario)
         let dbCache = { vocabulario: [] };
         let nivelesActivos = []; 
         let contenidoNivelActual = { vocabulario: [] };
-        let oracionesGeneradasDinamicamente = []; // Aquí guardaremos las 20 oraciones generadas para la ronda de Gramática
+        let oracionesGeneradasDinamicamente = [];
         
         let currentMode = ''; 
-        
         const MAX_RONDA = 20;
-        let queueVocab = [], queueMemo = [], queueLectura = [], queueDictado = [], queueEscritura = [], queueArmar = [];
-        let progreso = { vocab: 0, memo: 0, lectura: 0, dictado: 0, armar: 0, escritura: 0, examen: 0 };
-        let totales = { vocab: 0, memo: 0, lectura: 0, dictado: 0, armar: 0, escritura: 0, examen: 0 };
+        
+        let queueVocab = [], queueMemo = [], queueDictado = [], queueEscritura = [], queueArmar = [];
+        let progreso = { vocab: 0, memo: 0, dictado: 0, armar: 0, escritura: 0, examen: 0 };
+        let totales = { vocab: 0, memo: 0, dictado: 0, armar: 0, escritura: 0, examen: 0 };
 
-        const navColors = { vocab: 'text-amber-500', memo: 'text-rose-500', lectura: 'text-sky-500', dictado: 'text-emerald-500', armar: 'text-fuchsia-500', escritura: 'text-orange-500', examen: 'text-indigo-500' };
+        const navColors = { vocab: 'text-amber-500', memo: 'text-rose-500', dictado: 'text-emerald-500', armar: 'text-fuchsia-500', escritura: 'text-orange-500', examen: 'text-indigo-500' };
 
         function showToast(msg, icon = '✨') {
             const toast = document.getElementById('toast');
             document.getElementById('toast-msg').innerText = msg;
             document.getElementById('toast-icon').innerText = icon;
-            toast.classList.remove('-translate-y-24', 'opacity-0');
-            toast.classList.add('translate-y-0', 'opacity-100');
+            toast.classList.remove('-translate-y-24', 'opacity-0'); toast.classList.add('translate-y-0', 'opacity-100');
             setTimeout(() => { toast.classList.remove('translate-y-0', 'opacity-100'); toast.classList.add('-translate-y-24', 'opacity-0'); }, 3000);
         }
 
@@ -418,21 +376,24 @@
             const { data: { session } } = await _supabase.auth.getSession();
             if (session) {
                 document.getElementById('auth-section').classList.add('hidden');
-                document.getElementById('mode-selection').classList.remove('hidden');
-                document.getElementById('mode-selection').classList.add('flex');
+                document.getElementById('mode-selection').classList.remove('hidden'); document.getElementById('mode-selection').classList.add('flex');
                 cargarTodaLaBaseDeDatos();
             }
         }
-
         async function cerrarSesion() { await _supabase.auth.signOut(); location.reload(); }
 
         async function cargarTodaLaBaseDeDatos() {
             try {
-                // Ahora SOLO llamamos a app_vocabulario
-                const resVocab = await _supabase.from('app_vocabulario').select('*');
-                dbCache.vocabulario = resVocab.data || [];
-                console.log("Vocabulario cargado:", dbCache.vocabulario.length, "palabras");
-            } catch (error) { console.error("Error cargando DB:", error); }
+                // AQUÍ ESTABA EL ERROR ANTES: Trataba de jalar oraciones y dictados. Ahora solo jalamos VOCABULARIO.
+                const { data, error } = await _supabase.from('app_vocabulario').select('*');
+                if (error) throw error;
+                dbCache.vocabulario = data || [];
+                console.log("Súper-Tabla cargada con", dbCache.vocabulario.length, "palabras");
+                if(dbCache.vocabulario.length === 0) showToast("Base de datos vacía. Sube el CSV en Supabase.", "⚠️");
+            } catch (error) { 
+                console.error("Error BD:", error); 
+                showToast("Error de conexión. ¿Borraste las tablas viejas?", "❌"); 
+            }
         }
 
         function volverAlMenuPrincipal() {
@@ -452,26 +413,25 @@
                 document.getElementById('header-badge').innerText = "Vocabulario"; document.getElementById('header-badge').className = "text-[9px] text-amber-500 font-bold px-2 py-0.5 bg-amber-50 rounded-full uppercase tracking-wider";
                 document.getElementById('nav-armar').classList.add('hidden'); 
                 document.getElementById('nav-vocab').classList.remove('hidden'); document.getElementById('nav-memo').classList.remove('hidden');
-                nivelesActivos = [1]; // Por defecto cargamos el nivel 1
+                nivelesActivos = [1]; 
             } else {
                 document.getElementById('header-badge').innerText = "Gramática"; document.getElementById('header-badge').className = "text-[9px] text-fuchsia-500 font-bold px-2 py-0.5 bg-fuchsia-50 rounded-full uppercase tracking-wider";
-                document.getElementById('nav-armar').classList.remove('hidden');
+                document.getElementById('nav-armar').classList.remove('hidden'); 
                 document.getElementById('nav-vocab').classList.add('hidden'); document.getElementById('nav-memo').classList.add('hidden');
-                nivelesActivos = [1]; // Para gramática, usamos el vocabulario del nivel 1 para construir oraciones base
+                nivelesActivos = [1]; 
             }
             construirModalFiltro(); abrirFiltro();
         }
 
         function construirModalFiltro() {
             const container = document.getElementById('filtro-niveles-container'); container.innerHTML = '';
-            
-            // Para simplificar ahora, filtramos por Niveles Generales basados en la base de datos de palabras
+            // El filtro ahora se basa en el campo "nivel" de la tabla app_vocabulario
             let opciones = [
-                {val: 1, label: "Nivel 1: Esenciales (Días 1-20)"},
+                {val: 1, label: "Nivel 1: Esenciales y Supervivencia"},
                 {val: 2, label: "Nivel 2: Entorno y Ciudad"},
                 {val: 3, label: "Nivel 3: Interacción"}
             ];
-
+            
             opciones.forEach(opc => {
                 const checked = nivelesActivos.includes(opc.val) ? "checked" : "";
                 const color = currentMode === 'vocab' ? 'amber' : 'fuchsia';
@@ -485,10 +445,10 @@
         }
 
         function actualizarContadorFiltro() {
-            const seleccionados = document.querySelectorAll('.filtro-cb:checked').length;
+            const sel = document.querySelectorAll('.filtro-cb:checked').length;
             const color = currentMode === 'vocab' ? 'amber' : 'fuchsia';
             const txt = document.getElementById('filtro-contador-texto');
-            txt.innerText = `${seleccionados} nivel${seleccionados !== 1 ? 'es' : ''} seleccionado${seleccionados !== 1 ? 's' : ''}`;
+            txt.innerText = `${sel} nivel${sel !== 1 ? 'es' : ''} seleccionado${sel !== 1 ? 's' : ''}`;
             txt.className = `text-xs font-bold text-${color}-600 mb-6 bg-${color}-50 inline-block px-3 py-1.5 rounded-full transition-colors`;
         }
 
@@ -497,7 +457,7 @@
         function aplicarFiltroYRecargar() {
             const checkboxes = document.querySelectorAll('.filtro-cb');
             nivelesActivos = Array.from(checkboxes).filter(cb => cb.checked).map(cb => parseInt(cb.value));
-            if(nivelesActivos.length === 0) { showToast("Debes seleccionar al menos un nivel.", '⚠️'); checkboxes[0].checked = true; nivelesActivos = [parseInt(checkboxes[0].value)]; }
+            if(nivelesActivos.length === 0) { showToast("Selecciona al menos un nivel.", '⚠️'); checkboxes[0].checked = true; nivelesActivos = [parseInt(checkboxes[0].value)]; }
             document.getElementById('modal-filtro').classList.add('hidden'); document.getElementById('modal-filtro').classList.remove('flex');
             
             aplicarFiltroLocal();
@@ -506,78 +466,63 @@
 
         function mezclarYCortar(array, max) { 
             if(!array || array.length === 0) return []; 
-            let resultado = [];
-            // Repite y rellena de forma aleatoria hasta llegar exactamente al máximo (20)
-            while(resultado.length < max) {
+            let result = [];
+            while(result.length < max) {
                 let temp = [...array].sort(() => 0.5 - Math.random());
-                resultado = resultado.concat(temp.slice(0, max - resultado.length));
+                result = result.concat(temp.slice(0, max - result.length));
             }
-            return resultado.slice(0, max);
+            return result.slice(0, max);
         }
 
-        // ============================================================================
-        // NUEVA LÓGICA DE GENERACIÓN DE ORACIONES DINÁMICAS (MOTOR SOV)
-        // ============================================================================
-        function generarOracionDinamica(vocabularioDisponible) {
-            // Clasificamos las palabras filtradas por el nivel seleccionado
-            const sujetos = vocabularioDisponible.filter(v => v.categoria === 'SUJ');
-            const lugares = vocabularioDisponible.filter(v => v.categoria === 'LUG');
-            const objetos = vocabularioDisponible.filter(v => v.categoria === 'OBJ');
-            const verbosMov = vocabularioDisponible.filter(v => v.categoria === 'VER_MOV');
-            const verbosAcc = vocabularioDisponible.filter(v => v.categoria === 'VER_ACC');
+        /* =========================================================================
+           ¡LA MAGIA DEL MOTOR GRAMATICAL SOV! (Creación dinámica de oraciones)
+           ========================================================================= */
+        function generarOracionDinamica(vocabDisponible) {
+            const sujetos = vocabDisponible.filter(v => v.categoria === 'SUJ');
+            const lugares = vocabDisponible.filter(v => v.categoria === 'LUG');
+            const objetos = vocabDisponible.filter(v => v.categoria === 'OBJ');
+            const verbosMov = vocabDisponible.filter(v => v.categoria === 'VER_MOV');
+            const verbosAcc = vocabDisponible.filter(v => v.categoria === 'VER_ACC');
 
-            // Fallback por si la BD aún no tiene suficientes palabras de todas las categorías
-            if(sujetos.length===0 || (verbosMov.length===0 && verbosAcc.length===0)) {
-                return {
-                    espanol: "No hay suficiente vocabulario (Sujetos/Verbos) en este nivel para armar frases.",
-                    palabras: ["에러", "(Error)"],
-                    coreanoStr: "에러",
-                    tipo: 0
-                };
+            // Si la BD no tiene suficientes palabras aún, generamos un error controlado
+            if(sujetos.length === 0 || (verbosMov.length === 0 && verbosAcc.length === 0)) {
+                return { espanol: "Cargando palabras...", palabras: ["에러", "요"], coreanoStr: "에러 요", tipo: 0 };
             }
 
             const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
             let s = random(sujetos);
             
-            // Decidimos aleatoriamente si hacemos Fórmula 1 (Acción) o Fórmula 2 (Movimiento)
-            let tipoFormula = 1;
-            if(verbosMov.length > 0 && verbosAcc.length > 0) {
-                 tipoFormula = Math.random() > 0.5 ? 1 : 2;
-            } else if (verbosMov.length > 0) {
-                 tipoFormula = 2;
-            }
+            // Decidimos al azar si es Fórmula 1 (Acción) o 2 (Movimiento)
+            let formula = 1;
+            if(verbosMov.length > 0 && verbosAcc.length > 0) formula = Math.random() > 0.5 ? 1 : 2;
+            else if (verbosMov.length > 0) formula = 2;
 
-            // Aplicamos partículas según la lógica Coreana
-            let sujetoConParticula = s.coreano.match(/[가-힣][^가-힣]*$/)?.[0].match(/[가-힣]/) ? 
-                ( (s.coreano.charCodeAt(s.coreano.length - 1) - 44032) % 28 > 0 ? s.coreano + "은" : s.coreano + "는" ) : s.coreano + "는"; // Simplificación para demo
+            // Determinar si el Sujeto termina en vocal o consonante para la partícula 는/은
+            const lastCharS = s.coreano.charCodeAt(s.coreano.length - 1);
+            const tieneConsonanteS = (lastCharS - 44032) % 28 > 0;
+            let sujetoConParticula = tieneConsonanteS ? s.coreano + "은" : s.coreano + "는";
+            if(s.coreano === '나') sujetoConParticula = '나는'; // Yo informal
+            if(s.coreano === '저') sujetoConParticula = '저는'; // Yo formal
 
-            // Ajuste manual rápido de partículas comunes
-            if(s.coreano === '나') sujetoConParticula = '나는';
-            if(s.coreano === '저') sujetoConParticula = '저는';
-            if(s.coreano === '친구') sujetoConParticula = '친구는';
-            if(s.coreano === '선생님') sujetoConParticula = '선생님은';
-
-            if (tipoFormula === 2 && lugares.length > 0 && verbosMov.length > 0) {
-                // FÓRMULA 2: Sujeto + Lugar + Verbo Movimiento
-                let l = random(lugares);
-                let v = random(verbosMov);
-                // Conjugamos el verbo al estándar informal (요) basado en la "nota" de la DB o simplificamos
-                let verboConjugado = v.notas && v.notas.includes('Estándar:') ? v.notas.split('Estándar:')[1].trim() : v.coreano;
-                
+            // Fórmula 2: Sujeto + Lugar (에) + Verbo Movimiento
+            if (formula === 2 && lugares.length > 0) {
+                let l = random(lugares); let v = random(verbosMov);
+                let verboConjugado = (v.notas && v.notas.includes('Estándar:')) ? v.notas.split('Estándar:')[1].trim() : v.coreano + "요";
                 return {
-                    espanol: `${s.espanol} va/asiste a ${l.espanol}`,
+                    espanol: `${s.espanol} va a ${l.espanol}`,
                     palabras: [sujetoConParticula, `${l.coreano}에`, verboConjugado],
                     coreanoStr: `${sujetoConParticula} ${l.coreano}에 ${verboConjugado}`,
                     tipo: 2
                 };
-            } else if (tipoFormula === 1 && objetos.length > 0 && verbosAcc.length > 0) {
-                // FÓRMULA 1: Sujeto + Objeto + Verbo Acción
-                let o = random(objetos);
-                let v = random(verbosAcc);
-                let verboConjugado = v.notas && v.notas.includes('Estándar:') ? v.notas.split('Estándar:')[1].trim() : v.coreano;
+            } 
+            // Fórmula 1: Sujeto + Objeto (를/을) + Verbo Acción
+            else if (formula === 1 && objetos.length > 0) {
+                let o = random(objetos); let v = random(verbosAcc);
+                let verboConjugado = (v.notas && v.notas.includes('Estándar:')) ? v.notas.split('Estándar:')[1].trim() : v.coreano + "요";
                 
-                // Partícula 를/을 simplificada (termina en vocal 를, consonante 을)
-                let objParticula = ( (o.coreano.charCodeAt(o.coreano.length - 1) - 44032) % 28 > 0 ) ? o.coreano + "을" : o.coreano + "를";
+                const lastCharO = o.coreano.charCodeAt(o.coreano.length - 1);
+                const tieneConsonanteO = (lastCharO - 44032) % 28 > 0;
+                let objParticula = tieneConsonanteO ? o.coreano + "을" : o.coreano + "를";
 
                 return {
                     espanol: `${s.espanol} hace la acción de [${v.espanol}] con ${o.espanol}`,
@@ -585,24 +530,15 @@
                     coreanoStr: `${sujetoConParticula} ${objParticula} ${verboConjugado}`,
                     tipo: 1
                 };
-            } else {
-                 // Si faltan piezas, generamos una frase básica de estado (Fórmula 3 simplificada)
-                 return {
-                    espanol: `[Faltan palabras en DB para armar la frase completa]`,
-                    palabras: [s.coreano, "입니다"],
-                    coreanoStr: `${s.coreano} 입니다`,
-                    tipo: 3
-                };
             }
+            
+            // Falla de seguridad (Fórmula 3 Estado)
+            return { espanol: `${s.espanol} es/existe`, palabras: [s.coreano, "입니다"], coreanoStr: `${s.coreano} 입니다`, tipo: 3 };
         }
-        // ============================================================================
-
+        /* ========================================================================= */
 
         function aplicarFiltroLocal() {
-            // Filtramos la Super Tabla por los niveles seleccionados
             contenidoNivelActual.vocabulario = dbCache.vocabulario.filter(x => nivelesActivos.includes(x.nivel));
-            
-            // Si no hay palabras, mostramos alerta
             if(contenidoNivelActual.vocabulario.length === 0) {
                 showToast("No hay palabras en este nivel aún.", "⚠️");
             }
@@ -614,26 +550,24 @@
                 queueVocab = mezclarYCortar(contenidoNivelActual.vocabulario, MAX_RONDA);
                 queueMemo = mezclarYCortar(contenidoNivelActual.vocabulario, MAX_RONDA);
                 queueDictado = mezclarYCortar(contenidoNivelActual.vocabulario.map(v => v.coreano), MAX_RONDA);
-                // Para escritura en modo Vocabulario, pedimos escribir la palabra
                 queueEscritura = mezclarYCortar(contenidoNivelActual.vocabulario.map(v => ({espanol: v.espanol, coreanoStr: v.coreano})), MAX_RONDA);
-                
                 queueArmar = []; 
-            } else { // Modo GRAMMAR
+            } else { 
+                // MODO GRAMMAR: Se generan 20 oraciones dinámicas en el momento.
                 queueVocab = []; queueMemo = [];
-                
-                // Generamos 20 oraciones dinámicas para esta ronda
                 oracionesGeneradasDinamicamente = [];
+                
                 for(let i=0; i < MAX_RONDA; i++) {
                     oracionesGeneradasDinamicamente.push(generarOracionDinamica(contenidoNivelActual.vocabulario));
                 }
 
                 queueArmar = [...oracionesGeneradasDinamicamente];
                 queueDictado = mezclarYCortar(oracionesGeneradasDinamicamente.map(o => o.coreanoStr), MAX_RONDA);
-                queueEscritura = [...oracionesGeneradasDinamicamente]; // Ya tienen la propiedad coreanoStr
+                queueEscritura = [...oracionesGeneradasDinamicamente]; 
             }
             
-            totales = { vocab: queueVocab.length, memo: queueMemo.length, lectura: 0, dictado: queueDictado.length, armar: queueArmar.length, escritura: queueEscritura.length, examen: MAX_RONDA };
-            progreso = { vocab: 0, memo: 0, lectura: 0, dictado: 0, armar: 0, escritura: 0, examen: 0 };
+            totales = { vocab: queueVocab.length, memo: queueMemo.length, dictado: queueDictado.length, armar: queueArmar.length, escritura: queueEscritura.length, examen: MAX_RONDA };
+            progreso = { vocab: 0, memo: 0, dictado: 0, armar: 0, escritura: 0, examen: 0 };
             
             if(currentMode === 'vocab') { cargarVocabularioUI(); iniciarMemorama(); }
             
@@ -652,26 +586,28 @@
             });
         }
 
-        function reiniciarJuegoActivo() { reiniciarContenidos(); showToast("Ejercicios barajeados y reiniciados a 0/20.", "✨"); }
+        function reiniciarJuegoActivo() { reiniciarContenidos(); showToast("Ejercicios barajeados a 0/20.", "✨"); }
 
         function cargarVocabularioUI() {
             if(queueVocab.length === 0) return;
             document.getElementById('vocab-counter').innerText = `${progreso.vocab} / ${totales.vocab}`;
             const item = queueVocab[progreso.vocab];
+            const textoCoreano = document.getElementById('palabra-coreano'); 
+            textoCoreano.style.opacity = 0;
             
-            const textoCoreano = document.getElementById('palabra-coreano'); textoCoreano.style.opacity = 0;
             setTimeout(() => {
                 textoCoreano.innerText = item.coreano; 
                 document.getElementById('palabra-espanol').innerText = item.espanol; 
                 
-                // Mostrar Categoría Gramatical para que se vayan familiarizando
-                let catTexto = item.categoria;
+                // Mostrar Pista Gramatical Visual
+                let catTexto = "Desconocido";
                 if(item.categoria === 'SUJ') catTexto = "Sujeto / Persona";
                 if(item.categoria === 'LUG') catTexto = "Lugar (Usa 에/에서)";
                 if(item.categoria === 'OBJ') catTexto = "Objeto (Usa 을/를)";
-                if(item.categoria === 'VER_MOV') catTexto = "Verbo de Movimiento";
-                if(item.categoria === 'VER_ACC') catTexto = "Verbo de Acción";
+                if(item.categoria === 'VER_MOV') catTexto = "Verbo Movimiento";
+                if(item.categoria === 'VER_ACC') catTexto = "Verbo Acción";
                 if(item.categoria === 'ADJ') catTexto = "Adjetivo / Estado";
+                if(item.categoria === 'NUM') catTexto = `Número (Contador: ${item.contador || '-'})`;
                 document.getElementById('palabra-categoria').innerText = `[ ${catTexto} ]`;
 
                 textoCoreano.style.opacity = 1;
@@ -682,14 +618,10 @@
             progreso.vocab++;
             if (progreso.vocab >= totales.vocab) { 
                 document.getElementById('modal-ronda').classList.remove('hidden'); document.getElementById('modal-ronda').classList.add('flex');
-                progreso.vocab = 0; // Por si lo cierra
+                progreso.vocab = 0; 
             } else { cargarVocabularioUI(); }
         }
-        function anteriorVocabulario() {
-            if(queueVocab.length === 0) return;
-            if(progreso.vocab > 0) progreso.vocab--;
-            cargarVocabularioUI();
-        }
+        function anteriorVocabulario() { if(queueVocab.length > 0 && progreso.vocab > 0) { progreso.vocab--; cargarVocabularioUI(); } }
 
         let memoTableroActual = [], cartasVolteadas = [], bloqueado = false, paresEncontrados = 0;
         function iniciarMemorama() { progreso.memo = 0; renderizarTableroMemo(); }
@@ -726,7 +658,6 @@
             } else { setTimeout(() => { c1.classList.remove('flipped'); c2.classList.remove('flipped'); cartasVolteadas = []; bloqueado = false; }, 1000); }
         }
 
-        // --- DICTADO ---
         function resetDictadoUI() {
             if(queueDictado.length === 0) return;
             document.getElementById('dictado-counter').innerText = `${progreso.dictado} / ${totales.dictado}`;
@@ -735,14 +666,12 @@
         function reproducirDictado() { if(queueDictado.length > 0) reproducirVoz(queueDictado[0], 0.75); }
         function verificarDictado() {
             if(queueDictado.length === 0) return;
-            // Remover espacios para tolerar errores de espaciado comunes en aprendices
-            const inputOriginal = document.getElementById('dictado-input').value.trim();
-            const input = inputOriginal.replace(/\s+/g, ''); 
-            const correctaOriginal = queueDictado[0];
-            const correcta = correctaOriginal.replace(/\s+/g, '');
+            const inputOrg = document.getElementById('dictado-input').value.trim(); const correctaOrg = queueDictado[0]; 
+            // Tolerancia de espacios
+            const input = inputOrg.replace(/\s+/g, ''); const correcta = correctaOrg.replace(/\s+/g, '');
             const feedback = document.getElementById('dictado-feedback');
             
-            if(!inputOriginal) return;
+            if(!inputOrg) return;
             feedback.style.opacity = 1;
             if(input === correcta) {
                 progreso.dictado++; feedback.innerText = "¡Perfecto! ✨"; feedback.className = "h-auto min-h-[1.5rem] text-sm font-bold mb-4 transition-opacity text-emerald-500"; reproducirVoz("딩동댕");
@@ -750,13 +679,12 @@
                 if(queueDictado.length === 0) setTimeout(() => { document.getElementById('modal-ronda').classList.remove('hidden'); document.getElementById('modal-ronda').classList.add('flex'); }, 1500);
                 else setTimeout(() => resetDictadoUI(), 1500);
             } else {
-                feedback.innerText = `❌ Incorrecto.\nLa respuesta correcta es:\n${correctaOriginal}`; feedback.className = "h-auto min-h-[1.5rem] text-sm font-bold mb-4 transition-opacity text-rose-500";
+                feedback.innerText = `❌ Incorrecto.\nLa respuesta era:\n${correctaOrg}`; feedback.className = "h-auto min-h-[1.5rem] text-sm font-bold mb-4 transition-opacity text-rose-500";
                 const fallada = queueDictado.shift(); queueDictado.push(fallada);
-                setTimeout(() => resetDictadoUI(), 3500); 
+                setTimeout(() => resetDictadoUI(), 3000); 
             }
         }
 
-        // --- ARMAR ORACIONES (SOV DINÁMICO) ---
         let oracionActual = null, palabrasSeleccionadas = [];
         function resetArmarUI() {
             if(queueArmar.length === 0) return;
@@ -764,28 +692,24 @@
             oracionActual = queueArmar[0]; palabrasSeleccionadas = [];
             document.getElementById('armar-espanol').innerText = oracionActual.espanol; document.getElementById('armar-feedback').style.opacity = 0;
             
-            // Actualizar el hint (pista gramatical) según el tipo de fórmula generada
-            const hintText = document.getElementById('armar-hint-text');
-            if(oracionActual.tipo === 1) {
-                hintText.innerText = "[Sujeto]는/은  +  [Objeto]를/을  +  [Verbo Acción]";
-            } else if (oracionActual.tipo === 2) {
-                hintText.innerText = "[Sujeto]는/은  +  [Lugar]에  +  [Verbo Movimiento]";
-            } else {
-                hintText.innerText = "Organiza las palabras en el orden correcto.";
-            }
+            // Hints Dinámicos!
+            const hint = document.getElementById('armar-hint-text');
+            if(oracionActual.tipo === 1) hint.innerText = "[Sujeto]는/은  +  [Objeto]를/을  +  [Verbo Acción]";
+            else if(oracionActual.tipo === 2) hint.innerText = "[Sujeto]는/은  +  [Lugar]에  +  [Verbo Movimiento]";
+            else hint.innerText = "Organiza las palabras lógicamente.";
 
             const source = document.getElementById('armar-source'); const target = document.getElementById('armar-target');
             source.innerHTML = ''; target.innerHTML = '';
             
             [...oracionActual.palabras].sort(() => 0.5 - Math.random()).forEach((palabra) => {
-                const btn = document.createElement('button'); btn.className = 'bg-white border-2 border-stone-200 px-4 py-2 rounded-xl text-stone-800 font-medium active:scale-90 transition-all shadow-sm text-lg';
+                const btn = document.createElement('button'); btn.className = 'bg-white border-2 border-stone-200 px-4 py-2 rounded-xl text-stone-800 font-medium active:scale-90 transition-all shadow-sm';
                 btn.innerText = palabra; btn.onclick = () => seleccionarPalabraArmar(btn, palabra); source.appendChild(btn);
             });
         }
         function seleccionarPalabraArmar(btn, palabra) {
             btn.classList.add('hidden'); palabrasSeleccionadas.push(palabra);
             const target = document.getElementById('armar-target'); const badge = document.createElement('div');
-            badge.className = 'bg-fuchsia-500 hover:bg-fuchsia-600 text-white px-4 py-2 rounded-xl font-medium shadow-sm flex items-center animate-fade-in cursor-pointer transition-colors text-lg'; badge.innerText = palabra;
+            badge.className = 'bg-fuchsia-500 hover:bg-fuchsia-600 text-white px-4 py-2 rounded-xl font-medium shadow-sm flex items-center animate-fade-in cursor-pointer transition-colors'; badge.innerText = palabra;
             badge.onclick = () => { badge.remove(); btn.classList.remove('hidden'); const idx = palabrasSeleccionadas.lastIndexOf(palabra); if(idx > -1) palabrasSeleccionadas.splice(idx, 1); document.getElementById('armar-feedback').style.opacity = 0; };
             target.appendChild(badge); reproducirVoz(palabra.replace(/[^a-zA-Z가-힣]/g, '')); 
             if (palabrasSeleccionadas.length === oracionActual.palabras.length) verificarOracionArmada();
@@ -795,22 +719,21 @@
             const armada = palabrasSeleccionadas.join(" "); const correcta = oracionActual.palabras.join(" "); const feedback = document.getElementById('armar-feedback');
             feedback.style.opacity = 1;
             if (armada === correcta) {
-                progreso.armar++; feedback.innerText = "¡Excelente estructura SOV! ✨"; feedback.className = "h-10 text-sm mb-2 transition-opacity flex items-center text-center justify-center font-bold text-emerald-500"; reproducirVoz(correcta, 0.8);
+                progreso.armar++; feedback.innerText = "¡Excelente estructura SOV! ✨"; feedback.className = "h-auto min-h-[2.5rem] text-sm mb-2 transition-opacity flex items-center text-center justify-center font-bold text-emerald-500"; reproducirVoz(correcta, 0.8);
                 queueArmar.shift();
                 if(queueArmar.length === 0) setTimeout(() => { document.getElementById('modal-ronda').classList.remove('hidden'); document.getElementById('modal-ronda').classList.add('flex'); }, 2000);
                 else setTimeout(() => resetArmarUI(), 2000);
             } else {
-                // Dar pista de error
-                let hintError = "❌ Revisa el orden.";
+                let errorHint = "❌ Revisa el orden y vuelve a intentarlo.";
+                // Si el último de la selección no es el verbo real
                 if(palabrasSeleccionadas[palabrasSeleccionadas.length-1] !== oracionActual.palabras[oracionActual.palabras.length-1]) {
-                    hintError = "❌ ¡Recuerda que el Verbo SIEMPRE va al final en Coreano!";
+                    errorHint = "❌ ¡Recuerda que el Verbo SIEMPRE va al final en Coreano!";
                 }
-                feedback.innerText = hintError; feedback.className = "h-10 text-sm mb-2 transition-opacity flex items-center text-center justify-center font-bold text-rose-500";
+                feedback.innerText = errorHint; feedback.className = "h-auto min-h-[2.5rem] text-sm mb-2 transition-opacity flex items-center text-center justify-center font-bold text-rose-500 whitespace-pre-line";
                 setTimeout(() => { limpiarOracion(); }, 2000); 
             }
         }
 
-        // --- ESCRITURA ---
         function resetEscrituraUI() {
             if(queueEscritura.length === 0) return;
             document.getElementById('escritura-counter').innerText = `${progreso.escritura} / ${totales.escritura}`;
@@ -820,51 +743,48 @@
         function verificarEscritura() {
             if(queueEscritura.length === 0) return;
             const item = queueEscritura[0]; 
-            
+            const inputOrg = document.getElementById('escritura-input').value.trim(); 
             // Tolerancia de espacios
-            const inputOriginal = document.getElementById('escritura-input').value.trim();
-            const input = inputOriginal.replace(/\s+/g, '');
-            const correctaOriginal = item.coreanoStr;
-            const correcta = correctaOriginal.replace(/\s+/g, '');
-
+            const input = inputOrg.replace(/\s+/g, ''); 
+            const correctaOrg = item.coreanoStr;
+            const correcta = correctaOrg.replace(/\s+/g, '');
             const feedback = document.getElementById('escritura-feedback');
-            if(!inputOriginal) return;
+            
+            if(!inputOrg) return;
             feedback.style.opacity = 1;
             
             if(input === correcta) {
-                progreso.escritura++; feedback.innerText = "¡Excelente! ✨"; feedback.className = "h-auto min-h-[1.5rem] text-sm font-bold mb-4 transition-opacity text-emerald-500"; reproducirVoz(correctaOriginal);
+                progreso.escritura++; feedback.innerText = "¡Excelente! ✨"; feedback.className = "h-auto min-h-[1.5rem] text-sm font-bold mb-4 transition-opacity text-emerald-500"; reproducirVoz(correctaOrg);
                 queueEscritura.shift();
                 if(queueEscritura.length === 0) setTimeout(() => { document.getElementById('modal-ronda').classList.remove('hidden'); document.getElementById('modal-ronda').classList.add('flex'); }, 1500);
                 else setTimeout(() => resetEscrituraUI(), 1500);
             } else {
-                feedback.innerText = `❌ Incorrecto.\nLa respuesta correcta es:\n${correctaOriginal}`; feedback.className = "h-auto min-h-[1.5rem] text-sm font-bold mb-4 transition-opacity text-rose-500";
+                feedback.innerText = `❌ Incorrecto.\nLa respuesta era:\n${correctaOrg}`; feedback.className = "h-auto min-h-[1.5rem] text-sm font-bold mb-4 transition-opacity text-rose-500";
                 const fallada = queueEscritura.shift(); queueEscritura.push(fallada);
-                setTimeout(() => resetEscrituraUI(), 3500);
+                setTimeout(() => resetEscrituraUI(), 3000);
             }
         }
 
-        // --- EXAMEN ---
         let testPreguntas = [], testIndice = 0, testPuntos = 0, testPreguntaActual = null, testPalabrasArmar = [];
         function iniciarExamen() {
             let p = [];
-            
             if (currentMode === 'vocab') {
                 contenidoNivelActual.vocabulario.forEach(v => {
                     p.push({tipo: 'escritura', data: {espanol: v.espanol, coreanoStr: v.coreano} });
-                    p.push({tipo: 'dictado', data: v.coreano});
+                    p.push({tipo: 'dictado', data: {coreanoStr: v.coreano} });
                 });
             } else {
-                // Modo Grammar: Usar las oraciones dinámicas
+                // Grammar Mode usa la generación dinámica
                 oracionesGeneradasDinamicamente.forEach(o => {
                     p.push({tipo: 'escritura', data: o});
-                    p.push({tipo: 'dictado', data: o.coreanoStr});
+                    p.push({tipo: 'dictado', data: o});
                     p.push({tipo: 'armar', data: o});
                 });
             }
             
             testPreguntas = mezclarYCortar(p, MAX_RONDA);
             testIndice = 0; testPuntos = 0; totales.examen = testPreguntas.length;
-            if(testPreguntas.length === 0) return showToast("No hay contenido para el test.", "⚠️");
+            if(testPreguntas.length === 0) return showToast("No hay datos para test.", "⚠️");
 
             document.getElementById('examen-inicio').classList.add('hidden'); document.getElementById('examen-resultado').classList.add('hidden');
             document.getElementById('examen-activo').classList.remove('hidden'); document.getElementById('examen-activo').classList.add('flex');
@@ -877,8 +797,8 @@
             document.getElementById('examen-progreso').style.width = `${(testIndice / testPreguntas.length) * 100}%`;
             document.getElementById('examen-contador').innerText = `${testIndice + 1} / ${testPreguntas.length}`;
             document.getElementById('examen-feedback').style.opacity = 0;
-            const btnComprobar = document.getElementById('btn-examen-comprobar'); btnComprobar.innerText = "Comprobar"; btnComprobar.onclick = comprobarPreguntaExamen;
-            btnComprobar.className = "w-full bg-stone-900 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm mt-auto";
+            const btn = document.getElementById('btn-examen-comprobar'); btn.innerText = "Comprobar"; btn.onclick = comprobarPreguntaExamen;
+            btn.className = "w-full bg-stone-900 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm mt-auto";
 
             ['escritura', 'dictado', 'armar'].forEach(t => { document.getElementById(`examen-${t}-ui`).classList.add('hidden'); document.getElementById(`examen-${t}-ui`).classList.remove('flex'); });
 
@@ -890,7 +810,7 @@
             else if (testPreguntaActual.tipo === 'dictado') {
                 document.getElementById('examen-tipo-badge').innerText = "Comprensión Auditiva";
                 document.getElementById('examen-dictado-ui').classList.remove('hidden'); document.getElementById('examen-dictado-ui').classList.add('flex');
-                document.getElementById('examen-dictado-input').value = ""; setTimeout(() => reproducirVoz(testPreguntaActual.data), 500);
+                document.getElementById('examen-dictado-input').value = ""; setTimeout(() => reproducirVoz(testPreguntaActual.data.coreanoStr), 500);
             } 
             else if (testPreguntaActual.tipo === 'armar') {
                 document.getElementById('examen-tipo-badge').innerText = "Lógica Gramatical (SOV)";
@@ -898,13 +818,13 @@
                 document.getElementById('examen-armar-espanol').innerText = testPreguntaActual.data.espanol;
                 testPalabrasArmar = []; const src = document.getElementById('examen-armar-source'), tgt = document.getElementById('examen-armar-target'); src.innerHTML = ''; tgt.innerHTML = '';
                 [...testPreguntaActual.data.palabras].sort(() => 0.5 - Math.random()).forEach(p => {
-                    const btn = document.createElement('button'); btn.className = 'bg-white border-2 border-stone-200 px-4 py-2 rounded-xl text-stone-800 font-medium shadow-sm text-lg';
-                    btn.innerText = p; btn.onclick = () => {
-                        btn.classList.add('hidden'); testPalabrasArmar.push(p); const b = document.createElement('div');
-                        b.className = 'bg-indigo-500 hover:bg-indigo-600 transition-colors text-white px-4 py-2 rounded-xl font-medium shadow-sm cursor-pointer text-lg'; b.innerText = p;
-                        b.onclick = () => { b.remove(); btn.classList.remove('hidden'); testPalabrasArmar.splice(testPalabrasArmar.lastIndexOf(p), 1); };
-                        tgt.appendChild(b); reproducirVoz(p.replace(/[^a-zA-Z가-힣]/g, ''));
-                    }; src.appendChild(btn);
+                    const b = document.createElement('button'); b.className = 'bg-white border-2 border-stone-200 px-4 py-2 rounded-xl text-stone-800 font-medium shadow-sm';
+                    b.innerText = p; b.onclick = () => {
+                        b.classList.add('hidden'); testPalabrasArmar.push(p); const bt = document.createElement('div');
+                        bt.className = 'bg-indigo-500 hover:bg-indigo-600 transition-colors text-white px-4 py-2 rounded-xl font-medium shadow-sm cursor-pointer'; bt.innerText = p;
+                        bt.onclick = () => { bt.remove(); b.classList.remove('hidden'); testPalabrasArmar.splice(testPalabrasArmar.lastIndexOf(p), 1); };
+                        tgt.appendChild(bt); reproducirVoz(p.replace(/[^a-zA-Z가-힣]/g, ''));
+                    }; src.appendChild(b);
                 });
             }
         }
@@ -914,31 +834,26 @@
             
             if (testPreguntaActual.tipo === 'escritura') {
                 const val = document.getElementById('examen-escritura-input').value.trim().replace(/\s+/g, '');
-                respuestaCorrecta = testPreguntaActual.data.coreanoStr; 
-                correcto = (val === respuestaCorrecta.replace(/\s+/g, ''));
+                respuestaCorrecta = testPreguntaActual.data.coreanoStr; correcto = (val === respuestaCorrecta.replace(/\s+/g, ''));
             } else if (testPreguntaActual.tipo === 'dictado') {
                 const val = document.getElementById('examen-dictado-input').value.trim().replace(/\s+/g, '');
-                respuestaCorrecta = testPreguntaActual.data; 
-                correcto = (val === respuestaCorrecta.replace(/\s+/g, ''));
+                respuestaCorrecta = testPreguntaActual.data.coreanoStr; correcto = (val === respuestaCorrecta.replace(/\s+/g, ''));
             } else if (testPreguntaActual.tipo === 'armar') {
                 const val = testPalabrasArmar.join(" ");
-                respuestaCorrecta = testPreguntaActual.data.palabras.join(" "); 
-                correcto = (val === respuestaCorrecta);
+                respuestaCorrecta = testPreguntaActual.data.palabras.join(" "); correcto = (val === respuestaCorrecta);
             }
             
-            feedback.style.opacity = 1;
-            const btn = document.getElementById('btn-examen-comprobar');
+            feedback.style.opacity = 1; const btn = document.getElementById('btn-examen-comprobar');
             
             if(correcto) { 
-                testPuntos++; 
-                feedback.innerText = "¡Correcto! ✨"; 
-                feedback.className = "h-8 text-sm font-bold mb-4 mt-2 transition-opacity text-emerald-500 flex items-center justify-center"; 
+                testPuntos++; feedback.innerText = "¡Correcto! ✨"; 
+                feedback.className = "h-auto min-h-[2.5rem] text-sm font-bold mb-4 mt-2 transition-opacity text-emerald-500 flex items-center text-center justify-center"; 
                 btn.className = "w-full bg-emerald-500 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm mt-auto";
                 reproducirVoz("딩동댕"); 
             } 
             else { 
-                feedback.innerText = `Incorrecto.\nEra: ${respuestaCorrecta}`; 
-                feedback.className = "h-8 text-sm font-bold mb-4 mt-2 transition-opacity text-rose-500 flex items-center justify-center whitespace-pre-line"; 
+                feedback.innerText = `Incorrecto. Era:\n${respuestaCorrecta}`; 
+                feedback.className = "h-auto min-h-[2.5rem] text-sm font-bold mb-4 mt-2 transition-opacity text-rose-500 flex items-center text-center justify-center whitespace-pre-line"; 
                 btn.className = "w-full bg-rose-500 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm mt-auto";
             }
             
@@ -953,10 +868,11 @@
             document.getElementById('modal-ronda').classList.add('hidden'); document.getElementById('modal-ronda').classList.remove('flex');
             reiniciarContenidos();
         }
+
         function reproducirVoz(texto, velocidad = 0.85) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
-                const pronunciacion = new SpeechSynthesisUtterance(); pronunciacion.text = texto; pronunciacion.lang = 'ko-KR'; pronunciacion.rate = velocidad; window.speechSynthesis.speak(pronunciacion);
+                const pron = new SpeechSynthesisUtterance(texto); pron.lang = 'ko-KR'; pron.rate = velocidad; window.speechSynthesis.speak(pron);
             }
         }
     </script>
