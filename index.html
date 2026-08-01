@@ -500,10 +500,13 @@
         function generarOracionDinamica(vocabDisponible) {
             const sujetos = vocabDisponible.filter(v => v.categoria === 'SUJ');
             const lugares = vocabDisponible.filter(v => v.categoria === 'LUG');
-            const objetos = vocabDisponible.filter(v => v.categoria === 'OBJ');
             const verbosMov = vocabDisponible.filter(v => v.categoria === 'VER_MOV');
             const verbosAcc = vocabDisponible.filter(v => v.categoria === 'VER_ACC');
             const adjetivos = vocabDisponible.filter(v => v.categoria === 'ADJ');
+            
+            // Sub-clasificamos los objetos para que tengan sentido con los verbos
+            const objetosComida = vocabDisponible.filter(v => v.categoria === 'OBJ' && ['사과', '물', '커피', '밥', '빵', '우유', '고기', '소고기', '돼지고기', '생선', '치즈'].includes(v.coreano));
+            const objetosGenerales = vocabDisponible.filter(v => v.categoria === 'OBJ' && !objetosComida.includes(v));
 
             if(sujetos.length === 0 || (verbosMov.length === 0 && verbosAcc.length === 0 && adjetivos.length === 0)) {
                 return { espanol: "Cargando palabras...", palabras: ["에러", "요"], coreanoStr: "에러 요", tipo: 0 };
@@ -512,9 +515,8 @@
             const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
             let s = random(sujetos);
             
-            // Decidimos al azar la Fórmula (1, 2 o 3) dependiendo de lo que haya disponible
             let opcionesFormulas = [];
-            if(verbosAcc.length > 0 && objetos.length > 0) opcionesFormulas.push(1);
+            if(verbosAcc.length > 0 && (objetosComida.length > 0 || objetosGenerales.length > 0)) opcionesFormulas.push(1);
             if(verbosMov.length > 0 && lugares.length > 0) opcionesFormulas.push(2);
             if(adjetivos.length > 0) opcionesFormulas.push(3);
             
@@ -539,15 +541,38 @@
             } 
             // Fórmula 1: Sujeto + Objeto (를/을) + Verbo Acción
             else if (formula === 1) {
-                let o = random(objetos); let v = random(verbosAcc);
+                let v = random(verbosAcc);
+                let o;
+                
+                // Lógica para que las acciones tengan sentido
+                if (['먹다', '마시다', '요리하다', '끓이다', '굽다'].includes(v.coreano) && objetosComida.length > 0) {
+                    o = random(objetosComida); // Verbos de comer/beber con comida
+                } else if (objetosGenerales.length > 0) {
+                    o = random(objetosGenerales); // Otros verbos con objetos generales
+                } else {
+                     o = random(vocabDisponible.filter(v => v.categoria === 'OBJ')); // Respaldo
+                }
+
                 let verboConjugado = (v.notas && v.notas.includes('Estándar:')) ? v.notas.split('Estándar:')[1].trim() : v.coreano + "요";
                 
                 const lastCharO = o.coreano.charCodeAt(o.coreano.length - 1);
                 const tieneConsonanteO = (lastCharO - 44032) % 28 > 0;
                 let objParticula = tieneConsonanteO ? o.coreano + "을" : o.coreano + "를";
 
+                // Traducción al español más natural
+                let verboEspanol = v.espanol.toLowerCase();
+                let articulo = tieneConsonanteO ? "el/los" : "la/las"; // Aproximación
+                
+                // Excepciones para verbos comunes
+                if(v.coreano === '하다') verboEspanol = 'hace';
+                else if(v.coreano === '먹다') verboEspanol = 'come';
+                else if(v.coreano === '마시다') verboEspanol = 'bebe';
+                else if(v.coreano === '보다') verboEspanol = 've';
+                else if(v.coreano === '읽다') verboEspanol = 'lee';
+                else if(v.coreano === '사다') verboEspanol = 'compra';
+
                 return {
-                    espanol: `${s.espanol} hace la acción de [${v.espanol.toLowerCase()}] con ${o.espanol.toLowerCase()}`,
+                    espanol: `${s.espanol} ${verboEspanol} ${o.espanol.toLowerCase()}`,
                     palabras: [sujetoConParticula, objParticula, verboConjugado],
                     coreanoStr: `${sujetoConParticula} ${objParticula} ${verboConjugado}`,
                     tipo: 1
