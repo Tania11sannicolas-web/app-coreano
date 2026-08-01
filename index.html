@@ -269,7 +269,7 @@
                 <div id="modal-filtro" class="hidden absolute top-0 left-0 w-full h-full bg-stone-900/50 backdrop-blur-sm z-50 flex-col items-center justify-center p-6 animate-fade-in rounded-[32px]">
                     <div class="bg-white w-full max-w-sm p-8 rounded-[32px] shadow-xl text-center">
                         <h3 class="text-xl font-bold text-stone-900 mb-1" id="filtro-title">Niveles Base</h3>
-                        <p class="text-xs text-stone-500 mb-3">Selecciona el vocabulario a utilizar.</p>
+                        <p class="text-xs text-stone-500 mb-3" id="filtro-desc">Selecciona el vocabulario a utilizar.</p>
                         
                         <div id="filtro-contador-texto" class="text-xs font-bold text-amber-500 mb-6 bg-amber-50 inline-block px-3 py-1.5 rounded-full transition-colors">0 temas seleccionados</div>
                         
@@ -328,7 +328,7 @@
 
         // ¡AHORA SOLO USAMOS UNA TABLA PARA TODO! (app_vocabulario)
         let dbCache = { vocabulario: [] };
-        let nivelesActivos = []; 
+        let filtrosActivos = []; 
         let contenidoNivelActual = { vocabulario: [] };
         let oracionesGeneradasDinamicamente = [];
         
@@ -413,27 +413,46 @@
                 document.getElementById('header-badge').innerText = "Vocabulario"; document.getElementById('header-badge').className = "text-[9px] text-amber-500 font-bold px-2 py-0.5 bg-amber-50 rounded-full uppercase tracking-wider";
                 document.getElementById('nav-armar').classList.add('hidden'); 
                 document.getElementById('nav-vocab').classList.remove('hidden'); document.getElementById('nav-memo').classList.remove('hidden');
-                nivelesActivos = [1]; 
+                // Al entrar a vocabulario, cargamos TODAS las categorías por defecto
+                filtrosActivos = ['SUJ', 'LUG', 'OBJ', 'VER_ACC', 'VER_MOV', 'ADJ', 'NUM']; 
             } else {
                 document.getElementById('header-badge').innerText = "Gramática"; document.getElementById('header-badge').className = "text-[9px] text-fuchsia-500 font-bold px-2 py-0.5 bg-fuchsia-50 rounded-full uppercase tracking-wider";
                 document.getElementById('nav-armar').classList.remove('hidden'); 
                 document.getElementById('nav-vocab').classList.add('hidden'); document.getElementById('nav-memo').classList.add('hidden');
-                nivelesActivos = [1]; 
+                // Al entrar a gramática, cargamos el Nivel 1 por defecto
+                filtrosActivos = [1]; 
             }
             construirModalFiltro(); abrirFiltro();
         }
 
         function construirModalFiltro() {
             const container = document.getElementById('filtro-niveles-container'); container.innerHTML = '';
-            // El filtro ahora se basa en el campo "nivel" de la tabla app_vocabulario
-            let opciones = [
-                {val: 1, label: "Nivel 1: Esenciales y Supervivencia"},
-                {val: 2, label: "Nivel 2: Entorno y Ciudad"},
-                {val: 3, label: "Nivel 3: Interacción"}
-            ];
+            
+            let opciones = [];
+            if (currentMode === 'vocab') {
+                document.getElementById('filtro-title').innerText = "Categorías de Palabras";
+                document.getElementById('filtro-desc').innerText = "¿Qué tipo de palabras quieres estudiar?";
+                opciones = [
+                    {val: 'SUJ', label: "👤 Sujetos y Personas"},
+                    {val: 'LUG', label: "📍 Lugares y Espacios"},
+                    {val: 'OBJ', label: "🍎 Objetos y Cosas"},
+                    {val: 'VER_ACC', label: "🏃‍♂️ Verbos de Acción"},
+                    {val: 'VER_MOV', label: "🚶‍♂️ Verbos de Movimiento"},
+                    {val: 'ADJ', label: "✨ Adjetivos y Descripciones"},
+                    {val: 'NUM', label: "🔢 Números y Contadores"}
+                ];
+            } else {
+                document.getElementById('filtro-title').innerText = "Niveles Gramaticales";
+                document.getElementById('filtro-desc').innerText = "Selecciona de qué niveles armar oraciones.";
+                opciones = [
+                    {val: 1, label: "Nivel 1: Esenciales y Supervivencia"},
+                    {val: 2, label: "Nivel 2: Entorno y Ciudad"},
+                    {val: 3, label: "Nivel 3: Interacción"}
+                ];
+            }
             
             opciones.forEach(opc => {
-                const checked = nivelesActivos.includes(opc.val) ? "checked" : "";
+                const checked = filtrosActivos.includes(opc.val) ? "checked" : "";
                 const color = currentMode === 'vocab' ? 'amber' : 'fuchsia';
                 container.innerHTML += `
                     <label class="flex items-center gap-3 p-4 rounded-2xl border-2 border-stone-100 hover:border-${color}-200 cursor-pointer transition-all focus-within:border-${color}-400 bg-stone-50">
@@ -448,7 +467,7 @@
             const sel = document.querySelectorAll('.filtro-cb:checked').length;
             const color = currentMode === 'vocab' ? 'amber' : 'fuchsia';
             const txt = document.getElementById('filtro-contador-texto');
-            txt.innerText = `${sel} nivel${sel !== 1 ? 'es' : ''} seleccionado${sel !== 1 ? 's' : ''}`;
+            txt.innerText = `${sel} opción${sel !== 1 ? 'es' : ''} seleccionada${sel !== 1 ? 's' : ''}`;
             txt.className = `text-xs font-bold text-${color}-600 mb-6 bg-${color}-50 inline-block px-3 py-1.5 rounded-full transition-colors`;
         }
 
@@ -456,8 +475,15 @@
 
         function aplicarFiltroYRecargar() {
             const checkboxes = document.querySelectorAll('.filtro-cb');
-            nivelesActivos = Array.from(checkboxes).filter(cb => cb.checked).map(cb => parseInt(cb.value));
-            if(nivelesActivos.length === 0) { showToast("Selecciona al menos un nivel.", '⚠️'); checkboxes[0].checked = true; nivelesActivos = [parseInt(checkboxes[0].value)]; }
+            // Si es vocabulario, leemos el String de la categoría, si es gramática, lo parseamos a Número para el Nivel.
+            filtrosActivos = Array.from(checkboxes).filter(cb => cb.checked).map(cb => currentMode === 'vocab' ? cb.value : parseInt(cb.value));
+            
+            if(filtrosActivos.length === 0) { 
+                showToast("Selecciona al menos una opción.", '⚠️'); 
+                checkboxes[0].checked = true; 
+                filtrosActivos = currentMode === 'vocab' ? [checkboxes[0].value] : [parseInt(checkboxes[0].value)]; 
+            }
+            
             document.getElementById('modal-filtro').classList.add('hidden'); document.getElementById('modal-filtro').classList.remove('flex');
             
             aplicarFiltroLocal();
@@ -538,9 +564,16 @@
         /* ========================================================================= */
 
         function aplicarFiltroLocal() {
-            contenidoNivelActual.vocabulario = dbCache.vocabulario.filter(x => nivelesActivos.includes(x.nivel));
+            if (currentMode === 'vocab') {
+                // En modo Vocab, filtramos revisando si la "categoria" coincide con los filtros
+                contenidoNivelActual.vocabulario = dbCache.vocabulario.filter(x => filtrosActivos.includes(x.categoria));
+            } else {
+                // En modo Gramática, filtramos revisando si el "nivel" coincide
+                contenidoNivelActual.vocabulario = dbCache.vocabulario.filter(x => filtrosActivos.includes(x.nivel));
+            }
+
             if(contenidoNivelActual.vocabulario.length === 0) {
-                showToast("No hay palabras en este nivel aún.", "⚠️");
+                showToast("No hay palabras en esta selección aún.", "⚠️");
             }
             reiniciarContenidos();
         }
@@ -692,11 +725,17 @@
             oracionActual = queueArmar[0]; palabrasSeleccionadas = [];
             document.getElementById('armar-espanol').innerText = oracionActual.espanol; document.getElementById('armar-feedback').style.opacity = 0;
             
-            // Hints Dinámicos!
+            // Hints Dinámicos y Amigables!
             const hint = document.getElementById('armar-hint-text');
-            if(oracionActual.tipo === 1) hint.innerText = "[Sujeto]는/은  +  [Objeto]를/을  +  [Verbo Acción]";
-            else if(oracionActual.tipo === 2) hint.innerText = "[Sujeto]는/은  +  [Lugar]에  +  [Verbo Movimiento]";
-            else hint.innerText = "Organiza las palabras lógicamente.";
+            if(oracionActual.tipo === 1) {
+                hint.innerHTML = "💡 <b>Fórmula de Acción:</b><br/>Primero <b>quién</b> (Sujeto), luego <b>qué cosa</b> (Objeto), y siempre cerramos con la <b>acción</b> (Verbo).<br/><span class='text-fuchsia-500 mt-1 inline-block'>[Sujeto]는/은 + [Objeto]를/을 + [Verbo]</span>";
+            }
+            else if(oracionActual.tipo === 2) {
+                hint.innerHTML = "💡 <b>Fórmula de Destino:</b><br/>Primero <b>quién</b> (Sujeto), luego <b>a dónde</b> (Lugar), y siempre cerramos con el <b>movimiento</b> (Verbo).<br/><span class='text-fuchsia-500 mt-1 inline-block'>[Sujeto]는/은 + [Lugar]에 + [Verbo]</span>";
+            }
+            else {
+                hint.innerHTML = "💡 <b>Tip de Oro:</b> En coreano el verbo <b>siempre</b> va al final.";
+            }
 
             const source = document.getElementById('armar-source'); const target = document.getElementById('armar-target');
             source.innerHTML = ''; target.innerHTML = '';
@@ -724,10 +763,10 @@
                 if(queueArmar.length === 0) setTimeout(() => { document.getElementById('modal-ronda').classList.remove('hidden'); document.getElementById('modal-ronda').classList.add('flex'); }, 2000);
                 else setTimeout(() => resetArmarUI(), 2000);
             } else {
-                let errorHint = "❌ Revisa el orden y vuelve a intentarlo.";
-                // Si el último de la selección no es el verbo real
+                let errorHint = "❌ Mmm, el orden de las partículas no es del todo correcto. ¡Intenta de nuevo!";
+                // Si el último de la selección no es el verbo real, lanzamos el hint amigable
                 if(palabrasSeleccionadas[palabrasSeleccionadas.length-1] !== oracionActual.palabras[oracionActual.palabras.length-1]) {
-                    errorHint = "❌ ¡Recuerda que el Verbo SIEMPRE va al final en Coreano!";
+                    errorHint = "❌ ¡Ups! Recuerda que el Verbo SIEMPRE va al final en Coreano.";
                 }
                 feedback.innerText = errorHint; feedback.className = "h-auto min-h-[2.5rem] text-sm mb-2 transition-opacity flex items-center text-center justify-center font-bold text-rose-500 whitespace-pre-line";
                 setTimeout(() => { limpiarOracion(); }, 2000); 
