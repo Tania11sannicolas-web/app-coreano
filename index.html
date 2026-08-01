@@ -97,7 +97,6 @@
                 <button id="btn-logout" class="mt-8 text-xs font-bold text-stone-400 hover:text-rose-500 transition-colors">Cerrar Sesión</button>
             </div>
 
-            <!-- APPS -->
             <div id="app-section" class="hidden flex-col gap-6 w-full h-full mt-4">
                 
                 <!-- 1. VOCABULARIO (Tarjetas) -->
@@ -213,7 +212,7 @@
                     <div id="examen-inicio" class="text-center bg-white p-8 rounded-[32px] shadow-sm border border-stone-100 mt-4">
                         <div class="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-6 text-indigo-500 text-4xl shadow-inner border border-indigo-100"><i class="ph-fill ph-medal"></i></div>
                         <h2 class="text-2xl font-bold text-stone-900 mb-2">Simulador de Examen</h2>
-                        <p class="text-sm text-stone-500 mb-8">20 ejercicios aleatorios combinando todo lo aprendido.</p>
+                        <p class="text-sm text-stone-500 mb-8">20 ejercicios combinando las palabras de esta ronda.</p>
                         <button onclick="iniciarExamen()" class="w-full bg-indigo-500 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">Comenzar Test</button>
                     </div>
 
@@ -326,7 +325,6 @@
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdrdW5pZ3lxZ2V0cXZqc292emp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUzNjc1MzEsImV4cCI6MjEwMDk0MzUzMX0.Co8JkEWVJGlexJGG5WJbnLPb63pYvdX-y5HfYTd6fsg';
         const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // ¡AHORA SOLO USAMOS UNA TABLA PARA TODO! (app_vocabulario)
         let dbCache = { vocabulario: [] };
         let filtrosActivos = []; 
         let contenidoNivelActual = { vocabulario: [] };
@@ -384,7 +382,6 @@
 
         async function cargarTodaLaBaseDeDatos() {
             try {
-                // AQUÍ ESTABA EL ERROR ANTES: Trataba de jalar oraciones y dictados. Ahora solo jalamos VOCABULARIO.
                 const { data, error } = await _supabase.from('app_vocabulario').select('*');
                 if (error) throw error;
                 dbCache.vocabulario = data || [];
@@ -413,13 +410,11 @@
                 document.getElementById('header-badge').innerText = "Vocabulario"; document.getElementById('header-badge').className = "text-[9px] text-amber-500 font-bold px-2 py-0.5 bg-amber-50 rounded-full uppercase tracking-wider";
                 document.getElementById('nav-armar').classList.add('hidden'); 
                 document.getElementById('nav-vocab').classList.remove('hidden'); document.getElementById('nav-memo').classList.remove('hidden');
-                // Al entrar a vocabulario, cargamos TODAS las categorías por defecto
                 filtrosActivos = ['SUJ', 'LUG', 'OBJ', 'VER_ACC', 'VER_MOV', 'ADJ', 'NUM']; 
             } else {
                 document.getElementById('header-badge').innerText = "Gramática"; document.getElementById('header-badge').className = "text-[9px] text-fuchsia-500 font-bold px-2 py-0.5 bg-fuchsia-50 rounded-full uppercase tracking-wider";
                 document.getElementById('nav-armar').classList.remove('hidden'); 
                 document.getElementById('nav-vocab').classList.add('hidden'); document.getElementById('nav-memo').classList.add('hidden');
-                // Al entrar a gramática, cargamos el Nivel 1 por defecto
                 filtrosActivos = [1]; 
             }
             construirModalFiltro(); abrirFiltro();
@@ -475,7 +470,6 @@
 
         function aplicarFiltroYRecargar() {
             const checkboxes = document.querySelectorAll('.filtro-cb');
-            // Si es vocabulario, leemos el String de la categoría, si es gramática, lo parseamos a Número para el Nivel.
             filtrosActivos = Array.from(checkboxes).filter(cb => cb.checked).map(cb => currentMode === 'vocab' ? cb.value : parseInt(cb.value));
             
             if(filtrosActivos.length === 0) { 
@@ -509,40 +503,42 @@
             const objetos = vocabDisponible.filter(v => v.categoria === 'OBJ');
             const verbosMov = vocabDisponible.filter(v => v.categoria === 'VER_MOV');
             const verbosAcc = vocabDisponible.filter(v => v.categoria === 'VER_ACC');
+            const adjetivos = vocabDisponible.filter(v => v.categoria === 'ADJ');
 
-            // Si la BD no tiene suficientes palabras aún, generamos un error controlado
-            if(sujetos.length === 0 || (verbosMov.length === 0 && verbosAcc.length === 0)) {
+            if(sujetos.length === 0 || (verbosMov.length === 0 && verbosAcc.length === 0 && adjetivos.length === 0)) {
                 return { espanol: "Cargando palabras...", palabras: ["에러", "요"], coreanoStr: "에러 요", tipo: 0 };
             }
 
             const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
             let s = random(sujetos);
             
-            // Decidimos al azar si es Fórmula 1 (Acción) o 2 (Movimiento)
-            let formula = 1;
-            if(verbosMov.length > 0 && verbosAcc.length > 0) formula = Math.random() > 0.5 ? 1 : 2;
-            else if (verbosMov.length > 0) formula = 2;
+            // Decidimos al azar la Fórmula (1, 2 o 3) dependiendo de lo que haya disponible
+            let opcionesFormulas = [];
+            if(verbosAcc.length > 0 && objetos.length > 0) opcionesFormulas.push(1);
+            if(verbosMov.length > 0 && lugares.length > 0) opcionesFormulas.push(2);
+            if(adjetivos.length > 0) opcionesFormulas.push(3);
+            
+            let formula = opcionesFormulas.length > 0 ? random(opcionesFormulas) : 0;
 
-            // Determinar si el Sujeto termina en vocal o consonante para la partícula 는/은
             const lastCharS = s.coreano.charCodeAt(s.coreano.length - 1);
             const tieneConsonanteS = (lastCharS - 44032) % 28 > 0;
             let sujetoConParticula = tieneConsonanteS ? s.coreano + "은" : s.coreano + "는";
-            if(s.coreano === '나') sujetoConParticula = '나는'; // Yo informal
-            if(s.coreano === '저') sujetoConParticula = '저는'; // Yo formal
+            if(s.coreano === '나') sujetoConParticula = '나는';
+            if(s.coreano === '저') sujetoConParticula = '저는';
 
             // Fórmula 2: Sujeto + Lugar (에) + Verbo Movimiento
-            if (formula === 2 && lugares.length > 0) {
+            if (formula === 2) {
                 let l = random(lugares); let v = random(verbosMov);
                 let verboConjugado = (v.notas && v.notas.includes('Estándar:')) ? v.notas.split('Estándar:')[1].trim() : v.coreano + "요";
                 return {
-                    espanol: `${s.espanol} va a ${l.espanol}`,
+                    espanol: `${s.espanol} va a ${l.espanol.toLowerCase()}`,
                     palabras: [sujetoConParticula, `${l.coreano}에`, verboConjugado],
                     coreanoStr: `${sujetoConParticula} ${l.coreano}에 ${verboConjugado}`,
                     tipo: 2
                 };
             } 
             // Fórmula 1: Sujeto + Objeto (를/을) + Verbo Acción
-            else if (formula === 1 && objetos.length > 0) {
+            else if (formula === 1) {
                 let o = random(objetos); let v = random(verbosAcc);
                 let verboConjugado = (v.notas && v.notas.includes('Estándar:')) ? v.notas.split('Estándar:')[1].trim() : v.coreano + "요";
                 
@@ -551,24 +547,32 @@
                 let objParticula = tieneConsonanteO ? o.coreano + "을" : o.coreano + "를";
 
                 return {
-                    espanol: `${s.espanol} hace la acción de [${v.espanol}] con ${o.espanol}`,
+                    espanol: `${s.espanol} hace la acción de [${v.espanol.toLowerCase()}] con ${o.espanol.toLowerCase()}`,
                     palabras: [sujetoConParticula, objParticula, verboConjugado],
                     coreanoStr: `${sujetoConParticula} ${objParticula} ${verboConjugado}`,
                     tipo: 1
                 };
             }
+            // Fórmula 3: Sujeto + Adjetivo
+            else if (formula === 3) {
+                let a = random(adjetivos);
+                let adjConjugado = (a.notas && a.notas.includes('Estándar:')) ? a.notas.split('Estándar:')[1].trim() : a.coreano + "요";
+                return {
+                    espanol: `${s.espanol} es/está ${a.espanol.toLowerCase().replace('ser ', '').replace('estar ', '')}`,
+                    palabras: [sujetoConParticula, adjConjugado],
+                    coreanoStr: `${sujetoConParticula} ${adjConjugado}`,
+                    tipo: 3
+                };
+            }
             
-            // Falla de seguridad (Fórmula 3 Estado)
-            return { espanol: `${s.espanol} es/existe`, palabras: [s.coreano, "입니다"], coreanoStr: `${s.coreano} 입니다`, tipo: 3 };
+            return { espanol: `${s.espanol} es/existe`, palabras: [s.coreano, "입니다"], coreanoStr: `${s.coreano} 입니다`, tipo: 0 };
         }
         /* ========================================================================= */
 
         function aplicarFiltroLocal() {
             if (currentMode === 'vocab') {
-                // En modo Vocab, filtramos revisando si la "categoria" coincide con los filtros
                 contenidoNivelActual.vocabulario = dbCache.vocabulario.filter(x => filtrosActivos.includes(x.categoria));
             } else {
-                // En modo Gramática, filtramos revisando si el "nivel" coincide
                 contenidoNivelActual.vocabulario = dbCache.vocabulario.filter(x => filtrosActivos.includes(x.nivel));
             }
 
@@ -578,12 +582,17 @@
             reiniciarContenidos();
         }
 
+        // AQUI ESTÁ LA MAGIA: Una sola ronda maestra de 20 para todos los juegos!
         function reiniciarContenidos() {
             if (currentMode === 'vocab') {
-                queueVocab = mezclarYCortar(contenidoNivelActual.vocabulario, MAX_RONDA);
-                queueMemo = mezclarYCortar(contenidoNivelActual.vocabulario, MAX_RONDA);
-                queueDictado = mezclarYCortar(contenidoNivelActual.vocabulario.map(v => v.coreano), MAX_RONDA);
-                queueEscritura = mezclarYCortar(contenidoNivelActual.vocabulario.map(v => ({espanol: v.espanol, coreanoStr: v.coreano})), MAX_RONDA);
+                // 1. SELECCIONAR LAS 20 PALABRAS MAESTRAS PARA ESTA RONDA
+                let rondaMaestra = mezclarYCortar(contenidoNivelActual.vocabulario, MAX_RONDA);
+                
+                // 2. REPARTIR EXACTAMENTE LAS MISMAS 20 A TODOS LOS JUEGOS
+                queueVocab = [...rondaMaestra];
+                queueMemo = [...rondaMaestra];
+                queueDictado = rondaMaestra.map(v => v.coreano);
+                queueEscritura = rondaMaestra.map(v => ({espanol: v.espanol, coreanoStr: v.coreano}));
                 queueArmar = []; 
             } else { 
                 // MODO GRAMMAR: Se generan 20 oraciones dinámicas en el momento.
@@ -594,8 +603,9 @@
                     oracionesGeneradasDinamicamente.push(generarOracionDinamica(contenidoNivelActual.vocabulario));
                 }
 
+                // 2. REPARTIR EXACTAMENTE LAS MISMAS 20 ORACIONES A TODOS LOS JUEGOS
                 queueArmar = [...oracionesGeneradasDinamicamente];
-                queueDictado = mezclarYCortar(oracionesGeneradasDinamicamente.map(o => o.coreanoStr), MAX_RONDA);
+                queueDictado = oracionesGeneradasDinamicamente.map(o => o.coreanoStr);
                 queueEscritura = [...oracionesGeneradasDinamicamente]; 
             }
             
@@ -619,7 +629,7 @@
             });
         }
 
-        function reiniciarJuegoActivo() { reiniciarContenidos(); showToast("Ejercicios barajeados a 0/20.", "✨"); }
+        function reiniciarJuegoActivo() { reiniciarContenidos(); showToast("Nueva ronda maestra de 20 cargada.", "✨"); }
 
         function cargarVocabularioUI() {
             if(queueVocab.length === 0) return;
@@ -632,15 +642,14 @@
                 textoCoreano.innerText = item.coreano; 
                 document.getElementById('palabra-espanol').innerText = item.espanol; 
                 
-                // Mostrar Pista Gramatical Visual
                 let catTexto = "Desconocido";
-                if(item.categoria === 'SUJ') catTexto = "Sujeto / Persona";
-                if(item.categoria === 'LUG') catTexto = "Lugar (Usa 에/에서)";
-                if(item.categoria === 'OBJ') catTexto = "Objeto (Usa 을/를)";
-                if(item.categoria === 'VER_MOV') catTexto = "Verbo Movimiento";
-                if(item.categoria === 'VER_ACC') catTexto = "Verbo Acción";
-                if(item.categoria === 'ADJ') catTexto = "Adjetivo / Estado";
-                if(item.categoria === 'NUM') catTexto = `Número (Contador: ${item.contador || '-'})`;
+                if(item.categoria === 'SUJ') catTexto = "👤 Sujeto / Persona";
+                if(item.categoria === 'LUG') catTexto = "📍 Lugar (Usa 에/에서)";
+                if(item.categoria === 'OBJ') catTexto = "🍎 Objeto (Usa 을/를)";
+                if(item.categoria === 'VER_MOV') catTexto = "🚶‍♂️ Verbo Movimiento";
+                if(item.categoria === 'VER_ACC') catTexto = "🏃‍♂️ Verbo Acción";
+                if(item.categoria === 'ADJ') catTexto = "✨ Adjetivo / Estado";
+                if(item.categoria === 'NUM') catTexto = `🔢 Número (Contador: ${item.contador || '-'})`;
                 document.getElementById('palabra-categoria').innerText = `[ ${catTexto} ]`;
 
                 textoCoreano.style.opacity = 1;
@@ -700,7 +709,6 @@
         function verificarDictado() {
             if(queueDictado.length === 0) return;
             const inputOrg = document.getElementById('dictado-input').value.trim(); const correctaOrg = queueDictado[0]; 
-            // Tolerancia de espacios
             const input = inputOrg.replace(/\s+/g, ''); const correcta = correctaOrg.replace(/\s+/g, '');
             const feedback = document.getElementById('dictado-feedback');
             
@@ -725,13 +733,15 @@
             oracionActual = queueArmar[0]; palabrasSeleccionadas = [];
             document.getElementById('armar-espanol').innerText = oracionActual.espanol; document.getElementById('armar-feedback').style.opacity = 0;
             
-            // Hints Dinámicos y Amigables!
             const hint = document.getElementById('armar-hint-text');
             if(oracionActual.tipo === 1) {
                 hint.innerHTML = "💡 <b>Fórmula de Acción:</b><br/>Primero <b>quién</b> (Sujeto), luego <b>qué cosa</b> (Objeto), y siempre cerramos con la <b>acción</b> (Verbo).<br/><span class='text-fuchsia-500 mt-1 inline-block'>[Sujeto]는/은 + [Objeto]를/을 + [Verbo]</span>";
             }
             else if(oracionActual.tipo === 2) {
                 hint.innerHTML = "💡 <b>Fórmula de Destino:</b><br/>Primero <b>quién</b> (Sujeto), luego <b>a dónde</b> (Lugar), y siempre cerramos con el <b>movimiento</b> (Verbo).<br/><span class='text-fuchsia-500 mt-1 inline-block'>[Sujeto]는/은 + [Lugar]에 + [Verbo]</span>";
+            }
+            else if(oracionActual.tipo === 3) {
+                hint.innerHTML = "💡 <b>Fórmula de Descripción:</b><br/>Primero <b>qué/quién</b> (Sujeto), y cerramos con el <b>adjetivo/estado</b> (que en coreano funciona como verbo).<br/><span class='text-fuchsia-500 mt-1 inline-block'>[Sujeto]는/은 + [Adjetivo]</span>";
             }
             else {
                 hint.innerHTML = "💡 <b>Tip de Oro:</b> En coreano el verbo <b>siempre</b> va al final.";
@@ -764,9 +774,8 @@
                 else setTimeout(() => resetArmarUI(), 2000);
             } else {
                 let errorHint = "❌ Mmm, el orden de las partículas no es del todo correcto. ¡Intenta de nuevo!";
-                // Si el último de la selección no es el verbo real, lanzamos el hint amigable
                 if(palabrasSeleccionadas[palabrasSeleccionadas.length-1] !== oracionActual.palabras[oracionActual.palabras.length-1]) {
-                    errorHint = "❌ ¡Ups! Recuerda que el Verbo SIEMPRE va al final en Coreano.";
+                    errorHint = "❌ ¡Ups! Recuerda que el Verbo/Adjetivo SIEMPRE va al final en Coreano.";
                 }
                 feedback.innerText = errorHint; feedback.className = "h-auto min-h-[2.5rem] text-sm mb-2 transition-opacity flex items-center text-center justify-center font-bold text-rose-500 whitespace-pre-line";
                 setTimeout(() => { limpiarOracion(); }, 2000); 
@@ -783,7 +792,6 @@
             if(queueEscritura.length === 0) return;
             const item = queueEscritura[0]; 
             const inputOrg = document.getElementById('escritura-input').value.trim(); 
-            // Tolerancia de espacios
             const input = inputOrg.replace(/\s+/g, ''); 
             const correctaOrg = item.coreanoStr;
             const correcta = correctaOrg.replace(/\s+/g, '');
@@ -808,12 +816,12 @@
         function iniciarExamen() {
             let p = [];
             if (currentMode === 'vocab') {
-                contenidoNivelActual.vocabulario.forEach(v => {
+                // Tomamos de la ronda maestra para el examen
+                queueVocab.forEach(v => {
                     p.push({tipo: 'escritura', data: {espanol: v.espanol, coreanoStr: v.coreano} });
                     p.push({tipo: 'dictado', data: {coreanoStr: v.coreano} });
                 });
             } else {
-                // Grammar Mode usa la generación dinámica
                 oracionesGeneradasDinamicamente.forEach(o => {
                     p.push({tipo: 'escritura', data: o});
                     p.push({tipo: 'dictado', data: o});
