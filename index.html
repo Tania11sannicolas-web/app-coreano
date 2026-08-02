@@ -497,7 +497,7 @@
             
             document.getElementById('header-badge').innerText = "Práctica"; document.getElementById('header-badge').className = "text-[9px] text-indigo-500 font-bold px-2 py-0.5 bg-indigo-50 rounded-full uppercase tracking-wider";
             
-            filtrosActivos = [1, 2, 3, 4, 5]; 
+            filtrosActivos = [1, 2, 3, 4, 5, 6, 7]; 
             
             construirModalFiltro(); abrirFiltro();
         }
@@ -506,11 +506,13 @@
             const container = document.getElementById('filtro-niveles-container'); container.innerHTML = '';
             
             let opciones = [
-                {val: 1, label: "👤 Subnivel 1: Personas y Mi Mundo"},
-                {val: 2, label: "🏠 Subnivel 2: La Casa y Rutinas"},
+                {val: 1, label: "👤 Subnivel 1: Fundamentos y Personas"},
+                {val: 2, label: "⏱️ Subnivel 2: Tiempo y Números"},
                 {val: 3, label: "🍎 Subnivel 3: Comida y Sabores"},
-                {val: 4, label: "🏙️ Subnivel 4: Ciudad y Movimiento"},
-                {val: 5, label: "⏱️ Subnivel 5: Tiempo y Números"}
+                {val: 4, label: "🏠 Subnivel 4: La Casa y Rutinas"},
+                {val: 5, label: "🏙️ Subnivel 5: Ciudad y Movimiento"},
+                {val: 6, label: "🏃‍♂️ Subnivel 6: Acciones y Vida Diaria"},
+                {val: 7, label: "✨ Subnivel 7: Adjetivos y Estados"}
             ];
             
             opciones.forEach(opc => {
@@ -719,7 +721,7 @@
         }
 
         function aplicarFiltroLocal() {
-            // Nota de Experto: En Supabase asegúrate que la columna 'nivel' sea 1, 2, 3, 4, 5.
+            // Nota de Experto: En Supabase asegúrate que la columna 'nivel' sea 1, 2, 3, 4, 5, 6 o 7.
             contenidoNivelActual.vocabulario = dbCache.vocabulario.filter(x => filtrosActivos.includes(x.nivel));
 
             if(contenidoNivelActual.vocabulario.length === 0) {
