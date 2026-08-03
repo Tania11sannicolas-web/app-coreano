@@ -6,8 +6,6 @@
     <title>한국어 공간 | Coreano Aesthetic</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Supabase JS Client v2 -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Iconos -->
@@ -42,47 +40,43 @@
         </h1>
         <div class="flex items-center gap-3">
             <button id="btn-opciones" onclick="abrirFiltro()" class="hidden text-[11px] bg-stone-100 border border-stone-200 rounded-xl px-3 py-1.5 font-bold text-stone-600 outline-none cursor-pointer flex items-center gap-1.5 hover:bg-stone-200 transition-colors shadow-sm">
-                <i class="ph-bold ph-list-numbers"></i> Subniveles
+                <i class="ph-bold ph-books"></i> Lecciones
             </button>
-            <div id="user-info" class="text-xs text-stone-400 font-medium hidden"></div>
+            <div id="user-info" class="text-xs text-stone-500 font-bold hidden bg-stone-100 px-3 py-1 rounded-full"></div>
         </div>
     </header>
 
     <main class="flex-1 overflow-y-auto no-scrollbar relative flex flex-col">
         <div class="max-w-md mx-auto w-full p-6 flex-1 flex flex-col justify-center pb-24">
             
-            <div id="auth-section" class="bg-white p-8 rounded-[32px] shadow-sm border border-stone-100/80">
+            <!-- Pantalla de Bienvenida (Sin base de datos) -->
+            <div id="auth-section" class="bg-white p-8 rounded-[32px] shadow-sm border border-stone-100/80 animate-fade-in">
                 <div class="mb-8 text-center">
-                    <div class="w-16 h-16 bg-rose-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl">🌸</div>
-                    <h2 class="text-2xl font-bold text-stone-900 mb-2">Bienvenida</h2>
-                    <p class="text-sm text-stone-500 leading-relaxed">Tu espacio aesthetic para dominar el coreano.</p>
+                    <div class="w-16 h-16 bg-rose-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl">🇰🇷</div>
+                    <h2 class="text-2xl font-bold text-stone-900 mb-2">Bienvenido a clase</h2>
+                    <p class="text-sm text-stone-500 leading-relaxed">Dime tu nombre para empezar tu aprendizaje hoy.</p>
                 </div>
                 <div class="space-y-4 mb-8">
                     <div>
-                        <label class="text-[10px] uppercase tracking-wider font-bold text-stone-400 ml-1 mb-1 block">Correo</label>
-                        <input type="email" id="email" class="w-full px-5 py-4 rounded-2xl bg-stone-50 border-2 border-stone-100 text-sm focus:outline-none focus:border-rose-200 transition-colors" value="test@test.com">
-                    </div>
-                    <div>
-                        <label class="text-[10px] uppercase tracking-wider font-bold text-stone-400 ml-1 mb-1 block">Contraseña</label>
-                        <input type="password" id="password" class="w-full px-5 py-4 rounded-2xl bg-stone-50 border-2 border-stone-100 text-sm focus:outline-none focus:border-rose-200 transition-colors" value="123456">
+                        <label class="text-[10px] uppercase tracking-wider font-bold text-stone-400 ml-1 mb-1 block">Tu Nombre</label>
+                        <input type="text" id="nombre-estudiante" placeholder="Ej. Ana, Carlos..." class="w-full px-5 py-4 rounded-2xl bg-stone-50 border-2 border-stone-100 text-sm font-medium focus:outline-none focus:border-rose-300 transition-colors">
                     </div>
                 </div>
                 <div class="space-y-3">
-                    <button id="btn-login" class="w-full bg-stone-900 text-white py-4 rounded-2xl text-sm font-semibold hover:bg-stone-800 active:scale-95 transition-all shadow-sm">Iniciar Sesión</button>
-                    <button id="btn-signup" class="w-full bg-white text-stone-700 py-4 rounded-2xl text-sm font-semibold border-2 border-stone-100 hover:bg-stone-50 active:scale-95 transition-all">Crear cuenta nueva</button>
+                    <button onclick="entrarApp()" class="w-full bg-stone-900 text-white py-4 rounded-2xl text-sm font-semibold hover:bg-stone-800 active:scale-95 transition-all shadow-sm">Entrar al aula</button>
                 </div>
             </div>
 
             <!-- Seleccion de Modo -->
             <div id="mode-selection" class="hidden flex-col gap-6 w-full animate-fade-in text-center mt-4">
-                <h2 class="text-2xl font-bold text-stone-900 mb-2">¿Qué haremos hoy?</h2>
-                <p class="text-sm text-stone-500 mb-6">Elige tu enfoque de aprendizaje.</p>
+                <h2 id="saludo-personalizado" class="text-2xl font-bold text-stone-900 mb-2">¿Qué haremos hoy?</h2>
+                <p class="text-sm text-stone-500 mb-6">Sigue las instrucciones de tu profesor.</p>
                 
                 <button onclick="iniciarEstudio()" class="bg-white p-8 rounded-[32px] shadow-sm border-2 border-transparent hover:border-indigo-200 focus:border-indigo-400 transition-all flex flex-col items-center gap-4 active:scale-95 group">
                     <div class="w-16 h-16 bg-indigo-50 text-indigo-500 group-hover:bg-indigo-100 group-hover:scale-110 transition-all rounded-full flex items-center justify-center text-3xl"><i class="ph-fill ph-student"></i></div>
                     <div>
                         <h3 class="font-bold text-lg text-stone-900">Iniciar Práctica</h3>
-                        <p class="text-xs text-stone-500 mt-1">10 Palabras nuevas por ronda.</p>
+                        <p class="text-xs text-stone-500 mt-1">Practica las palabras de la lección.</p>
                     </div>
                 </button>
 
@@ -90,119 +84,145 @@
                     <div class="w-16 h-16 bg-teal-50 text-teal-500 group-hover:bg-teal-100 group-hover:scale-110 transition-all rounded-full flex items-center justify-center text-3xl"><i class="ph-fill ph-notebook"></i></div>
                     <div>
                         <h3 class="font-bold text-lg text-stone-900">Mis Apuntes (Teoría)</h3>
-                        <p class="text-xs text-stone-500 mt-1">Reglas, Partículas y Fórmulas SOV.</p>
+                        <p class="text-xs text-stone-500 mt-1">Revisa lo que te enseñó el profesor.</p>
                     </div>
                 </button>
                 
-                <button id="btn-logout" class="mt-8 text-xs font-bold text-stone-400 hover:text-rose-500 transition-colors">Cerrar Sesión</button>
+                <button onclick="salirApp()" class="mt-8 text-xs font-bold text-stone-400 hover:text-rose-500 transition-colors">Salir de clase</button>
             </div>
 
             <div id="app-section" class="hidden flex-col gap-6 w-full h-full mt-4">
 
-                <!-- 0. TEORÍA Y APUNTES MEJORADOS -->
+                <!-- 0. TEORÍA Y APUNTES DE LA CLASE -->
                 <div id="view-teoria" class="app-view hidden flex-col gap-6 w-full animate-fade-in pb-10">
                     <div class="flex justify-between items-center px-2 mb-2">
-                        <h2 class="text-xl font-bold text-stone-900">Cuaderno de Reglas</h2>
+                        <h2 class="text-xl font-bold text-stone-900">Cuaderno de Clase</h2>
                     </div>
 
                     <div class="bg-white p-6 rounded-[32px] shadow-sm border border-stone-100 flex flex-col gap-6">
                         
-                        <!-- Sección 1: Estructura SOV -->
-                        <div class="p-4 bg-fuchsia-50 rounded-2xl border border-fuchsia-100">
-                            <h3 class="font-bold text-fuchsia-700 mb-2 flex items-center gap-2"><i class="ph-fill ph-magic-wand"></i> 1. La Estructura SOV</h3>
-                            <p class="text-xs text-stone-600 mb-3">En coreano, el verbo <b>SIEMPRE</b> va al final de la oración. ¡Esta es la regla de oro!</p>
-                            
-                            <div class="bg-white p-3 rounded-xl border border-fuchsia-200 mb-2 text-sm text-center shadow-sm">
-                                <span class="font-bold text-stone-800">Sujeto</span> + <span class="font-bold text-stone-800">Objeto</span> + <span class="font-bold text-fuchsia-500">Verbo Acción</span>
-                            </div>
-                            <p class="text-[11px] text-stone-500 italic text-center mb-4">Ej: 나는 컴퓨터를 써요 (Yo uso la computadora)</p>
-                            
-                            <div class="bg-white p-3 rounded-xl border border-fuchsia-200 mb-2 text-sm text-center shadow-sm">
-                                <span class="font-bold text-stone-800">Sujeto</span> + <span class="font-bold text-stone-800">Lugar</span> + <span class="font-bold text-fuchsia-500">Verbo Movimiento</span>
-                            </div>
-                            <p class="text-[11px] text-stone-500 italic text-center">Ej: 저는 헬스장에 가요 (Yo voy al gimnasio)</p>
-                        </div>
-
-                        <!-- Sección 2: Partículas -->
+                        <!-- Lección 1 -->
                         <div class="p-4 bg-sky-50 rounded-2xl border border-sky-100">
-                            <h3 class="font-bold text-sky-700 mb-2 flex items-center gap-2"><i class="ph-fill ph-puzzle-piece"></i> 2. Partículas (El Pegamento)</h3>
-                            <p class="text-xs text-stone-600 mb-3">Se pegan al final de la palabra para indicarnos qué función cumple esa palabra en tu oración.</p>
+                            <h3 class="font-bold text-sky-700 mb-2 flex items-center gap-2"><i class="ph-fill ph-hand-waving"></i> Lección 1: Supervivencia Básica</h3>
+                            <p class="text-xs text-stone-600 mb-3">Las expresiones indispensables para sobrevivir y ser educado en Corea.</p>
                             
                             <ul class="space-y-3 text-sm">
                                 <li class="bg-white p-3 rounded-xl border border-sky-200 shadow-sm">
-                                    <b class="text-sky-600">는 / 은</b> (Tema/Sujeto): Marca de quién hablamos.<br>
-                                    <span class="text-xs text-stone-500 block mt-1">Vocal = 는 (나는 - Yo) <br> Consonante = 은 (박민영은 - Park Min Young)</span>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <b class="text-stone-800 text-lg">안녕하세요</b> 
+                                        <button onclick="reproducirVoz('안녕하세요')" class="text-sky-500 p-1 hover:bg-sky-50 rounded"><i class="ph-fill ph-speaker-high"></i></button>
+                                    </div>
+                                    <span class="text-sky-600 font-bold block mb-1">Hola (Formal)</span>
+                                    <span class="text-xs text-stone-500 block">Significa literalmente "Paz". Úsalo con todas las personas.</span>
                                 </li>
                                 <li class="bg-white p-3 rounded-xl border border-sky-200 shadow-sm">
-                                    <b class="text-sky-600">를 / 을</b> (Objeto Directo): Lo que recibe la acción.<br>
-                                    <span class="text-xs text-stone-500 block mt-1">Vocal = 를 (드라마를 봐요 - Veo un drama) <br> Consonante = 을 (물을 마셔요 - Bebo agua)</span>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <b class="text-stone-800 text-lg">감사합니다</b> 
+                                        <button onclick="reproducirVoz('감사합니다')" class="text-sky-500 p-1 hover:bg-sky-50 rounded"><i class="ph-fill ph-speaker-high"></i></button>
+                                    </div>
+                                    <span class="text-sky-600 font-bold block mb-1">Gracias (Formal)</span>
+                                    <span class="text-xs text-stone-500 block">Regla mental: "¡Camisa hambre ni da!".</span>
                                 </li>
                                 <li class="bg-white p-3 rounded-xl border border-sky-200 shadow-sm">
-                                    <b class="text-sky-600">에</b> (Lugar de destino / Tiempo): Hacia dónde vas.<br>
-                                    <span class="text-xs text-stone-500 block mt-1">Ej: 멕시코에 와요 (Vengo a México)</span>
-                                </li>
-                                <li class="bg-white p-3 rounded-xl border border-sky-200 shadow-sm">
-                                    <b class="text-sky-600">에서</b> (Lugar de Acción): Dónde OCURRE una acción.<br>
-                                    <span class="text-xs text-stone-500 block mt-1">Ej: 공원에서 달려요 (Corro en el parque)</span>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <b class="text-stone-800 text-lg">네 / 아니요</b> 
+                                        <button onclick="reproducirVoz('네 아니요')" class="text-sky-500 p-1 hover:bg-sky-50 rounded"><i class="ph-fill ph-speaker-high"></i></button>
+                                    </div>
+                                    <span class="text-sky-600 font-bold block mb-1">Sí / No</span>
+                                    <span class="text-xs text-stone-500 block">"Ne" también significa "te escucho/entiendo".</span>
                                 </li>
                             </ul>
                         </div>
 
-                        <!-- Sección 3: Construye tus frases -->
-                        <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
-                            <h3 class="font-bold text-emerald-700 mb-2 flex items-center gap-2"><i class="ph-fill ph-sparkle"></i> 3. ¡Crea tus propias frases!</h3>
-                            <p class="text-xs text-stone-600 mb-3">Usa las palabras que aprendes en la app para hacer tus frases del día a día.</p>
+                        <!-- Lección 2 -->
+                        <div class="p-4 bg-fuchsia-50 rounded-2xl border border-fuchsia-100 mt-4">
+                            <h3 class="font-bold text-fuchsia-700 mb-2 flex items-center gap-2"><i class="ph-fill ph-shopping-bag"></i> Lección 2: Compras Básicas</h3>
+                            <p class="text-xs text-stone-600 mb-3">Aprende a pedir cosas usando "Esto, Eso y Aquello".</p>
                             
-                            <div class="space-y-3">
-                                <div class="bg-white p-3 rounded-xl border border-emerald-200 shadow-sm">
-                                    <p class="text-sm font-bold text-stone-800">🏃‍♀️ Rutina de ejercicio:</p>
-                                    <p class="text-xs text-stone-600 mt-1">저는 매일 아침 <b>공원에서</b> <b>달려요</b>.</p>
-                                    <p class="text-[10px] text-stone-400 italic">(Yo cada mañana corro en el parque).</p>
-                                </div>
-                                <div class="bg-white p-3 rounded-xl border border-emerald-200 shadow-sm">
-                                    <p class="text-sm font-bold text-stone-800">📺 Tiempo libre:</p>
-                                    <p class="text-xs text-stone-600 mt-1">나는 집에서 <b>박민영</b> <b>드라마를</b> <b>봐요</b>.</p>
-                                    <p class="text-[10px] text-stone-400 italic">(Yo veo dramas de Park Min Young en casa).</p>
-                                </div>
-                                <div class="bg-white p-3 rounded-xl border border-emerald-200 shadow-sm">
-                                    <p class="text-sm font-bold text-stone-800">💻 Trabajo/Estudio:</p>
-                                    <p class="text-xs text-stone-600 mt-1">저는 <b>컴퓨터로</b> <b>한국어를</b> <b>배워요</b>.</p>
-                                    <p class="text-[10px] text-stone-400 italic">(Yo aprendo coreano con la computadora).</p>
-                                </div>
-                            </div>
+                            <ul class="space-y-3 text-sm">
+                                <li class="bg-white p-3 rounded-xl border border-fuchsia-200 shadow-sm">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <b class="text-stone-800 text-lg">이것 / 그것 / 저것</b> 
+                                        <button onclick="reproducirVoz('이것 그것 저것')" class="text-fuchsia-500 p-1 hover:bg-fuchsia-50 rounded"><i class="ph-fill ph-speaker-high"></i></button>
+                                    </div>
+                                    <span class="text-fuchsia-600 font-bold block mb-1">Esto / Eso / Aquello</span>
+                                    <span class="text-xs text-stone-500 block"><b>이것</b> (Cerca de ti), <b>그것</b> (Cerca del oyente), <b>저것</b> (Lejos de ambos).</span>
+                                </li>
+                                <li class="bg-white p-3 rounded-xl border border-fuchsia-200 shadow-sm">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <b class="text-stone-800 text-lg">주세요</b> 
+                                        <button onclick="reproducirVoz('주세요')" class="text-fuchsia-500 p-1 hover:bg-fuchsia-50 rounded"><i class="ph-fill ph-speaker-high"></i></button>
+                                    </div>
+                                    <span class="text-fuchsia-600 font-bold block mb-1">Por favor, deme</span>
+                                    <span class="text-xs text-stone-500 block">Fórmula mágica: [Objeto] + 주세요. Ej: 커피 주세요 (Deme café, por favor).</span>
+                                </li>
+                            </ul>
                         </div>
 
-                    </div>
-                </div>
-                
-                <!-- 1. VOCABULARIO (Tarjetas) -->
-                <div id="view-vocab" class="app-view hidden flex-col gap-6 w-full animate-fade-in">
-                    <div class="flex justify-between items-center px-2 mb-2">
-                        <h2 class="text-xl font-bold text-stone-900">Tarjetas</h2>
-                        <button onclick="reiniciarJuegoActivo()" class="text-amber-500 bg-amber-50 p-2 rounded-xl active:scale-95 transition-all"><i class="ph-bold ph-arrows-clockwise text-lg"></i></button>
-                    </div>
-                    <div class="bg-white p-8 rounded-[32px] shadow-sm border border-stone-100 text-center relative overflow-hidden flex-1 flex flex-col justify-center min-h-[400px]">
-                        <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-amber-200 to-amber-400"></div>
-                        <span class="text-[10px] uppercase tracking-widest text-amber-600 font-bold bg-amber-50 px-3 py-1.5 rounded-full inline-block mb-4 mx-auto" id="vocab-counter">0 / 10</span>
-                        
-                        <!-- Pista visual de categoría -->
-                        <span id="palabra-categoria" class="text-[11px] font-bold text-stone-400 uppercase tracking-wider mb-2 block">Categoría</span>
-                        
-                        <p id="palabra-coreano" class="text-5xl font-medium text-stone-900 mt-2 mb-4 tracking-wide transition-opacity duration-300">...</p>
-                        <p id="palabra-espanol" class="text-base text-stone-500 mb-10 font-medium">...</p>
-                        
-                        <div class="flex flex-col gap-3 mt-auto">
-                            <button onclick="reproducirVoz(document.getElementById('palabra-coreano').innerText)" class="w-full bg-amber-400 text-white py-4 rounded-2xl text-sm font-bold active:scale-95 transition-all shadow-sm flex items-center justify-center gap-2">
-                                <i class="ph-fill ph-speaker-high text-lg"></i> Escuchar
-                            </button>
-                            <div class="flex gap-2">
-                                <button onclick="anteriorVocabulario()" class="flex-1 bg-stone-100 text-stone-700 py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all flex items-center justify-center gap-2">
-                                    <i class="ph-bold ph-caret-left"></i> Atrás
-                                </button>
-                                <button onclick="siguienteVocabulario()" class="flex-1 bg-stone-100 text-stone-700 py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all flex items-center justify-center gap-2">
-                                    Adelante <i class="ph-bold ph-caret-right"></i>
-                                </button>
-                            </div>
+                        <!-- Lección 3 -->
+                        <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-100 mt-4">
+                            <h3 class="font-bold text-emerald-700 mb-2 flex items-center gap-2"><i class="ph-fill ph-map-pin"></i> Lección 3: ¿Dónde está...?</h3>
+                            <p class="text-xs text-stone-600 mb-3">La pregunta de oro para no perderte y encontrar lo que necesitas.</p>
+                            
+                            <ul class="space-y-3 text-sm">
+                                <li class="bg-white p-3 rounded-xl border border-emerald-200 shadow-sm">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <b class="text-stone-800 text-lg">어디</b> 
+                                        <button onclick="reproducirVoz('어디')" class="text-emerald-500 p-1 hover:bg-emerald-50 rounded"><i class="ph-fill ph-speaker-high"></i></button>
+                                    </div>
+                                    <span class="text-emerald-600 font-bold block mb-1">Dónde</span>
+                                    <span class="text-xs text-stone-500 block">Palabra interrogativa para lugares.</span>
+                                </li>
+                                <li class="bg-white p-3 rounded-xl border border-emerald-200 shadow-sm">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <b class="text-stone-800 text-lg">있어요?</b> 
+                                        <button onclick="reproducirVoz('있어요')" class="text-emerald-500 p-1 hover:bg-emerald-50 rounded"><i class="ph-fill ph-speaker-high"></i></button>
+                                    </div>
+                                    <span class="text-emerald-600 font-bold block mb-1">¿Está? / ¿Hay? / ¿Tiene?</span>
+                                    <span class="text-xs text-stone-500 block">Fórmula: [Lugar/Objeto] + 어디 있어요? = ¿Dónde está el [Lugar/Objeto]?</span>
+                                </li>
+                                <li class="bg-white p-3 rounded-xl border border-emerald-200 shadow-sm">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <b class="text-stone-800 text-lg">화장실</b> 
+                                        <button onclick="reproducirVoz('화장실')" class="text-emerald-500 p-1 hover:bg-emerald-50 rounded"><i class="ph-fill ph-speaker-high"></i></button>
+                                    </div>
+                                    <span class="text-emerald-600 font-bold block mb-1">Baño</span>
+                                    <span class="text-xs text-stone-500 block">Pregunta de supervivencia absoluta: 화장실 어디 있어요? (¿Dónde está el baño?).</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Lección 4 -->
+                        <div class="p-4 bg-amber-50 rounded-2xl border border-amber-100 mt-4">
+                            <h3 class="font-bold text-amber-700 mb-2 flex items-center gap-2"><i class="ph-fill ph-person-simple-run"></i> Lección 4: ¡Acción! y la partícula 을/를</h3>
+                            <p class="text-xs text-stone-600 mb-3">Aprende a decir qué haces. El verbo siempre al final.</p>
+                            
+                            <ul class="space-y-3 text-sm">
+                                <li class="bg-white p-3 rounded-xl border border-amber-200 shadow-sm">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <b class="text-stone-800 text-lg">을 / 를</b> 
+                                        <button onclick="reproducirVoz('을 를')" class="text-amber-500 p-1 hover:bg-amber-50 rounded"><i class="ph-fill ph-speaker-high"></i></button>
+                                    </div>
+                                    <span class="text-amber-600 font-bold block mb-1">Partícula de Objeto Directo</span>
+                                    <span class="text-xs text-stone-500 block">Se pega a la palabra para indicar qué recibe la acción. <b>를</b> (termina en vocal), <b>을</b> (termina en consonante).</span>
+                                </li>
+                                <li class="bg-white p-3 rounded-xl border border-amber-200 shadow-sm">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <b class="text-stone-800 text-lg">먹어요 / 마셔요</b> 
+                                        <button onclick="reproducirVoz('먹어요 마셔요')" class="text-amber-500 p-1 hover:bg-amber-50 rounded"><i class="ph-fill ph-speaker-high"></i></button>
+                                    </div>
+                                    <span class="text-amber-600 font-bold block mb-1">Como / Bebo</span>
+                                    <span class="text-xs text-stone-500 block">Ej: 밥<b>을</b> 먹어요 (Como arroz/comida). 물<b>을</b> 마셔요 (Bebo agua).</span>
+                                </li>
+                                <li class="bg-white p-3 rounded-xl border border-amber-200 shadow-sm">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <b class="text-stone-800 text-lg">봐요 / 해요</b> 
+                                        <button onclick="reproducirVoz('봐요 해요')" class="text-amber-500 p-1 hover:bg-amber-50 rounded"><i class="ph-fill ph-speaker-high"></i></button>
+                                    </div>
+                                    <span class="text-amber-600 font-bold block mb-1">Veo / Hago</span>
+                                    <span class="text-xs text-stone-500 block">Ej: 드라마<b>를</b> 봐요 (Veo un drama). 공부<b>를</b> 해요 (Hago estudio = Estudio).</span>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -214,10 +234,11 @@
                             <h2 class="text-xl font-bold text-stone-900">Memorama</h2>
                         </div>
                         <div class="flex items-center gap-2">
-                            <span class="text-[10px] uppercase tracking-widest text-rose-500 font-bold bg-rose-50 px-3 py-1.5 rounded-full inline-block" id="memo-counter">0 / 10</span>
+                            <span class="text-[10px] uppercase tracking-widest text-rose-500 font-bold bg-rose-50 px-3 py-1.5 rounded-full inline-block" id="memo-counter">0 / 0</span>
                             <button onclick="reiniciarJuegoActivo()" class="text-rose-500 bg-rose-50 p-2 rounded-xl active:scale-95 transition-all"><i class="ph-bold ph-arrows-clockwise text-lg"></i></button>
                         </div>
                     </div>
+                    <!-- El grid mostrará 6 pares = 12 cartas para que encaje visualmente bien -->
                     <div id="memo-grid" class="grid grid-cols-3 gap-3 w-full"></div>
                 </div>
 
@@ -229,7 +250,7 @@
                     </div>
 
                     <div class="bg-white p-6 rounded-[32px] shadow-sm border border-stone-100 text-center flex flex-col min-h-[300px] justify-center">
-                        <span class="text-[10px] uppercase tracking-widest text-emerald-600 font-bold bg-emerald-50 px-3 py-1.5 rounded-full inline-block mb-6 mx-auto" id="dictado-counter">0 / 10</span>
+                        <span class="text-[10px] uppercase tracking-widest text-emerald-600 font-bold bg-emerald-50 px-3 py-1.5 rounded-full inline-block mb-6 mx-auto" id="dictado-counter">0 / 0</span>
                         <button onclick="reproducirDictado()" class="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6 text-emerald-500 hover:bg-emerald-100 active:scale-90 transition-all shadow-inner border border-emerald-100">
                             <i class="ph-fill ph-headphones text-4xl"></i>
                         </button>
@@ -247,7 +268,7 @@
                     </div>
 
                     <div class="bg-white p-6 rounded-[32px] shadow-sm border border-stone-100 text-center flex flex-col min-h-[300px] justify-center">
-                        <span class="text-[10px] uppercase tracking-widest text-orange-600 font-bold bg-orange-50 px-3 py-1.5 rounded-full inline-block mb-6 mx-auto" id="escritura-counter">0 / 10</span>
+                        <span class="text-[10px] uppercase tracking-widest text-orange-600 font-bold bg-orange-50 px-3 py-1.5 rounded-full inline-block mb-6 mx-auto" id="escritura-counter">0 / 0</span>
                         <p id="escritura-espanol" class="text-xl font-bold text-stone-800 mb-8">...</p>
                         <div class="w-full relative">
                             <input type="text" id="escritura-input" placeholder="Escribe en coreano..." class="w-full text-center px-5 py-4 rounded-2xl bg-stone-50 border-2 border-stone-100 text-lg font-medium text-orange-700 focus:outline-none focus:border-orange-400 transition-colors mb-2" autocomplete="off" spellcheck="false">
@@ -262,7 +283,7 @@
                     <div id="examen-inicio" class="text-center bg-white p-8 rounded-[32px] shadow-sm border border-stone-100 mt-4">
                         <div class="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-6 text-indigo-500 text-4xl shadow-inner border border-indigo-100"><i class="ph-fill ph-medal"></i></div>
                         <h2 class="text-2xl font-bold text-stone-900 mb-2">Simulador de Examen</h2>
-                        <p class="text-sm text-stone-500 mb-8">Prueba final con las palabras de esta ronda.</p>
+                        <p class="text-sm text-stone-500 mb-8">Prueba final de esta lección.</p>
                         <button onclick="iniciarExamen()" class="w-full bg-indigo-500 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">Comenzar Test</button>
                     </div>
 
@@ -278,7 +299,7 @@
                         <div class="bg-white p-6 rounded-[32px] shadow-sm border border-stone-100 flex flex-col items-center text-center min-h-[350px]">
                             <div class="flex gap-2 justify-center mb-6">
                                 <span id="examen-tipo-badge" class="text-[10px] uppercase tracking-widest text-indigo-600 font-bold bg-indigo-50 px-3 py-1.5 rounded-full inline-block">Tipo</span>
-                                <span class="text-[10px] uppercase tracking-widest text-indigo-600 font-bold bg-indigo-50 px-3 py-1.5 rounded-full inline-block" id="examen-contador">0 / 10</span>
+                                <span class="text-[10px] uppercase tracking-widest text-indigo-600 font-bold bg-indigo-50 px-3 py-1.5 rounded-full inline-block" id="examen-contador">0 / 0</span>
                             </div>
 
                             <div id="examen-escritura-ui" class="w-full hidden flex-col flex-1 justify-center">
@@ -300,7 +321,7 @@
                         <div class="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-4 text-indigo-500 text-4xl shadow-inner border border-indigo-100"><i class="ph-fill ph-confetti"></i></div>
                         <h2 class="text-2xl font-bold text-stone-900 mb-2">¡Terminaste el Test!</h2>
                         <p class="text-sm text-stone-500 mb-6">Tu puntuación final es:</p>
-                        <p id="examen-puntaje-texto" class="text-5xl font-bold text-indigo-500 mb-10">9 / 10</p>
+                        <p id="examen-puntaje-texto" class="text-5xl font-bold text-indigo-500 mb-10">0 / 0</p>
                         <div class="space-y-3">
                             <button onclick="iniciarExamen()" class="w-full bg-indigo-500 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">Volver a intentar</button>
                             <button onclick="document.getElementById('examen-resultado').classList.add('hidden'); document.getElementById('examen-inicio').classList.remove('hidden');" class="w-full bg-stone-100 text-stone-700 py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all">Salir</button>
@@ -311,13 +332,11 @@
                 <!-- MODALES -->
                 <div id="modal-filtro" class="hidden absolute top-0 left-0 w-full h-full bg-stone-900/50 backdrop-blur-sm z-50 flex-col items-center justify-center p-6 animate-fade-in rounded-[32px]">
                     <div class="bg-white w-full max-w-sm p-8 rounded-[32px] shadow-xl text-center">
-                        <h3 class="text-xl font-bold text-stone-900 mb-1" id="filtro-title">Subniveles de Estudio</h3>
-                        <p class="text-xs text-stone-500 mb-3" id="filtro-desc">¿Qué quieres aprender hoy?</p>
-                        
-                        <div id="filtro-contador-texto" class="text-xs font-bold text-indigo-500 mb-6 bg-indigo-50 inline-block px-3 py-1.5 rounded-full transition-colors">0 seleccionados</div>
+                        <h3 class="text-xl font-bold text-stone-900 mb-1">Elige tu Lección</h3>
+                        <p class="text-xs text-stone-500 mb-6">Solo selecciona una a la vez.</p>
                         
                         <div class="space-y-3 mb-8 max-h-[50vh] overflow-y-auto no-scrollbar text-left" id="filtro-niveles-container">
-                            <!-- Se llena por JS -->
+                            <!-- Se llena por JS desde nuestra BD Local -->
                         </div>
                         <button onclick="aplicarFiltroYRecargar()" class="w-full bg-stone-900 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">Iniciar Práctica</button>
                     </div>
@@ -326,12 +345,11 @@
                 <div id="modal-ronda" class="hidden absolute top-0 left-0 w-full h-full bg-stone-900/50 backdrop-blur-sm z-50 flex-col items-center justify-center p-6 animate-fade-in rounded-[32px]">
                     <div class="bg-white w-full max-w-sm p-8 rounded-[32px] shadow-xl text-center">
                         <div class="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-500 text-4xl shadow-inner border border-emerald-100"><i class="ph-fill ph-check-circle"></i></div>
-                        <h3 class="text-2xl font-bold text-stone-900 mb-2">¡Ronda completada! ✨</h3>
-                        <p class="text-sm text-stone-500 mb-8">Has terminado los 10 ejercicios.</p>
+                        <h3 class="text-2xl font-bold text-stone-900 mb-2">¡Completado! ✨</h3>
+                        <p class="text-sm text-stone-500 mb-8">Has repasado todo el vocabulario.</p>
                         <div class="space-y-3">
-                            <button onclick="repetirRondaActiva()" class="w-full bg-sky-500 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">Repetir estas mismas 10</button>
-                            <button onclick="cerrarModalRondaYReiniciar()" class="w-full bg-emerald-500 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">Aprender 10 distintas</button>
-                            <button onclick="document.getElementById('modal-ronda').classList.add('hidden'); abrirFiltro();" class="w-full bg-stone-100 text-stone-700 py-4 rounded-2xl text-sm font-semibold border-2 border-stone-100 active:scale-95 transition-all">Cambiar Subnivel</button>
+                            <button onclick="repetirRondaActiva()" class="w-full bg-sky-500 text-white py-4 rounded-2xl text-sm font-semibold active:scale-95 transition-all shadow-sm">Repetir Ejercicio</button>
+                            <button onclick="document.getElementById('modal-ronda').classList.add('hidden'); abrirFiltro();" class="w-full bg-stone-100 text-stone-700 py-4 rounded-2xl text-sm font-semibold border-2 border-stone-100 active:scale-95 transition-all">Cambiar Lección</button>
                         </div>
                     </div>
                 </div>
@@ -364,26 +382,544 @@
         </div>
     </nav>
 
-    <!-- JAVASCRIPT & SUPABASE -->
+    <!-- JAVASCRIPT SIN BASE DE DATOS EXTERNA -->
     <script>
-        const SUPABASE_URL = 'https://gkunigyqgetqvjsovzjy.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdrdW5pZ3lxZ2V0cXZqc292emp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUzNjc1MzEsImV4cCI6MjEwMDk0MzUzMX0.Co8JkEWVJGlexJGG5WJbnLPb63pYvdX-y5HfYTd6fsg';
-        const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        let dbCache = { vocabulario: [] };
-        let filtrosActivos = []; 
-        let contenidoNivelActual = { vocabulario: [] };
-        
-        // CUIDADO: AQUÍ REDUJE EL NÚMERO A 10
-        const MAX_RONDA = 10;
+        // -------------------------------------------------------------
+        // NUESTRA BASE DE DATOS LOCAL (Aquí agregaremos lecciones)
+        // -------------------------------------------------------------
+        const leccionesCurriculum = [
+            {
+                id: 1,
+                titulo: "Lección 1: Supervivencia Básica",
+                vocabulario: [
+                    { coreano: "안녕하세요", espanol: "Hola", categoria: "Saludo" },
+                    { coreano: "감사합니다", espanol: "Gracias", categoria: "Cortesía" },
+                    { coreano: "네", espanol: "Sí / Entiendo", categoria: "Respuesta" },
+                    { coreano: "아니요", espanol: "No", categoria: "Respuesta" },
+                    { coreano: "한국어", espanol: "Idioma coreano", categoria: "Sustantivo" },
+                    { coreano: "물", espanol: "Agua", categoria: "Sustantivo" },
+                    { coreano: "커피", espanol: "Café", categoria: "Sustantivo" },
+                    { coreano: "밥", espanol: "Comida / Arroz", categoria: "Sustantivo" },
+                    { coreano: "사람", espanol: "Persona", categoria: "Sustantivo" },
+                    { coreano: "안녕히 계세요", espanol: "Adiós (Te vas)", categoria: "Saludo" },
+                    { coreano: "죄송합니다", espanol: "Lo siento (Formal)", categoria: "Cortesía" },
+                    { coreano: "천만에요", espanol: "De nada", categoria: "Cortesía" },
+                    { coreano: "제발", espanol: "Por favor (Ruego)", categoria: "Expresión" },
+                    { coreano: "수고하세요", espanol: "Buen trabajo (Despedida a trabajador)", categoria: "Saludo" },
+                    { coreano: "안녕", espanol: "Hola / Adiós (Informal)", categoria: "Saludo" },
+                    { coreano: "잠시만요", espanol: "Un momento / Permiso", categoria: "Expresión" },
+                    { coreano: "환영합니다", espanol: "Bienvenido", categoria: "Saludo" },
+                    { coreano: "네 맞아요", espanol: "Sí, es correcto", categoria: "Respuesta" },
+                    { coreano: "잘 먹겠습니다", espanol: "Comeré bien (Antes de comer)", categoria: "Cortesía" },
+                    { coreano: "잘 먹었습니다", espanol: "Comí bien (Después de comer)", categoria: "Cortesía" }
+                ]
+            },
+            {
+                id: 2,
+                titulo: "Lección 2: Compras y Pronombres",
+                vocabulario: [
+                    { coreano: "저", espanol: "Yo (Formal)", categoria: "Pronombre" },
+                    { coreano: "나", espanol: "Yo (Informal)", categoria: "Pronombre" },
+                    { coreano: "이것", espanol: "Esto (Cerca de mí)", categoria: "Pronombre" },
+                    { coreano: "그것", espanol: "Eso (Cerca de ti)", categoria: "Pronombre" },
+                    { coreano: "저것", espanol: "Aquello (Lejos de ambos)", categoria: "Pronombre" },
+                    { coreano: "주세요", espanol: "Por favor, deme", categoria: "Verbo" },
+                    { coreano: "빵", espanol: "Pan", categoria: "Sustantivo" },
+                    { coreano: "우유", espanol: "Leche", categoria: "Sustantivo" },
+                    { coreano: "사과", espanol: "Manzana", categoria: "Sustantivo" },
+                    { coreano: "괜찮아요", espanol: "No gracias / Estoy bien", categoria: "Expresión" },
+                    { coreano: "얼마예요?", espanol: "¿Cuánto es/cuesta?", categoria: "Frase" },
+                    { coreano: "비싸요", espanol: "Es caro", categoria: "Adjetivo" },
+                    { coreano: "싸요", espanol: "Es barato", categoria: "Adjetivo" },
+                    { coreano: "돈", espanol: "Dinero", categoria: "Sustantivo" },
+                    { coreano: "카드", espanol: "Tarjeta (Bancaria)", categoria: "Sustantivo" },
+                    { coreano: "영수증", espanol: "Recibo / Ticket", categoria: "Sustantivo" },
+                    { coreano: "봉투", espanol: "Bolsa (de plástico/papel)", categoria: "Sustantivo" },
+                    { coreano: "환불", espanol: "Reembolso", categoria: "Sustantivo" },
+                    { coreano: "이거", espanol: "Esto (Hablado informal)", categoria: "Pronombre" },
+                    { coreano: "저기요", espanol: "Disculpe (Para llamar a alguien)", categoria: "Expresión" }
+                ]
+            },
+            {
+                id: 3,
+                titulo: "Lección 3: ¿Dónde está...?",
+                vocabulario: [
+                    { coreano: "어디", espanol: "Dónde", categoria: "Pregunta" },
+                    { coreano: "있어요", espanol: "Está / Hay / Tiene", categoria: "Verbo" },
+                    { coreano: "화장실", espanol: "Baño", categoria: "Lugar" },
+                    { coreano: "편의점", espanol: "Tienda de conveniencia", categoria: "Lugar" },
+                    { coreano: "지하철역", espanol: "Estación de metro", categoria: "Lugar" },
+                    { coreano: "호텔", espanol: "Hotel", categoria: "Lugar" },
+                    { coreano: "식당", espanol: "Restaurante", categoria: "Lugar" },
+                    { coreano: "병원", espanol: "Hospital", categoria: "Lugar" },
+                    { coreano: "약국", espanol: "Farmacia", categoria: "Lugar" },
+                    { coreano: "여기", espanol: "Aquí", categoria: "Ubicación" },
+                    { coreano: "거기", espanol: "Ahí", categoria: "Ubicación" },
+                    { coreano: "저기", espanol: "Allá", categoria: "Ubicación" },
+                    { coreano: "오른쪽", espanol: "Derecha", categoria: "Dirección" },
+                    { coreano: "왼쪽", espanol: "Izquierda", categoria: "Dirección" },
+                    { coreano: "직진", espanol: "Recto / Derecho", categoria: "Dirección" },
+                    { coreano: "길", espanol: "Calle / Camino", categoria: "Sustantivo" },
+                    { coreano: "은행", espanol: "Banco", categoria: "Lugar" },
+                    { coreano: "공항", espanol: "Aeropuerto", categoria: "Lugar" },
+                    { coreano: "시장", espanol: "Mercado tradicional", categoria: "Lugar" },
+                    { coreano: "집", espanol: "Casa", categoria: "Lugar" }
+                ]
+            },
+            {
+                id: 4,
+                titulo: "Lección 4: Verbos y Partículas",
+                vocabulario: [
+                    { coreano: "먹어요", espanol: "Como (Comer)", categoria: "Verbo" },
+                    { coreano: "마셔요", espanol: "Bebo (Beber)", categoria: "Verbo" },
+                    { coreano: "봐요", espanol: "Veo (Ver)", categoria: "Verbo" },
+                    { coreano: "해요", espanol: "Hago (Hacer)", categoria: "Verbo" },
+                    { coreano: "드라마", espanol: "Drama", categoria: "Sustantivo" },
+                    { coreano: "영화", espanol: "Película", categoria: "Sustantivo" },
+                    { coreano: "물", espanol: "Agua", categoria: "Sustantivo" },
+                    { coreano: "밥", espanol: "Arroz / Comida", categoria: "Sustantivo" },
+                    { coreano: "공부", espanol: "Estudio", categoria: "Sustantivo" },
+                    { coreano: "운동", espanol: "Ejercicio", categoria: "Sustantivo" },
+                    { coreano: "읽어요", espanol: "Leo (Leer)", categoria: "Verbo" },
+                    { coreano: "들어요", espanol: "Escucho (Escuchar)", categoria: "Verbo" },
+                    { coreano: "사요", espanol: "Compro (Comprar)", categoria: "Verbo" },
+                    { coreano: "자요", espanol: "Duermo (Dormir)", categoria: "Verbo" },
+                    { coreano: "책", espanol: "Libro", categoria: "Sustantivo" },
+                    { coreano: "음악", espanol: "Música", categoria: "Sustantivo" },
+                    { coreano: "옷", espanol: "Ropa", categoria: "Sustantivo" },
+                    { coreano: "일", espanol: "Trabajo (Labor)", categoria: "Sustantivo" },
+                    { coreano: "숙제", espanol: "Tarea", categoria: "Sustantivo" },
+                    { coreano: "텔레비전", espanol: "Televisión", categoria: "Sustantivo" }
+                ]
+            },
+            {
+                id: 5,
+                titulo: "Lección 5: Movimiento y Lugares",
+                vocabulario: [
+                    { coreano: "가요", espanol: "Voy (Ir)", categoria: "Verbo" },
+                    { coreano: "와요", espanol: "Vengo (Venir)", categoria: "Verbo" },
+                    { coreano: "학교", espanol: "Escuela", categoria: "Lugar" },
+                    { coreano: "집", espanol: "Casa", categoria: "Lugar" },
+                    { coreano: "회사", espanol: "Empresa / Oficina", categoria: "Lugar" },
+                    { coreano: "은행", espanol: "Banco", categoria: "Lugar" },
+                    { coreano: "도서관", espanol: "Biblioteca", categoria: "Lugar" },
+                    { coreano: "공원", espanol: "Parque", categoria: "Lugar" },
+                    { coreano: "에", espanol: "A / Hacia (Dirección)", categoria: "Partícula" },
+                    { coreano: "에서", espanol: "En (Lugar de acción)", categoria: "Partícula" },
+                    { coreano: "떠나요", espanol: "Parto / Me voy", categoria: "Verbo" },
+                    { coreano: "도착해요", espanol: "Llego", categoria: "Verbo" },
+                    { coreano: "돌아가요", espanol: "Regreso / Vuelvo", categoria: "Verbo" },
+                    { coreano: "카페", espanol: "Cafetería", categoria: "Lugar" },
+                    { coreano: "식당", espanol: "Restaurante", categoria: "Lugar" },
+                    { coreano: "영화관", espanol: "Cine", categoria: "Lugar" },
+                    { coreano: "바다", espanol: "Mar", categoria: "Lugar" },
+                    { coreano: "여행", espanol: "Viaje", categoria: "Sustantivo" },
+                    { coreano: "산", espanol: "Montaña", categoria: "Lugar" },
+                    { coreano: "시내", espanol: "Centro de la ciudad", categoria: "Lugar" }
+                ]
+            },
+            {
+                id: 6,
+                titulo: "Lección 6: Tiempo y Días",
+                vocabulario: [
+                    { coreano: "오늘", espanol: "Hoy", categoria: "Tiempo" },
+                    { coreano: "내일", espanol: "Mañana", categoria: "Tiempo" },
+                    { coreano: "어제", espanol: "Ayer", categoria: "Tiempo" },
+                    { coreano: "지금", espanol: "Ahora", categoria: "Tiempo" },
+                    { coreano: "시간", espanol: "Tiempo / Hora", categoria: "Sustantivo" },
+                    { coreano: "월요일", espanol: "Lunes", categoria: "Día" },
+                    { coreano: "화요일", espanol: "Martes", categoria: "Día" },
+                    { coreano: "수요일", espanol: "Miércoles", categoria: "Día" },
+                    { coreano: "주말", espanol: "Fin de semana", categoria: "Tiempo" },
+                    { coreano: "매일", espanol: "Todos los días", categoria: "Tiempo" },
+                    { coreano: "목요일", espanol: "Jueves", categoria: "Día" },
+                    { coreano: "금요일", espanol: "Viernes", categoria: "Día" },
+                    { coreano: "토요일", espanol: "Sábado", categoria: "Día" },
+                    { coreano: "일요일", espanol: "Domingo", categoria: "Día" },
+                    { coreano: "아침", espanol: "Mañana / AM", categoria: "Tiempo" },
+                    { coreano: "점심", espanol: "Mediodía", categoria: "Tiempo" },
+                    { coreano: "저녁", espanol: "Tarde", categoria: "Tiempo" },
+                    { coreano: "밤", espanol: "Noche", categoria: "Tiempo" },
+                    { coreano: "새벽", espanol: "Madrugada", categoria: "Tiempo" },
+                    { coreano: "나중에", espanol: "Más tarde", categoria: "Tiempo" }
+                ]
+            },
+            {
+                id: 7,
+                titulo: "Lección 7: Adjetivos Básicos",
+                vocabulario: [
+                    { coreano: "커요", espanol: "Es grande", categoria: "Adjetivo" },
+                    { coreano: "작아요", espanol: "Es pequeño", categoria: "Adjetivo" },
+                    { coreano: "좋아요", espanol: "Es bueno / Me gusta", categoria: "Adjetivo" },
+                    { coreano: "나빠요", espanol: "Es malo", categoria: "Adjetivo" },
+                    { coreano: "예뻐요", espanol: "Es bonito/a", categoria: "Adjetivo" },
+                    { coreano: "많아요", espanol: "Hay mucho", categoria: "Adjetivo" },
+                    { coreano: "적어요", espanol: "Hay poco", categoria: "Adjetivo" },
+                    { coreano: "비싸요", espanol: "Es caro", categoria: "Adjetivo" },
+                    { coreano: "싸요", espanol: "Es barato", categoria: "Adjetivo" },
+                    { coreano: "재미있어요", espanol: "Es divertido / Interesante", categoria: "Adjetivo" },
+                    { coreano: "맛없어요", espanol: "Sabe mal", categoria: "Adjetivo" },
+                    { coreano: "맛있어요", espanol: "Sabe bien / Delicioso", categoria: "Adjetivo" },
+                    { coreano: "더워요", espanol: "Hace calor", categoria: "Adjetivo" },
+                    { coreano: "추워요", espanol: "Hace frío", categoria: "Adjetivo" },
+                    { coreano: "따뜻해요", espanol: "Es cálido", categoria: "Adjetivo" },
+                    { coreano: "시원해요", espanol: "Es fresco", categoria: "Adjetivo" },
+                    { coreano: "피곤해요", espanol: "Estoy cansado", categoria: "Adjetivo" },
+                    { coreano: "바빠요", espanol: "Estoy ocupado", categoria: "Adjetivo" },
+                    { coreano: "심심해요", espanol: "Estoy aburrido", categoria: "Adjetivo" },
+                    { coreano: "슬퍼요", espanol: "Estoy triste", categoria: "Adjetivo" }
+                ]
+            },
+            {
+                id: 8,
+                titulo: "Lección 8: Comida y Sabores",
+                vocabulario: [
+                    { coreano: "맛있어요", espanol: "Es delicioso", categoria: "Adjetivo" },
+                    { coreano: "맛없어요", espanol: "Sabe mal", categoria: "Adjetivo" },
+                    { coreano: "매워요", espanol: "Es picante", categoria: "Adjetivo" },
+                    { coreano: "달아요", espanol: "Es dulce", categoria: "Adjetivo" },
+                    { coreano: "고기", espanol: "Carne", categoria: "Comida" },
+                    { coreano: "채소", espanol: "Verdura", categoria: "Comida" },
+                    { coreano: "과일", espanol: "Fruta", categoria: "Comida" },
+                    { coreano: "맥주", espanol: "Cerveza", categoria: "Bebida" },
+                    { coreano: "소주", espanol: "Soju (Licor coreano)", categoria: "Bebida" },
+                    { coreano: "메뉴", espanol: "Menú", categoria: "Sustantivo" },
+                    { coreano: "짜요", espanol: "Es salado", categoria: "Adjetivo" },
+                    { coreano: "셔요", espanol: "Es ácido", categoria: "Adjetivo" },
+                    { coreano: "써요", espanol: "Es amargo", categoria: "Adjetivo" },
+                    { coreano: "김치", espanol: "Kimchi", categoria: "Comida" },
+                    { coreano: "라면", espanol: "Ramen", categoria: "Comida" },
+                    { coreano: "돼지고기", espanol: "Carne de cerdo", categoria: "Comida" },
+                    { coreano: "소고기", espanol: "Carne de res", categoria: "Comida" },
+                    { coreano: "닭고기", espanol: "Carne de pollo", categoria: "Comida" },
+                    { coreano: "차", espanol: "Té", categoria: "Bebida" },
+                    { coreano: "주스", espanol: "Jugo", categoria: "Bebida" }
+                ]
+            },
+            {
+                id: 9,
+                titulo: "Lección 9: Personas y Familia",
+                vocabulario: [
+                    { coreano: "엄마", espanol: "Mamá", categoria: "Familia" },
+                    { coreano: "아빠", espanol: "Papá", categoria: "Familia" },
+                    { coreano: "형", espanol: "Hermano mayor (de hombre)", categoria: "Familia" },
+                    { coreano: "누나", espanol: "Hermana mayor (de hombre)", categoria: "Familia" },
+                    { coreano: "오빠", espanol: "Hermano mayor (de mujer)", categoria: "Familia" },
+                    { coreano: "언니", espanol: "Hermana mayor (de mujer)", categoria: "Familia" },
+                    { coreano: "동생", espanol: "Hermano/a menor", categoria: "Familia" },
+                    { coreano: "친구", espanol: "Amigo/a", categoria: "Persona" },
+                    { coreano: "선생님", espanol: "Profesor/a", categoria: "Persona" },
+                    { coreano: "학생", espanol: "Estudiante", categoria: "Persona" },
+                    { coreano: "남동생", espanol: "Hermano menor", categoria: "Familia" },
+                    { coreano: "여동생", espanol: "Hermana menor", categoria: "Familia" },
+                    { coreano: "할머니", espanol: "Abuela", categoria: "Familia" },
+                    { coreano: "할아버지", espanol: "Abuelo", categoria: "Familia" },
+                    { coreano: "부모님", espanol: "Padres", categoria: "Familia" },
+                    { coreano: "남편", espanol: "Esposo", categoria: "Familia" },
+                    { coreano: "아내", espanol: "Esposa", categoria: "Familia" },
+                    { coreano: "아이", espanol: "Niño/a", categoria: "Persona" },
+                    { coreano: "남자", espanol: "Hombre", categoria: "Persona" },
+                    { coreano: "여자", espanol: "Mujer", categoria: "Persona" }
+                ]
+            },
+            {
+                id: 10,
+                titulo: "Lección 10: Números Nativos",
+                vocabulario: [
+                    { coreano: "하나", espanol: "Uno (1)", categoria: "Número" },
+                    { coreano: "둘", espanol: "Dos (2)", categoria: "Número" },
+                    { coreano: "셋", espanol: "Tres (3)", categoria: "Número" },
+                    { coreano: "넷", espanol: "Cuatro (4)", categoria: "Número" },
+                    { coreano: "다섯", espanol: "Cinco (5)", categoria: "Número" },
+                    { coreano: "여섯", espanol: "Seis (6)", categoria: "Número" },
+                    { coreano: "일곱", espanol: "Siete (7)", categoria: "Número" },
+                    { coreano: "여덟", espanol: "Ocho (8)", categoria: "Número" },
+                    { coreano: "아홉", espanol: "Nueve (9)", categoria: "Número" },
+                    { coreano: "열", espanol: "Diez (10)", categoria: "Número" },
+                    { coreano: "스물", espanol: "Veinte (20)", categoria: "Número" },
+                    { coreano: "서른", espanol: "Treinta (30)", categoria: "Número" },
+                    { coreano: "마흔", espanol: "Cuarenta (40)", categoria: "Número" },
+                    { coreano: "쉰", espanol: "Cincuenta (50)", categoria: "Número" },
+                    { coreano: "명", espanol: "Contador (Personas)", categoria: "Contador" },
+                    { coreano: "개", espanol: "Contador (Cosas/Objetos)", categoria: "Contador" },
+                    { coreano: "병", espanol: "Contador (Botellas)", categoria: "Contador" },
+                    { coreano: "잔", espanol: "Contador (Vasos/Tazas)", categoria: "Contador" },
+                    { coreano: "마리", espanol: "Contador (Animales)", categoria: "Contador" },
+                    { coreano: "권", espanol: "Contador (Libros)", categoria: "Contador" }
+                ]
+            },
+            {
+                id: 11,
+                titulo: "Lección 11: Números Sino-Coreanos",
+                vocabulario: [
+                    { coreano: "일", espanol: "Uno (1 - Sino)", categoria: "Número" },
+                    { coreano: "이", espanol: "Dos (2 - Sino)", categoria: "Número" },
+                    { coreano: "삼", espanol: "Tres (3 - Sino)", categoria: "Número" },
+                    { coreano: "사", espanol: "Cuatro (4 - Sino)", categoria: "Número" },
+                    { coreano: "오", espanol: "Cinco (5 - Sino)", categoria: "Número" },
+                    { coreano: "육", espanol: "Seis (6 - Sino)", categoria: "Número" },
+                    { coreano: "칠", espanol: "Siete (7 - Sino)", categoria: "Número" },
+                    { coreano: "팔", espanol: "Ocho (8 - Sino)", categoria: "Número" },
+                    { coreano: "구", espanol: "Nueve (9 - Sino)", categoria: "Número" },
+                    { coreano: "십", espanol: "Diez (10 - Sino)", categoria: "Número" },
+                    { coreano: "백", espanol: "Cien (100)", categoria: "Número" },
+                    { coreano: "천", espanol: "Mil (1,000)", categoria: "Número" },
+                    { coreano: "만", espanol: "Diez mil (10,000)", categoria: "Número" },
+                    { coreano: "영", espanol: "Cero (0)", categoria: "Número" },
+                    { coreano: "년", espanol: "Año", categoria: "Sustantivo" },
+                    { coreano: "월", espanol: "Mes", categoria: "Sustantivo" },
+                    { coreano: "일", espanol: "Día", categoria: "Sustantivo" },
+                    { coreano: "원", espanol: "Won (Moneda coreana)", categoria: "Sustantivo" },
+                    { coreano: "층", espanol: "Piso (de un edificio)", categoria: "Contador" },
+                    { coreano: "번", espanol: "Número (Teléfono, Bus)", categoria: "Contador" }
+                ]
+            },
+            {
+                id: 12,
+                titulo: "Lección 12: Ropa y Compras",
+                vocabulario: [
+                    { coreano: "옷", espanol: "Ropa", categoria: "Sustantivo" },
+                    { coreano: "바지", espanol: "Pantalón", categoria: "Ropa" },
+                    { coreano: "치마", espanol: "Falda", categoria: "Ropa" },
+                    { coreano: "신발", espanol: "Zapatos", categoria: "Ropa" },
+                    { coreano: "모자", espanol: "Sombrero / Gorra", categoria: "Ropa" },
+                    { coreano: "안경", espanol: "Gafas / Lentes", categoria: "Accesorios" },
+                    { coreano: "가방", espanol: "Bolsa / Mochila", categoria: "Accesorios" },
+                    { coreano: "입어요", espanol: "Me pongo (Ropa)", categoria: "Verbo" },
+                    { coreano: "신어요", espanol: "Me pongo (Zapatos)", categoria: "Verbo" },
+                    { coreano: "얼마예요?", espanol: "¿Cuánto cuesta?", categoria: "Frase" },
+                    { coreano: "양말", espanol: "Calcetines", categoria: "Ropa" },
+                    { coreano: "티셔츠", espanol: "Camiseta / T-shirt", categoria: "Ropa" },
+                    { coreano: "코트", espanol: "Abrigo", categoria: "Ropa" },
+                    { coreano: "원피스", espanol: "Vestido", categoria: "Ropa" },
+                    { coreano: "시계", espanol: "Reloj", categoria: "Accesorios" },
+                    { coreano: "지갑", espanol: "Cartera / Billetera", categoria: "Accesorios" },
+                    { coreano: "사이즈", espanol: "Talla", categoria: "Sustantivo" },
+                    { coreano: "작아요?", espanol: "¿Es pequeño?", categoria: "Pregunta" },
+                    { coreano: "커요?", espanol: "¿Es grande?", categoria: "Pregunta" },
+                    { coreano: "입어봐도 돼요?", espanol: "¿Puedo probármelo?", categoria: "Frase" }
+                ]
+            },
+            {
+                id: 13,
+                titulo: "Lección 13: Rutina Diaria",
+                vocabulario: [
+                    { coreano: "일어나요", espanol: "Me levanto", categoria: "Verbo" },
+                    { coreano: "자요", espanol: "Duermo", categoria: "Verbo" },
+                    { coreano: "씻어요", espanol: "Me lavo", categoria: "Verbo" },
+                    { coreano: "일해요", espanol: "Trabajo", categoria: "Verbo" },
+                    { coreano: "쉬어요", espanol: "Descanso", categoria: "Verbo" },
+                    { coreano: "아침", espanol: "Mañana / Desayuno", categoria: "Tiempo" },
+                    { coreano: "점심", espanol: "Mediodía / Almuerzo", categoria: "Tiempo" },
+                    { coreano: "저녁", espanol: "Tarde / Cena", categoria: "Tiempo" },
+                    { coreano: "밤", espanol: "Noche", categoria: "Tiempo" },
+                    { coreano: "새벽", espanol: "Madrugada", categoria: "Tiempo" },
+                    { coreano: "샤워해요", espanol: "Me baño / Me ducho", categoria: "Verbo" },
+                    { coreano: "양치해요", espanol: "Me cepillo los dientes", categoria: "Verbo" },
+                    { coreano: "옷을 입어요", espanol: "Me visto", categoria: "Verbo" },
+                    { coreano: "출근해요", espanol: "Voy al trabajo", categoria: "Verbo" },
+                    { coreano: "퇴근해요", espanol: "Salgo del trabajo", categoria: "Verbo" },
+                    { coreano: "요리해요", espanol: "Cocino", categoria: "Verbo" },
+                    { coreano: "청소해요", espanol: "Limpio", categoria: "Verbo" },
+                    { coreano: "빨래해요", espanol: "Lavo la ropa", categoria: "Verbo" },
+                    { coreano: "만나요", espanol: "Me reúno (Ver a alguien)", categoria: "Verbo" },
+                    { coreano: "전화해요", espanol: "Llamo por teléfono", categoria: "Verbo" }
+                ]
+            },
+            {
+                id: 14,
+                titulo: "Lección 14: Transporte",
+                vocabulario: [
+                    { coreano: "버스", espanol: "Autobús", categoria: "Transporte" },
+                    { coreano: "택시", espanol: "Taxi", categoria: "Transporte" },
+                    { coreano: "지하철", espanol: "Metro", categoria: "Transporte" },
+                    { coreano: "기차", espanol: "Tren", categoria: "Transporte" },
+                    { coreano: "비행기", espanol: "Avión", categoria: "Transporte" },
+                    { coreano: "자전거", espanol: "Bicicleta", categoria: "Transporte" },
+                    { coreano: "자동차", espanol: "Coche / Auto", categoria: "Transporte" },
+                    { coreano: "타요", espanol: "Me subo (a transporte)", categoria: "Verbo" },
+                    { coreano: "내려요", espanol: "Me bajo (de transporte)", categoria: "Verbo" },
+                    { coreano: "환승해요", espanol: "Hago transbordo", categoria: "Verbo" },
+                    { coreano: "정류장", espanol: "Parada (de autobús)", categoria: "Lugar" },
+                    { coreano: "표", espanol: "Boleto / Ticket", categoria: "Sustantivo" },
+                    { coreano: "역", espanol: "Estación", categoria: "Lugar" },
+                    { coreano: "교통카드", espanol: "Tarjeta de transporte", categoria: "Sustantivo" },
+                    { coreano: "타는 곳", espanol: "Andén / Lugar de abordaje", categoria: "Lugar" },
+                    { coreano: "걸어요", espanol: "Camino", categoria: "Verbo" },
+                    { coreano: "빨라요", espanol: "Es rápido", categoria: "Adjetivo" },
+                    { coreano: "느려요", espanol: "Es lento", categoria: "Adjetivo" },
+                    { coreano: "막혀요", espanol: "Hay tráfico / Está atascado", categoria: "Adjetivo" },
+                    { coreano: "주차장", espanol: "Estacionamiento", categoria: "Lugar" }
+                ]
+            },
+            {
+                id: 15,
+                titulo: "Lección 15: Clima y Estaciones",
+                vocabulario: [
+                    { coreano: "날씨", espanol: "Clima / Tiempo", categoria: "Naturaleza" },
+                    { coreano: "비", espanol: "Lluvia", categoria: "Clima" },
+                    { coreano: "눈", espanol: "Nieve", categoria: "Clima" },
+                    { coreano: "바람", espanol: "Viento", categoria: "Clima" },
+                    { coreano: "봄", espanol: "Primavera", categoria: "Estación" },
+                    { coreano: "여름", espanol: "Verano", categoria: "Estación" },
+                    { coreano: "가을", espanol: "Otoño", categoria: "Estación" },
+                    { coreano: "겨울", espanol: "Invierno", categoria: "Estación" },
+                    { coreano: "더워요", espanol: "Hace calor", categoria: "Adjetivo" },
+                    { coreano: "추워요", espanol: "Hace frío", categoria: "Adjetivo" },
+                    { coreano: "맑아요", espanol: "Está despejado", categoria: "Adjetivo" },
+                    { coreano: "흐려요", espanol: "Está nublado", categoria: "Adjetivo" },
+                    { coreano: "비가 와요", espanol: "Está lloviendo", categoria: "Verbo" },
+                    { coreano: "눈이 와요", espanol: "Está nevando", categoria: "Verbo" },
+                    { coreano: "우산", espanol: "Paraguas", categoria: "Sustantivo" },
+                    { coreano: "태풍", espanol: "Tifón", categoria: "Clima" },
+                    { coreano: "얼음", espanol: "Hielo", categoria: "Clima" },
+                    { coreano: "햇빛", espanol: "Luz del sol", categoria: "Clima" },
+                    { coreano: "계절", espanol: "Estaciones del año", categoria: "Sustantivo" },
+                    { coreano: "온도", espanol: "Temperatura", categoria: "Sustantivo" }
+                ]
+            },
+            {
+                id: 16,
+                titulo: "Lección 16: Cuerpo y Salud",
+                vocabulario: [
+                    { coreano: "머리", espanol: "Cabeza / Pelo", categoria: "Cuerpo" },
+                    { coreano: "눈", espanol: "Ojo(s)", categoria: "Cuerpo" },
+                    { coreano: "코", espanol: "Nariz", categoria: "Cuerpo" },
+                    { coreano: "입", espanol: "Boca", categoria: "Cuerpo" },
+                    { coreano: "손", espanol: "Mano(s)", categoria: "Cuerpo" },
+                    { coreano: "발", espanol: "Pie(s)", categoria: "Cuerpo" },
+                    { coreano: "배", espanol: "Estómago / Vientre", categoria: "Cuerpo" },
+                    { coreano: "아파요", espanol: "Me duele", categoria: "Adjetivo" },
+                    { coreano: "병원", espanol: "Hospital", categoria: "Lugar" },
+                    { coreano: "약", espanol: "Medicina / Pastilla", categoria: "Salud" },
+                    { coreano: "귀", espanol: "Oreja", categoria: "Cuerpo" },
+                    { coreano: "얼굴", espanol: "Cara / Rostro", categoria: "Cuerpo" },
+                    { coreano: "팔", espanol: "Brazo", categoria: "Cuerpo" },
+                    { coreano: "다리", espanol: "Pierna", categoria: "Cuerpo" },
+                    { coreano: "어깨", espanol: "Hombro", categoria: "Cuerpo" },
+                    { coreano: "허리", espanol: "Espalda / Cintura", categoria: "Cuerpo" },
+                    { coreano: "감기", espanol: "Resfriado", categoria: "Salud" },
+                    { coreano: "열", espanol: "Fiebre", categoria: "Salud" },
+                    { coreano: "의사", espanol: "Doctor / Médico", categoria: "Persona" },
+                    { coreano: "치과", espanol: "Dentista (Clínica)", categoria: "Lugar" }
+                ]
+            },
+            {
+                id: 17,
+                titulo: "Lección 17: Pasatiempos",
+                vocabulario: [
+                    { coreano: "음악", espanol: "Música", categoria: "Pasatiempo" },
+                    { coreano: "책", espanol: "Libro", categoria: "Objeto" },
+                    { coreano: "영화", espanol: "Película", categoria: "Pasatiempo" },
+                    { coreano: "사진", espanol: "Fotografía", categoria: "Objeto" },
+                    { coreano: "운동", espanol: "Deporte / Ejercicio", categoria: "Pasatiempo" },
+                    { coreano: "축구", espanol: "Fútbol", categoria: "Pasatiempo" },
+                    { coreano: "수영", espanol: "Natación", categoria: "Pasatiempo" },
+                    { coreano: "피아노", espanol: "Piano", categoria: "Pasatiempo" },
+                    { coreano: "게임", espanol: "Videojuego", categoria: "Pasatiempo" },
+                    { coreano: "노래", espanol: "Canción", categoria: "Pasatiempo" },
+                    { coreano: "기타", espanol: "Guitarra", categoria: "Pasatiempo" },
+                    { coreano: "자전거 타기", espanol: "Andar en bicicleta", categoria: "Pasatiempo" },
+                    { coreano: "등산", espanol: "Senderismo", categoria: "Pasatiempo" },
+                    { coreano: "낚시", espanol: "Pesca", categoria: "Pasatiempo" },
+                    { coreano: "요리", espanol: "Cocina", categoria: "Pasatiempo" },
+                    { coreano: "그림", espanol: "Dibujo / Pintura", categoria: "Pasatiempo" },
+                    { coreano: "춤", espanol: "Baile", categoria: "Pasatiempo" },
+                    { coreano: "사진 찍기", espanol: "Tomar fotos", categoria: "Pasatiempo" },
+                    { coreano: "여행", espanol: "Viajar (Actividad)", categoria: "Pasatiempo" },
+                    { coreano: "독서", espanol: "Leer libros", categoria: "Pasatiempo" }
+                ]
+            },
+            {
+                id: 18,
+                titulo: "Lección 18: Profesiones",
+                vocabulario: [
+                    { coreano: "의사", espanol: "Médico / Doctor", categoria: "Profesión" },
+                    { coreano: "간호사", espanol: "Enfermero/a", categoria: "Profesión" },
+                    { coreano: "경찰", espanol: "Policía", categoria: "Profesión" },
+                    { coreano: "소방관", espanol: "Bombero", categoria: "Profesión" },
+                    { coreano: "요리사", espanol: "Cocinero/a", categoria: "Profesión" },
+                    { coreano: "가수", espanol: "Cantante", categoria: "Profesión" },
+                    { coreano: "배우", espanol: "Actor / Actriz", categoria: "Profesión" },
+                    { coreano: "회사원", espanol: "Empleado/a de oficina", categoria: "Profesión" },
+                    { coreano: "변호사", espanol: "Abogado/a", categoria: "Profesión" },
+                    { coreano: "기자", espanol: "Periodista", categoria: "Profesión" },
+                    { coreano: "선생님", espanol: "Profesor/a", categoria: "Profesión" },
+                    { coreano: "학생", espanol: "Estudiante", categoria: "Profesión" },
+                    { coreano: "공무원", espanol: "Funcionario público", categoria: "Profesión" },
+                    { coreano: "엔지니어", espanol: "Ingeniero", categoria: "Profesión" },
+                    { coreano: "디자이너", espanol: "Diseñador", categoria: "Profesión" },
+                    { coreano: "미용사", espanol: "Peluquero/a", categoria: "Profesión" },
+                    { coreano: "운전기사", espanol: "Chofer / Conductor", categoria: "Profesión" },
+                    { coreano: "농부", espanol: "Agricultor", categoria: "Profesión" },
+                    { coreano: "은행원", espanol: "Empleado bancario", categoria: "Profesión" },
+                    { coreano: "직업", espanol: "Profesión / Trabajo", categoria: "Sustantivo" }
+                ]
+            },
+            {
+                id: 19,
+                titulo: "Lección 19: Naturaleza y Colores",
+                vocabulario: [
+                    { coreano: "바다", espanol: "Mar", categoria: "Naturaleza" },
+                    { coreano: "산", espanol: "Montaña", categoria: "Naturaleza" },
+                    { coreano: "강", espanol: "Río", categoria: "Naturaleza" },
+                    { coreano: "나무", espanol: "Árbol", categoria: "Naturaleza" },
+                    { coreano: "꽃", espanol: "Flor", categoria: "Naturaleza" },
+                    { coreano: "하늘", espanol: "Cielo", categoria: "Naturaleza" },
+                    { coreano: "별", espanol: "Estrella", categoria: "Naturaleza" },
+                    { coreano: "빨간색", espanol: "Rojo (Color)", categoria: "Color" },
+                    { coreano: "파란색", espanol: "Azul (Color)", categoria: "Color" },
+                    { coreano: "노란색", espanol: "Amarillo (Color)", categoria: "Color" },
+                    { coreano: "달", espanol: "Luna", categoria: "Naturaleza" },
+                    { coreano: "해", espanol: "Sol", categoria: "Naturaleza" },
+                    { coreano: "구름", espanol: "Nube", categoria: "Naturaleza" },
+                    { coreano: "돌", espanol: "Piedra", categoria: "Naturaleza" },
+                    { coreano: "동물", espanol: "Animal", categoria: "Naturaleza" },
+                    { coreano: "검은색", espanol: "Negro (Color)", categoria: "Color" },
+                    { coreano: "하얀색", espanol: "Blanco (Color)", categoria: "Color" },
+                    { coreano: "초록색", espanol: "Verde (Color)", categoria: "Color" },
+                    { coreano: "주황색", espanol: "Naranja (Color)", categoria: "Color" },
+                    { coreano: "보라색", espanol: "Morado (Color)", categoria: "Color" }
+                ]
+            },
+            {
+                id: 20,
+                titulo: "Lección 20: Tecnología",
+                vocabulario: [
+                    { coreano: "핸드폰", espanol: "Teléfono celular", categoria: "Tecnología" },
+                    { coreano: "전화", espanol: "Llamada telefónica", categoria: "Tecnología" },
+                    { coreano: "문자", espanol: "Mensaje de texto", categoria: "Tecnología" },
+                    { coreano: "인터넷", espanol: "Internet", categoria: "Tecnología" },
+                    { coreano: "컴퓨터", espanol: "Computadora", categoria: "Tecnología" },
+                    { coreano: "이메일", espanol: "Correo electrónico", categoria: "Tecnología" },
+                    { coreano: "와이파이", espanol: "Wi-Fi", categoria: "Tecnología" },
+                    { coreano: "여보세요", espanol: "¿Aló? / ¿Bueno?", categoria: "Frase" },
+                    { coreano: "번호", espanol: "Número (de teléfono)", categoria: "Sustantivo" },
+                    { coreano: "비밀번호", espanol: "Contraseña", categoria: "Tecnología" },
+                    { coreano: "앱", espanol: "Aplicación / App", categoria: "Tecnología" },
+                    { coreano: "충전기", espanol: "Cargador", categoria: "Tecnología" },
+                    { coreano: "배터리", espanol: "Batería", categoria: "Tecnología" },
+                    { coreano: "화면", espanol: "Pantalla", categoria: "Tecnología" },
+                    { coreano: "마우스", espanol: "Mouse / Ratón", categoria: "Tecnología" },
+                    { coreano: "키보드", espanol: "Teclado", categoria: "Tecnología" },
+                    { coreano: "메시지", espanol: "Mensaje (Chat)", categoria: "Tecnología" },
+                    { coreano: "통화", espanol: "Llamada (En curso)", categoria: "Tecnología" },
+                    { coreano: "사진첩", espanol: "Galería de fotos", categoria: "Tecnología" },
+                    { coreano: "다운로드", espanol: "Descarga", categoria: "Tecnología" }
+                ]
+            }
+        ];
+        let leccionActivaId = 1;
         let rondaMaestra = []; 
-        
         let queueVocab = [], queueMemo = [], queueDictado = [], queueEscritura = [];
         let progreso = { vocab: 0, memo: 0, dictado: 0, escritura: 0, examen: 0 };
         let totales = { vocab: 0, memo: 0, dictado: 0, escritura: 0, examen: 0 };
 
         const navColors = { vocab: 'text-amber-500', memo: 'text-rose-500', dictado: 'text-emerald-500', escritura: 'text-orange-500', examen: 'text-indigo-500', teoria: 'text-teal-500' };
 
+        // -------------------------------------------------------------
+        // FUNCIONES GENERALES
+        // -------------------------------------------------------------
         function showToast(msg, icon = '✨') {
             const toast = document.getElementById('toast');
             document.getElementById('toast-msg').innerText = msg;
@@ -393,61 +929,31 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            verificarSesion();
-            document.getElementById('btn-signup').addEventListener('click', handleSignup);
-            document.getElementById('btn-login').addEventListener('click', handleLogin);
-            document.getElementById('btn-logout').addEventListener('click', cerrarSesion);
+            const nombreGuardado = localStorage.getItem('estudiante_nombre');
+            if(nombreGuardado) {
+                document.getElementById('nombre-estudiante').value = nombreGuardado;
+                entrarApp(false);
+            }
         });
 
-        async function handleSignup() {
-            const email = document.getElementById('email').value.trim(); const password = document.getElementById('password').value.trim();
-            if(!email || !password) return showToast('Ingresa correo y contraseña.', '⚠️');
-            const btn = document.getElementById('btn-signup'); btn.innerText = "Cargando...";
+        function entrarApp(mostrarToast = true) {
+            const nombre = document.getElementById('nombre-estudiante').value.trim();
+            if(!nombre) return showToast('Por favor dime tu nombre', '⚠️');
             
-            const { data, error } = await _supabase.auth.signUp({ email, password }); 
-            btn.innerText = "Crear cuenta nueva";
+            localStorage.setItem('estudiante_nombre', nombre);
+            document.getElementById('user-info').innerText = `Estudiante: ${nombre}`;
+            document.getElementById('user-info').classList.remove('hidden');
+            document.getElementById('saludo-personalizado').innerText = `¿List@, ${nombre}?`;
             
-            if (error) {
-                showToast(error.message, '❌'); 
-            } else {
-                showToast('¡Cuenta creada con éxito!', '🎉');
-                if (data.session) {
-                    verificarSesion();
-                } else {
-                    await handleLogin(); 
-                }
-            }
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('mode-selection').classList.remove('hidden'); document.getElementById('mode-selection').classList.add('flex');
+            
+            if(mostrarToast) showToast(`¡Bienvenid@ a clase, ${nombre}!`, '🌸');
         }
 
-        async function handleLogin() {
-            const email = document.getElementById('email').value.trim(); const password = document.getElementById('password').value.trim();
-            if(!email || !password) return showToast('Ingresa correo y contraseña.', '⚠️');
-            const btn = document.getElementById('btn-login'); btn.innerText = "Cargando...";
-            const { error } = await _supabase.auth.signInWithPassword({ email, password }); btn.innerText = "Iniciar Sesión";
-            if (error) showToast('Verifica tus datos.', '❌'); else verificarSesion();
-        }
-
-        async function verificarSesion() {
-            const { data: { session } } = await _supabase.auth.getSession();
-            if (session) {
-                document.getElementById('auth-section').classList.add('hidden');
-                document.getElementById('mode-selection').classList.remove('hidden'); document.getElementById('mode-selection').classList.add('flex');
-                cargarTodaLaBaseDeDatos();
-            }
-        }
-        async function cerrarSesion() { await _supabase.auth.signOut(); location.reload(); }
-
-        async function cargarTodaLaBaseDeDatos() {
-            try {
-                const { data, error } = await _supabase.from('app_vocabulario').select('*');
-                if (error) throw error;
-                dbCache.vocabulario = data || [];
-                console.log("Súper-Tabla cargada con", dbCache.vocabulario.length, "palabras");
-                if(dbCache.vocabulario.length === 0) showToast("Base de datos vacía.", "⚠️");
-            } catch (error) { 
-                console.error("Error BD:", error); 
-                showToast("Error de conexión.", "❌"); 
-            }
+        function salirApp() {
+            localStorage.removeItem('estudiante_nombre');
+            location.reload();
         }
 
         function volverAlMenuPrincipal() {
@@ -464,92 +970,57 @@
             
             document.getElementById('header-badge').innerText = "Práctica"; document.getElementById('header-badge').className = "text-[9px] text-indigo-500 font-bold px-2 py-0.5 bg-indigo-50 rounded-full uppercase tracking-wider";
             
-            filtrosActivos = [1, 2, 3, 4, 5, 6, 7]; 
-            
             construirModalFiltro(); abrirFiltro();
         }
 
+        // -------------------------------------------------------------
+        // LÓGICA DE LECCIONES Y JUEGOS
+        // -------------------------------------------------------------
         function construirModalFiltro() {
             const container = document.getElementById('filtro-niveles-container'); container.innerHTML = '';
             
-            let opciones = [
-                {val: 1, label: "👤 Personas y Pronombres"},
-                {val: 2, label: "⏱️ Tiempo y Números"},
-                {val: 3, label: "🍎 Comida y Bebida"},
-                {val: 4, label: "🏠 Hogar y Rutina"},
-                {val: 5, label: "🏙️ Ciudad y Lugares"},
-                {val: 6, label: "💻 Mis Pasatiempos (PC, Gym)"},
-                {val: 7, label: "✨ Adjetivos Útiles"}
-            ];
-            
-            opciones.forEach(opc => {
-                const checked = filtrosActivos.includes(opc.val) ? "checked" : "";
+            leccionesCurriculum.forEach(lec => {
+                const checked = leccionActivaId === lec.id ? "checked" : "";
                 container.innerHTML += `
                     <label class="flex items-center gap-3 p-4 rounded-2xl border-2 border-stone-100 hover:border-indigo-200 cursor-pointer transition-all focus-within:border-indigo-400 bg-stone-50">
-                        <input type="checkbox" value="${opc.val}" class="filtro-cb w-5 h-5 accent-indigo-500" ${checked} onchange="actualizarContadorFiltro()">
-                        <span class="text-sm font-bold text-stone-700">${opc.label}</span>
+                        <input type="radio" name="leccionRadio" value="${lec.id}" class="w-5 h-5 accent-indigo-500" ${checked}>
+                        <span class="text-sm font-bold text-stone-700">${lec.titulo}</span>
                     </label>`;
             });
-            actualizarContadorFiltro();
-        }
-
-        function actualizarContadorFiltro() {
-            const sel = document.querySelectorAll('.filtro-cb:checked').length;
-            const txt = document.getElementById('filtro-contador-texto');
-            txt.innerText = `${sel} subnivel${sel !== 1 ? 'es' : ''} seleccionado${sel !== 1 ? 's' : ''}`;
-            txt.className = `text-xs font-bold text-indigo-600 mb-6 bg-indigo-50 inline-block px-3 py-1.5 rounded-full transition-colors`;
         }
 
         function abrirFiltro() { document.getElementById('modal-filtro').classList.remove('hidden'); document.getElementById('modal-filtro').classList.add('flex'); }
 
         function aplicarFiltroYRecargar() {
-            const checkboxes = document.querySelectorAll('.filtro-cb');
-            filtrosActivos = Array.from(checkboxes).filter(cb => cb.checked).map(cb => parseInt(cb.value));
+            const seleccionado = document.querySelector('input[name="leccionRadio"]:checked');
+            if(!seleccionado) return showToast("Selecciona una lección", '⚠️');
             
-            if(filtrosActivos.length === 0) { 
-                showToast("Selecciona al menos un subnivel.", '⚠️'); 
-                checkboxes[0].checked = true; 
-                filtrosActivos = [parseInt(checkboxes[0].value)]; 
-            }
-            
+            leccionActivaId = parseInt(seleccionado.value);
             document.getElementById('modal-filtro').classList.add('hidden'); document.getElementById('modal-filtro').classList.remove('flex');
             
-            aplicarFiltroLocal();
-            cambiarVista('vocab'); // Siempre arranca en Tarjetas tras aplicar filtro
-        }
-
-        function mezclarYCortar(array, max) { 
-            if(!array || array.length === 0) return []; 
-            let result = [];
-            while(result.length < max) {
-                let temp = [...array].sort(() => 0.5 - Math.random());
-                result = result.concat(temp.slice(0, max - result.length));
-            }
-            return result.slice(0, max);
-        }
-
-        function aplicarFiltroLocal() {
-            contenidoNivelActual.vocabulario = dbCache.vocabulario.filter(x => filtrosActivos.includes(x.nivel));
-
-            if(contenidoNivelActual.vocabulario.length === 0) {
-                contenidoNivelActual.vocabulario = dbCache.vocabulario;
-                if(dbCache.vocabulario.length > 0) showToast("Mostrando todo el vocabulario.", "💡");
-                else showToast("No hay palabras en la BD.", "⚠️");
-            }
             reiniciarContenidos();
+            cambiarVista('vocab'); 
+        }
+
+        function mezclarArray(array) { 
+            return [...array].sort(() => 0.5 - Math.random());
         }
 
         function reiniciarContenidos() {
-            // 1. SELECCIONAR LAS 10 PALABRAS MAESTRAS PARA ESTA RONDA
-            rondaMaestra = mezclarYCortar(contenidoNivelActual.vocabulario, MAX_RONDA);
+            const leccionActual = leccionesCurriculum.find(l => l.id === leccionActivaId);
+            if(!leccionActual || leccionActual.vocabulario.length === 0) {
+                return showToast("Lección sin vocabulario.", "⚠️");
+            }
+
+            // Tomamos el vocabulario de la lección seleccionada
+            rondaMaestra = mezclarArray(leccionActual.vocabulario);
             
-            // 2. REPARTIR EXACTAMENTE LAS MISMAS 10 A LOS JUEGOS DE VOCABULARIO
             queueVocab = [...rondaMaestra];
             queueMemo = [...rondaMaestra];
             queueDictado = rondaMaestra.map(v => v.coreano);
             queueEscritura = rondaMaestra.map(v => ({espanol: v.espanol, coreanoStr: v.coreano}));
             
-            totales = { vocab: queueVocab.length, memo: queueMemo.length, dictado: queueDictado.length, escritura: queueEscritura.length, examen: MAX_RONDA };
+            totales = { vocab: queueVocab.length, memo: queueMemo.length, dictado: queueDictado.length, escritura: queueEscritura.length, examen: rondaMaestra.length };
             progreso = { vocab: 0, memo: 0, dictado: 0, escritura: 0, examen: 0 };
             
             cargarVocabularioUI(); 
@@ -561,20 +1032,12 @@
         function repetirRondaActiva() {
             document.getElementById('modal-ronda').classList.add('hidden'); document.getElementById('modal-ronda').classList.remove('flex');
             
-            // Usamos las mismas listas sin volver a mezclar
-            queueVocab = [...rondaMaestra];
-            queueMemo = [...rondaMaestra];
-            queueDictado = rondaMaestra.map(v => v.coreano);
-            queueEscritura = rondaMaestra.map(v => ({espanol: v.espanol, coreanoStr: v.coreano}));
-            
+            queueVocab = [...rondaMaestra]; queueMemo = [...rondaMaestra];
+            queueDictado = rondaMaestra.map(v => v.coreano); queueEscritura = rondaMaestra.map(v => ({espanol: v.espanol, coreanoStr: v.coreano}));
             progreso = { vocab: 0, memo: 0, dictado: 0, escritura: 0, examen: 0 };
             
-            cargarVocabularioUI(); 
-            iniciarMemorama();
-            resetDictadoUI(); 
-            resetEscrituraUI(); 
-            
-            showToast("Repitiendo los mismos 10 ejercicios.", "🔁");
+            cargarVocabularioUI(); iniciarMemorama(); resetDictadoUI(); resetEscrituraUI(); 
+            showToast("Repitiendo esta lección.", "🔁");
         }
 
         function cambiarVista(vistaId) {
@@ -589,11 +1052,12 @@
             });
         }
 
-        function reiniciarJuegoActivo() { reiniciarContenidos(); showToast(`Nueva ronda maestra de ${MAX_RONDA} cargada.`, "✨"); }
+        function reiniciarJuegoActivo() { reiniciarContenidos(); showToast(`Lección reiniciada.`, "✨"); }
 
+        // --- TARJETAS ---
         function cargarVocabularioUI() {
             if(queueVocab.length === 0) return;
-            document.getElementById('vocab-counter').innerText = `${progreso.vocab} / ${totales.vocab}`;
+            document.getElementById('vocab-counter').innerText = `${progreso.vocab + 1} / ${totales.vocab}`;
             const item = queueVocab[progreso.vocab];
             const textoCoreano = document.getElementById('palabra-coreano'); 
             textoCoreano.style.opacity = 0;
@@ -601,17 +1065,7 @@
             setTimeout(() => {
                 textoCoreano.innerText = item.coreano; 
                 document.getElementById('palabra-espanol').innerText = item.espanol; 
-                
-                let catTexto = "Desconocido";
-                if(item.categoria === 'SUJ') catTexto = "👤 Sujeto / Persona / Profesión";
-                if(item.categoria === 'LUG') catTexto = "📍 Lugar (Usa 에/에서)";
-                if(item.categoria === 'OBJ') catTexto = "🍎 Objeto / Concepto (Usa 을/를)";
-                if(item.categoria === 'VER_MOV') catTexto = "🚶‍♂️ Verbo Movimiento";
-                if(item.categoria === 'VER_ACC') catTexto = "🏃‍♂️ Verbo Acción";
-                if(item.categoria === 'ADJ') catTexto = "✨ Adjetivo / Estado";
-                if(item.categoria === 'NUM') catTexto = `🔢 Número (Contador: ${item.contador || '-'})`;
-                document.getElementById('palabra-categoria').innerText = `[ ${catTexto} ]`;
-
+                document.getElementById('palabra-categoria').innerText = `[ ${item.categoria || 'Palabra'} ]`;
                 textoCoreano.style.opacity = 1;
             }, 150);
         }
@@ -625,13 +1079,17 @@
         }
         function anteriorVocabulario() { if(queueVocab.length > 0 && progreso.vocab > 0) { progreso.vocab--; cargarVocabularioUI(); } }
 
+        // --- MEMORAMA ---
         let memoTableroActual = [], cartasVolteadas = [], bloqueado = false, paresEncontrados = 0;
         function iniciarMemorama() { progreso.memo = 0; renderizarTableroMemo(); }
         function renderizarTableroMemo() {
             const grid = document.getElementById('memo-grid'); grid.innerHTML = ''; cartasVolteadas = []; bloqueado = false; paresEncontrados = 0;
-            document.getElementById('memo-counter').innerText = `${progreso.memo} / ${totales.memo}`;
+            
+            // Toma las siguientes 6 palabras (o las que queden) para hacer 12 cartas en pantalla
             memoTableroActual = queueMemo.slice(progreso.memo, progreso.memo + 6);
             if(memoTableroActual.length === 0) return;
+            
+            document.getElementById('memo-counter').innerText = `${progreso.memo} / ${totales.memo}`;
             
             let mazo = [];
             memoTableroActual.forEach(p => { mazo.push({ texto: p.coreano, tipo: 'kr', id: p.coreano }); mazo.push({ texto: p.espanol, tipo: 'es', id: p.coreano }); });
@@ -660,6 +1118,7 @@
             } else { setTimeout(() => { c1.classList.remove('flipped'); c2.classList.remove('flipped'); cartasVolteadas = []; bloqueado = false; }, 1000); }
         }
 
+        // --- DICTADO ---
         function resetDictadoUI() {
             if(queueDictado.length === 0) return;
             document.getElementById('dictado-counter').innerText = `${progreso.dictado} / ${totales.dictado}`;
@@ -686,6 +1145,7 @@
             }
         }
 
+        // --- ESCRITURA ---
         function resetEscrituraUI() {
             if(queueEscritura.length === 0) return;
             document.getElementById('escritura-counter').innerText = `${progreso.escritura} / ${totales.escritura}`;
@@ -716,17 +1176,18 @@
             }
         }
 
+        // --- TEST FINAL ---
         let testPreguntas = [], testIndice = 0, testPuntos = 0, testPreguntaActual = null;
         function iniciarExamen() {
             let p = [];
-            // Toma de la ronda maestra para el examen
             queueVocab.forEach(v => {
                 p.push({tipo: 'escritura', data: {espanol: v.espanol, coreanoStr: v.coreano} });
                 p.push({tipo: 'dictado', data: {coreanoStr: v.coreano} });
             });
             
-            testPreguntas = mezclarYCortar(p, MAX_RONDA);
-            testIndice = 0; testPuntos = 0; totales.examen = testPreguntas.length;
+            // Mezclamos y tomamos la misma cantidad que el tamaño de la lección para un test rápido
+            testPreguntas = mezclarArray(p).slice(0, totales.examen);
+            testIndice = 0; testPuntos = 0; 
             if(testPreguntas.length === 0) return showToast("No hay datos para test.", "⚠️");
 
             document.getElementById('examen-inicio').classList.add('hidden'); document.getElementById('examen-resultado').classList.add('hidden');
@@ -790,11 +1251,8 @@
             document.getElementById('examen-resultado').classList.remove('hidden'); document.getElementById('examen-puntaje-texto').innerText = `${testPuntos} / ${testPreguntas.length}`;
             if(testPuntos >= testPreguntas.length * 0.8) reproducirVoz("축하합니다");
         }
-        function cerrarModalRondaYReiniciar() {
-            document.getElementById('modal-ronda').classList.add('hidden'); document.getElementById('modal-ronda').classList.remove('flex');
-            reiniciarContenidos();
-        }
 
+        // --- SISTEMA DE VOZ NATIVO ---
         function reproducirVoz(texto, velocidad = 0.85) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
